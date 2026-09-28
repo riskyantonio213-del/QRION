@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="40" viewBox="0 0 180 40">
+  <g fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 12h13v13H7z" />
+    <path d="M20 8h13v21H20" />
+    <path d="M24 15h5M24 20h5M24 25h5" />
+  </g>
+  <text x="46" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1.2" fill="#64748b">LOGO YAYASAN</text>
+</svg>

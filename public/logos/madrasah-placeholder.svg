@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="184" height="40" viewBox="0 0 184 40">
+  <g fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 7a13 13 0 1 0 0 26z" />
+    <path d="M24 11a9 9 0 1 1 0 18" />
+    <path d="M28 15.5 33 12v16l-5-3.5z" />
+  </g>
+  <text x="46" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1.2" fill="#64748b">LOGO MADRASAH</text>
+</svg>

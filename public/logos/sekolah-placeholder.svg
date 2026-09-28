@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="40" viewBox="0 0 176 40">
+  <g fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 12.5 20 6l14 6.5L20 19z" />
+    <path d="M11 15v9M29 15v9M9 24h22" />
+  </g>
+  <text x="46" y="25" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="1.2" fill="#64748b">LOGO SEKOLAH</text>
+</svg>
