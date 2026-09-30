@@ -26,7 +26,7 @@ function ProductIntegration({ product }: { product: Product }) {
   const others = products.filter((item) => item.slug !== product.slug);
 
   return (
-    <Section id="integrasi" background="soft" size="wide" aria-labelledby="integrasi-heading">
+    <Section id="integrasi" background="soft" size="wide" containerClassName="max-w-[1980px]" aria-labelledby="integrasi-heading">
       <SectionHeader
         eyebrow="Integrasi"
         title={

@@ -11,6 +11,7 @@ export function DashboardSection() {
     <Section
       id="dashboard"
       size="wide"
+      containerClassName="max-w-[1980px]"
       aria-labelledby="dashboard-heading"
     >
       <SectionHeader

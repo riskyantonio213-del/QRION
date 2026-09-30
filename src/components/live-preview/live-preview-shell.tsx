@@ -11,12 +11,18 @@ interface LivePreviewShellProps {
   children?: React.ReactNode;
   /** Sembunyikan bar mockup browser (traffic light + URL bar). Dipakai halaman mockup mobile. */
   showBrowserBar?: boolean;
+  /** Hilangkan padding vertikal section (dipakai saat shell dibungkus Section marketing). */
+  compact?: boolean;
+  /** Ukuran kartu preview. "lg" lebih tinggi & lebar — khusus dashboard sekolah. */
+  size?: "default" | "lg";
 }
 
 export function LivePreviewShell({
   slug,
   children,
   showBrowserBar = true,
+  compact = false,
+  size = "default",
 }: LivePreviewShellProps) {
   const product = products.find((p) => p.slug === slug);
   const ProductIcon = product?.icon ?? Sparkles;
@@ -34,7 +40,9 @@ export function LivePreviewShell({
 
   return (
     <section
-      className="relative w-full overflow-hidden px-4 py-24 font-sans sm:px-6 lg:px-10 xl:px-16"
+      className={`relative w-full overflow-hidden font-sans ${
+        compact ? "px-0 py-0" : "px-4 py-24 sm:px-6 lg:px-10 xl:px-16"
+      }`}
     >
       {/* Background Decor */}
       <div className="pointer-events-none absolute inset-0">
@@ -43,7 +51,11 @@ export function LivePreviewShell({
       </div>
 
       {/* Dashboard Shell */}
-      <div className="relative z-10 mx-auto flex h-[820px] w-full max-w-[1380px] flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_35px_100px_rgba(15,23,42,0.13)]">
+      <div
+        className={`relative z-10 mx-auto flex w-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_35px_100px_rgba(15,23,42,0.13)] ${
+          size === "lg" ? "h-[1080px] max-w-[1980px]" : "h-[820px] max-w-[1380px]"
+        }`}
+      >
 
         {/* Browser Bar Mockup */}
         {showBrowserBar && (

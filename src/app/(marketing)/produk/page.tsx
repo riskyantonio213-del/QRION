@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "Jelajahi modul QRION: Ontuition untuk pembayaran sekolah, Oncard untuk kartu pintar siswa, Ontime untuk presensi digital, Qrion Jurnal, dan Qrion SPMB untuk penerimaan murid baru.",
   alternates: { canonical: "/produk" },
   openGraph: {
-    title: "Produk QRION | Ekosistem Digital untuk Pendidikan",
+    title: "Produk QRION",
     description:
       "Lima modul yang dapat digunakan secara mandiri dan dihubungkan dalam satu ekosistem pendidikan.",
     url: "/produk",

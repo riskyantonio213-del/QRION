@@ -16,7 +16,7 @@ import { finalCta, trust } from "@/data/home";
 import { ctaLinks } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "QRION | Ekosistem Digital untuk Pendidikan",
+  title: "QRION",
   description:
     "QRION menyediakan solusi digital terintegrasi untuk membantu sekolah, madrasah, dan pesantren mengelola pembayaran, presensi, kartu pintar, jurnal pembelajaran, dan penerimaan murid baru.",
   alternates: { canonical: "/" },

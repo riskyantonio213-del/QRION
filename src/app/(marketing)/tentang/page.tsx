@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "QRION membangun infrastruktur digital untuk pendidikan Indonesia melalui ekosistem teknologi terintegrasi bagi sekolah, madrasah, dan pesantren.",
   alternates: { canonical: "/tentang" },
   openGraph: {
-    title: "Tentang QRION | Ekosistem Digital untuk Pendidikan",
+    title: "Tentang QRION",
     description:
       "Visi, misi, dan nilai yang menjadi dasar pengembangan ekosistem QRION.",
     url: "/tentang",

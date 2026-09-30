@@ -16,9 +16,9 @@ export default function LivePreviewLayout({
   const showSidebar = pathname !== "/live-preview";
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-dvh flex-col overflow-hidden">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         {showSidebar && <LivePreviewSidebar />}
         <main id="konten-utama" className="min-w-0 flex-1 overflow-y-auto bg-soft">
           {children}

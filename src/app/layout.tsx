@@ -20,8 +20,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "QRION | Ekosistem Digital untuk Pendidikan",
-    template: "%s | QRION",
+    default: "QRION",
+    template: "",
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
@@ -35,12 +35,12 @@ export const metadata: Metadata = {
     locale: siteConfig.locale,
     url: "/",
     siteName: siteConfig.name,
-    title: "QRION | Ekosistem Digital untuk Pendidikan",
+    title: "QRION",
     description: siteConfig.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "QRION | Ekosistem Digital untuk Pendidikan",
+    title: "QRION",
     description: siteConfig.description,
   },
   robots: {
