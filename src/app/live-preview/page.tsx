@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 
-import { LivePreviewExperience } from "@/components/live-preview/live-preview-experience";
+import { LivePreviewOverview } from "@/components/live-preview/live-preview-overview";
 
 export const metadata: Metadata = {
-  title: "QRION Live Experience",
+  title: "QRION Live Preview",
   description:
-    "Jelajahi ekosistem QRION langsung dari peramban: modul pembayaran, kartu siswa, presensi, jurnal pembelajaran, dan penerimaan murid baru dalam satu pengalaman demo.",
+    "Jelajahi semua modul ekosistem QRION: pembayaran, kartu siswa, presensi, jurnal, dan penerimaan murid baru.",
   alternates: { canonical: "/live-preview" },
   openGraph: {
-    title: "QRION Live Experience",
-    description:
-      "Coba langsung ekosistem QRION dan lihat bagaimana satu sistem menangani operasional sekolah.",
+    title: "QRION Live Preview",
+    description: "Preview semua dashboard layanan QRION dalam satu halaman.",
     url: "/live-preview",
   },
 };
 
 export default function LivePreviewPage() {
-  return <LivePreviewExperience />;
+  return <LivePreviewOverview />;
 }

@@ -17,7 +17,7 @@ type LeadModalProps = {
   onComplete: (state: FormState) => void;
 };
 
-const defaultValues: LivePreviewLeadValues = { name: "", whatsapp: "" };
+const defaultValues: LivePreviewLeadValues = { name: "", whatsapp: "", institution: "" };
 
 /**
  * Lead capture gate shown before the Live Experience.
@@ -214,6 +214,33 @@ export function LeadModal({ open, onComplete }: LeadModalProps) {
                   Contoh: 812 3456 7890 atau 08xx xxxx xxxx.
                 </p>
               )}
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="lead-institution" className="text-[13px]">
+                Asal Sekolah / Instansi
+                <span aria-hidden="true" className="ml-0.5 text-qrion-error">
+                  *
+                </span>
+              </Label>
+              <Input
+                id="lead-institution"
+                type="text"
+                autoComplete="organization"
+                placeholder="Masukkan nama Sekolah / Instansi Anda"
+                aria-invalid={Boolean(errors.institution)}
+                aria-describedby={errors.institution ? "lead-institution-error" : undefined}
+                {...register("institution")}
+              />
+              {errors.institution ? (
+                <p
+                  id="lead-institution-error"
+                  role="alert"
+                  className="text-[13px] font-medium text-qrion-error"
+                >
+                  {errors.institution.message}
+                </p>
+              ) : null}
             </div>
 
             {deliveryFailed ? (

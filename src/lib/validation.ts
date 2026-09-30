@@ -130,12 +130,13 @@ export const demoFormSchema = z.object({
 });
 
 /**
- * Lead gate shown before the QRION Live Experience. Two fields only, matching
- * the reference flow: name and WhatsApp number.
+ * Lead gate shown before the QRION Live Experience. Three fields: name,
+ * WhatsApp number, and the visitor's institution.
  */
 export const livePreviewLeadSchema = z.object({
   name,
   whatsapp,
+  institution: institution,
 });
 
 export type LivePreviewLeadValues = z.infer<typeof livePreviewLeadSchema>;
