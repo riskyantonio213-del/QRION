@@ -168,10 +168,11 @@
 
   --shadow-card: var(--qrion-shadow-card);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display:
+    var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -238,7 +239,8 @@
 
 /* Subtle grid used behind hero / CTA sections. */
 @utility bg-grid {
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       to right,
       color-mix(in srgb, var(--qrion-green) 18%, transparent) 1px,
       transparent 1px
@@ -249,4 +251,38 @@
       transparent 1px
     );
   background-size: 56px 56px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Oncard product-page motion (mirrors source: framer marquee + gsap intro)     */
+/* -------------------------------------------------------------------------- */
+
+@keyframes oc-marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes oc-marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ONCARD preview frame: 🌙 dark mode (invert-hue trick keeps source photos sane) */
+.oc-dark {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.oc-dark img,
+.oc-dark svg,
+.oc-dark video,
+.oc-dark picture {
+  filter: invert(1) hue-rotate(180deg);
 }

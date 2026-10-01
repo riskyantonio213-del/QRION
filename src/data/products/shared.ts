@@ -1,0 +1,3 @@
+import type { ProductTextItem } from "./types";
+
+export const sharedRoles = {   management: {     title: "Manajemen Sekolah",     description:       "Memantau ringkasan aktivitas dan laporan tanpa perlu menggabungkan berkas manual.",   },   admin: {     title: "Administrator",     description: "Menjalankan proses harian dengan alur kerja yang terstruktur.",   },   teacher: {     title: "Guru",     description: "Terhubung dengan aktivitas kelas dan kebutuhan pencatatan.",   },   parent: {     title: "Orang Tua",     description: "Menerima informasi penting terkait aktivitas siswa.",   },   student: {     title: "Siswa",     description: "Menggunakan layanan sekolah yang lebih terintegrasi.",   }, } satisfies Record<string, ProductTextItem>;

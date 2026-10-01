@@ -3,13 +3,20 @@ import { ArrowRight, ChevronRight, Check } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
 import { ProductPreview } from "@/components/product/product-preview";
+import type { ProductDesign } from "@/components/product/designs";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 /** Hero block for a single product page. */
-export function ProductHero({ product }: { product: Product }) {
+export function ProductHero({
+  product,
+  design,
+}: {
+  product: Product;
+  design?: ProductDesign;
+}) {
   const Icon = product.icon;
 
   return (
@@ -28,6 +35,8 @@ export function ProductHero({ product }: { product: Product }) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-grid opacity-[0.25] [mask-image:radial-gradient(640px_320px_at_20%_0%,black,transparent)]"
       />
+
+      {design?.heroDecor}
 
       <Container size="wide">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-12 xl:gap-16">
@@ -108,7 +117,11 @@ export function ProductHero({ product }: { product: Product }) {
           </div>
 
           <Reveal delay={0.1}>
-            <ProductPreview product={product} />
+            {design?.heroVisual ? (
+              design.heroVisual(product)
+            ) : (
+              <ProductPreview product={product} />
+            )}
           </Reveal>
         </div>
       </Container>

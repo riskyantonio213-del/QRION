@@ -11,6 +11,7 @@ import {
   ProductWorkflow,
 } from "@/components/product/product-sections";
 import { DashboardPreview } from "@/components/dashboard/dashboard-preview";
+import { getProductDesign } from "@/components/product/designs";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Faq } from "@/components/sections/faq";
@@ -85,9 +86,15 @@ function ProductIntegration({ product }: { product: Product }) {
  * src/data/products.ts, so adding a product requires no new page component.
  */
 export function ProductPage({ product }: { product: Product }) {
+  const design = getProductDesign(product.slug);
+
+  if (design.page) {
+    return <div style={design.themeVars}>{design.page(product)}</div>;
+  }
+
   return (
-    <>
-      <ProductHero product={product} />
+    <div style={design.themeVars}>
+      <ProductHero product={product} design={design} />
       <ProductOverview product={product} />
       <ProductProblems product={product} />
       <ProductFeatures product={product} />
@@ -102,6 +109,6 @@ export function ProductPage({ product }: { product: Product }) {
         primaryCta={{ label: product.cta.primaryLabel, href: `/demo?produk=${product.slug}` }}
         secondaryCta={{ label: product.cta.secondaryLabel, href: ctaLinks.contact }}
       />
-    </>
+    </div>
   );
 }
