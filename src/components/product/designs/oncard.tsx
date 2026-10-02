@@ -1,4 +1,5 @@
 import type { ProductDesign } from "./types";
+import Link from "next/link";
 import { OncardDashboard } from "./interactive/oncard-dashboard";
 import { OncardTestimonials } from "./interactive/oncard-testimonials";
 import { OncardVideoCarousel } from "./interactive/oncard-video-carousel";
@@ -5241,7 +5242,7 @@ function OncardPage() {
             lg:gap-6
           "
               >
-                <a
+                <Link
                   className="
         group
         relative
@@ -5257,16 +5258,16 @@ function OncardPage() {
         hover:border-[#32B67D]/30
         hover:shadow-[0_24px_60px_rgba(7,26,19,0.08)]
       "
-                  href="https://oncard.qrion.id/berita/manfaat-menggunakan-oncard-di-sekolah"
+                  href="/insight"
                   data-discover="true"
                 >
                   <div
                     className="
-          relative
-          aspect-[1.25/1]
-          overflow-hidden
-          bg-slate-100
-        "
+           relative
+           aspect-[1.25/1]
+           overflow-hidden
+           bg-slate-100
+         "
                   >
                     <img
                       alt="5 Manfaat Menggunakan Oncard di Sekolah"
@@ -5434,8 +5435,8 @@ function OncardPage() {
                       </span>
                     </div>
                   </div>
-                </a>
-                <a
+                </Link>
+                <Link
                   className="
         group
         relative
@@ -5451,7 +5452,7 @@ function OncardPage() {
         hover:border-[#32B67D]/30
         hover:shadow-[0_24px_60px_rgba(7,26,19,0.08)]
       "
-                  href="https://oncard.qrion.id/berita/ponpes-nurul-hidayah-terapkan-oncard"
+                  href="/insight"
                   data-discover="true"
                 >
                   <div
@@ -5628,8 +5629,8 @@ function OncardPage() {
                       </span>
                     </div>
                   </div>
-                </a>
-                <a
+                </Link>
+                <Link
                   className="
         group
         relative
@@ -5645,7 +5646,7 @@ function OncardPage() {
         hover:border-[#32B67D]/30
         hover:shadow-[0_24px_60px_rgba(7,26,19,0.08)]
       "
-                  href="https://oncard.qrion.id/berita/mahad-tafaqquh-luncurkan-oncard"
+                  href="/insight"
                   data-discover="true"
                 >
                   <div
@@ -5822,8 +5823,8 @@ function OncardPage() {
                       </span>
                     </div>
                   </div>
-                </a>
-                <a
+                </Link>
+                <Link
                   className="
         group
         relative
@@ -5839,7 +5840,7 @@ function OncardPage() {
         hover:border-[#32B67D]/30
         hover:shadow-[0_24px_60px_rgba(7,26,19,0.08)]
       "
-                  href="https://oncard.qrion.id/berita/sharing-knowledge-oncard-brks-arifin-ahmad"
+                  href="/insight"
                   data-discover="true"
                 >
                   <div
@@ -6018,7 +6019,7 @@ function OncardPage() {
                       </span>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
               <div
                 className="
@@ -6068,7 +6069,7 @@ function OncardPage() {
                     04 ARTICLES
                   </span>
                 </div>
-                <a
+                <Link
                   className="
         group
         relative
@@ -6103,7 +6104,7 @@ function OncardPage() {
         !flex
         !box-border
       "
-                  href="https://oncard.qrion.id/berita"
+                  href="/insight"
                   data-discover="true"
                 >
                   <OncardRipple />
@@ -6121,7 +6122,7 @@ function OncardPage() {
                   >
                     Lihat Semua Berita
                   </span>
-                </a>
+                </Link>
               </div>
             </div>
           </section>

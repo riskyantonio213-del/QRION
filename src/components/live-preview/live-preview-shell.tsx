@@ -34,7 +34,7 @@ export function LivePreviewShell({
     gsap.fromTo(
       contentRef.current,
       { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }
+      { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" },
     );
   }, []);
 
@@ -53,10 +53,11 @@ export function LivePreviewShell({
       {/* Dashboard Shell */}
       <div
         className={`relative z-10 mx-auto flex w-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_35px_100px_rgba(15,23,42,0.13)] ${
-          size === "lg" ? "h-[1080px] max-w-[1980px]" : "h-[820px] max-w-[1380px]"
+          size === "lg"
+            ? "h-[1080px] max-w-[1980px]"
+            : "h-[820px] max-w-[1380px]"
         }`}
       >
-
         {/* Browser Bar Mockup */}
         {showBrowserBar && (
           <div className="flex h-[48px] shrink-0 items-center gap-2 border-b border-slate-100 bg-white px-4">
@@ -84,7 +85,9 @@ export function LivePreviewShell({
               <div className="text-xs font-bold text-qrion-indigo">
                 {product?.name ?? "QRION"} Admin
               </div>
-              <div className="text-[9px] text-slate-400">Sekolah Global Mandiri</div>
+              <div className="text-[9px] text-slate-400">
+                Sekolah Global Mandiri
+              </div>
             </div>
           </div>
         </div>

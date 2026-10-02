@@ -1,57 +1,31 @@
 import { useState } from "react";
-import { 
-  ArrowRight, 
-  Plus, 
-  Search, 
-  Megaphone, 
-  Settings, 
-  Send, 
-  Users, 
-  FileText, 
-  Wallet, 
-  TrendingDown, 
-  CreditCard,
+import {
+  Plus,
+  Search,
+  Send,
+  Users,
+  FileText,
   Edit,
   Trash2,
   ChevronRight,
-  Calendar, 
-  Filter, 
-  RotateCw, 
-  Download, 
-  FileSpreadsheet, 
+  Calendar,
+  Filter,
+  RotateCw,
+  Download,
+  FileSpreadsheet,
   ChevronDown,
-  Camera, Eye, Info
+  Camera,
+  Eye,
+  Info,
 } from "lucide-react";
 
-function PageHeader({ title, subtitle, buttonText }: { title: string; subtitle?: string; buttonText?: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <div>
-        <h2 className="text-xl font-bold text-slate-900">{title}</h2>
-        {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
-      </div>
-      <button className="flex items-center gap-2 bg-[#3DBA86] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-[#35a77a] transition">
-        <Plus className="w-4 h-4" />
-        {buttonText || "Tambah Baru"}
-      </button>
-    </div>
-  );
-}
-
-function SearchBar({ placeholder }: { placeholder: string }) {
-  return (
-    <div className="relative">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#3DBA86]/30"
-      />
-    </div>
-  );
-}
-
-function EmptyTable({ headers, rows }: { headers: string[]; rows: (string | React.ReactNode)[][] }) {
+function EmptyTable({
+  headers,
+  rows,
+}: {
+  headers: string[];
+  rows: (string | React.ReactNode)[][];
+}) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
       <div className="overflow-x-auto">
@@ -59,7 +33,9 @@ function EmptyTable({ headers, rows }: { headers: string[]; rows: (string | Reac
           <thead className="bg-[#E8F7F1] text-slate-700 font-semibold">
             <tr>
               {headers.map((h) => (
-                <th key={h} className="p-4 whitespace-nowrap">{h}</th>
+                <th key={h} className="p-4 whitespace-nowrap">
+                  {h}
+                </th>
               ))}
             </tr>
           </thead>
@@ -67,7 +43,14 @@ function EmptyTable({ headers, rows }: { headers: string[]; rows: (string | Reac
             {rows.map((row, i) => (
               <tr key={i} className="hover:bg-slate-50">
                 {row.map((cell, j) => (
-                  <td key={j} className={j === 0 ? "p-4 font-semibold text-slate-800" : "p-4 whitespace-nowrap"}>
+                  <td
+                    key={j}
+                    className={
+                      j === 0
+                        ? "p-4 font-semibold text-slate-800"
+                        : "p-4 whitespace-nowrap"
+                    }
+                  >
                     {cell}
                   </td>
                 ))}
@@ -96,24 +79,124 @@ export function OnTuitionManajemenBiaya() {
     "Diterima",
     "Prog(%)",
     "Jatuh Tempo",
-    "Aksi"
+    "Aksi",
   ];
 
   const biayaRowsData = [
-    { nama: "Umum", total: "Rp 574.091.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 574.091.000", diterima: "Rp 27.406.000", prog: "4.77%", val: 4.77 },
-    { nama: "Jul 2026", total: "Rp 222.310.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 222.310.000", diterima: "Rp 3.550.000", prog: "1.6%", val: 1.6 },
-    { nama: "Agu 2026", total: "Rp 222.200.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 222.200.000", diterima: "Rp 3.150.000", prog: "1.42%", val: 1.42 },
-    { nama: "Sep 2026", total: "Rp 22.250.004", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 22.250.004", diterima: "Rp 600.001", prog: "2.7%", val: 2.7 },
-    { nama: "Okt 2026", total: "Rp 22.250.004", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 22.250.004", diterima: "Rp 1.000.002", prog: "4.49%", val: 4.49 },
-    { nama: "Nov 2026", total: "Rp 20.250.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 20.250.000", diterima: "Rp 0", prog: "0%", val: 0 },
-    { nama: "Des 2026", total: "Rp 20.250.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 20.250.000", diterima: "Rp 0", prog: "0%", val: 0 },
-    { nama: "Mar 2027", total: "Rp 220.000.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 220.000.000", diterima: "Rp 4.400.000", prog: "2%", val: 2 },
-    { nama: "Mei 2027", total: "Rp 222.960.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 222.960.000", diterima: "Rp 4.290.000", prog: "1.92%", val: 1.92 },
-    { nama: "Jun 2027", total: "Rp 2.500.000", perSiswa: "-", jumlah: "-", diskon: "-", harusBayar: "Rp 2.500.000", diterima: "Rp 500.000", prog: "20%", val: 20 },
+    {
+      nama: "Umum",
+      total: "Rp 574.091.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 574.091.000",
+      diterima: "Rp 27.406.000",
+      prog: "4.77%",
+      val: 4.77,
+    },
+    {
+      nama: "Jul 2026",
+      total: "Rp 222.310.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 222.310.000",
+      diterima: "Rp 3.550.000",
+      prog: "1.6%",
+      val: 1.6,
+    },
+    {
+      nama: "Agu 2026",
+      total: "Rp 222.200.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 222.200.000",
+      diterima: "Rp 3.150.000",
+      prog: "1.42%",
+      val: 1.42,
+    },
+    {
+      nama: "Sep 2026",
+      total: "Rp 22.250.004",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 22.250.004",
+      diterima: "Rp 600.001",
+      prog: "2.7%",
+      val: 2.7,
+    },
+    {
+      nama: "Okt 2026",
+      total: "Rp 22.250.004",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 22.250.004",
+      diterima: "Rp 1.000.002",
+      prog: "4.49%",
+      val: 4.49,
+    },
+    {
+      nama: "Nov 2026",
+      total: "Rp 20.250.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 20.250.000",
+      diterima: "Rp 0",
+      prog: "0%",
+      val: 0,
+    },
+    {
+      nama: "Des 2026",
+      total: "Rp 20.250.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 20.250.000",
+      diterima: "Rp 0",
+      prog: "0%",
+      val: 0,
+    },
+    {
+      nama: "Mar 2027",
+      total: "Rp 220.000.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 220.000.000",
+      diterima: "Rp 4.400.000",
+      prog: "2%",
+      val: 2,
+    },
+    {
+      nama: "Mei 2027",
+      total: "Rp 222.960.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 222.960.000",
+      diterima: "Rp 4.290.000",
+      prog: "1.92%",
+      val: 1.92,
+    },
+    {
+      nama: "Jun 2027",
+      total: "Rp 2.500.000",
+      perSiswa: "-",
+      jumlah: "-",
+      diskon: "-",
+      harusBayar: "Rp 2.500.000",
+      diterima: "Rp 500.000",
+      prog: "20%",
+      val: 20,
+    },
   ];
 
   const biayaFormattedRows = biayaRowsData.map((item) => [
-    <div className="flex items-center gap-1">
+    <div key="nama" className="flex items-center gap-1">
       <span>{item.nama}</span>
       <ChevronRight className="w-3 h-3 text-slate-400" />
     </div>,
@@ -122,26 +205,35 @@ export function OnTuitionManajemenBiaya() {
     item.jumlah,
     item.diskon,
     item.harusBayar,
-    <span className="text-[#3DBA86] font-medium">{item.diterima}</span>,
-    <div className="flex items-center gap-2">
+    <span key="diterima" className="text-[#3DBA86] font-medium">
+      {item.diterima}
+    </span>,
+    <div key="prog" className="flex items-center gap-2">
       <div className="w-16 bg-slate-100 h-2 rounded-full overflow-hidden">
-        <div className="bg-[#3DBA86] h-full rounded-full" style={{ width: `${Math.min(item.val, 100)}%` }} />
+        <div
+          className="bg-[#3DBA86] h-full rounded-full"
+          style={{ width: `${Math.min(item.val, 100)}%` }}
+        />
       </div>
       <span className="text-[11px] font-medium">{item.prog}</span>
     </div>,
     "-",
-    "-"
+    "-",
   ]);
 
   const beasiswaHeaders = ["No", "Nama Beasiswa", "Jumlah Siswa", "Aksi"];
-  
+
   const beasiswaRowsData = [
     { no: "1", nama: "Diskon Juara 1", jumlah: "1" },
     { no: "2", nama: "Beasiswa Pemprov", jumlah: "4" },
     { no: "3", nama: "Beasiswa Bersaudara", jumlah: "1" },
     { no: "4", nama: "Anak Guru Assajadah", jumlah: "1" },
     { no: "5", nama: "BEASISWA JALAN JALAN KE SUMBAR", jumlah: "1" },
-    { no: "6", nama: "tes bayar utk tagihan yg sudah terbayarkan", jumlah: "2" },
+    {
+      no: "6",
+      nama: "tes bayar utk tagihan yg sudah terbayarkan",
+      jumlah: "2",
+    },
     { no: "7", nama: "Tes Beasiswa Tes Biaya Umum 2", jumlah: "12" },
     { no: "8", nama: "Diskon Anak Guru", jumlah: "2" },
   ];
@@ -150,11 +242,17 @@ export function OnTuitionManajemenBiaya() {
     item.no,
     item.nama,
     item.jumlah,
-    <div className="flex items-center gap-2 text-slate-400">
-      <button className="p-1 hover:text-slate-600 transition"><FileText className="w-4 h-4" /></button>
-      <button className="p-1 hover:text-[#3DBA86] transition"><Edit className="w-4 h-4" /></button>
-      <button className="p-1 hover:text-red-500 transition"><Trash2 className="w-4 h-4" /></button>
-    </div>
+    <div key="aksi" className="flex items-center gap-2 text-slate-400">
+      <button className="p-1 hover:text-slate-600 transition">
+        <FileText className="w-4 h-4" />
+      </button>
+      <button className="p-1 hover:text-[#3DBA86] transition">
+        <Edit className="w-4 h-4" />
+      </button>
+      <button className="p-1 hover:text-red-500 transition">
+        <Trash2 className="w-4 h-4" />
+      </button>
+    </div>,
   ]);
 
   return (
@@ -162,7 +260,9 @@ export function OnTuitionManajemenBiaya() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-slate-900">Manajemen Biaya</h2>
-          <p className="text-xs text-slate-400 mt-1">Senin, 28 September 2026 - 10.30 WIB</p>
+          <p className="text-xs text-slate-400 mt-1">
+            Senin, 28 September 2026 - 10.30 WIB
+          </p>
         </div>
         <button className="flex items-center gap-2 bg-[#3DBA86] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-[#35a77a] transition">
           <Plus className="w-4 h-4" />
@@ -251,14 +351,14 @@ export function OnTuitionPembayaran() {
             Cari Data Pembayaran Siswa
           </h3>
           <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
-            Masukkan nama atau NISN siswa pada kolom pencarian di atas untuk melihat riwayat dan status pembayaran
+            Masukkan nama atau NISN siswa pada kolom pencarian di atas untuk
+            melihat riwayat dan status pembayaran
           </p>
         </div>
       </div>
     </div>
   );
 }
-
 
 export function OnTuitionPenarikan() {
   const [activeTab, setActiveTab] = useState<"transit" | "sekolah">("transit");
@@ -268,7 +368,8 @@ export function OnTuitionPenarikan() {
       no: "1",
       waktu: "2026-07-28 10:38:36",
       nominal: "Rp946.000",
-      keterangan: "Request penarikan saldo [Auto-cancelled]: New withdrawal request initiated.",
+      keterangan:
+        "Request penarikan saldo [Auto-cancelled]: New withdrawal request initiated.",
       status: "Dibatalkan",
       invoice: "-",
       aksi: "-",
@@ -286,7 +387,8 @@ export function OnTuitionPenarikan() {
       no: "3",
       waktu: "2026-07-23 09:57:04",
       nominal: "Rp15.000.000",
-      keterangan: "Request pencairan dana [Auto-cancelled]: New withdrawal request initiated.",
+      keterangan:
+        "Request pencairan dana [Auto-cancelled]: New withdrawal request initiated.",
       status: "Dibatalkan",
       invoice: "-",
       aksi: "-",
@@ -364,14 +466,18 @@ export function OnTuitionPenarikan() {
   const totalData = isTransit ? 7 : 10;
   const saldoAmount = isTransit ? "Rp106.246.000" : "Rp45.816.001";
   const buttonText = isTransit ? "Request Penarikan" : "Penarikan";
-  const historyTitle = isTransit ? "Riwayat Penarikan Saldo Transit" : "Riwayat Penarikan Saldo Kas";
+  const historyTitle = isTransit
+    ? "Riwayat Penarikan Saldo Transit"
+    : "Riwayat Penarikan Saldo Kas";
 
   return (
     <div className="space-y-6">
       {/* Header Info */}
       <div>
         <h2 className="text-xl font-bold text-slate-900">Penarikan</h2>
-        <p className="text-xs text-slate-400 mt-1">Senin, 28 September 2026 - 10.31 WIB</p>
+        <p className="text-xs text-slate-400 mt-1">
+          Senin, 28 September 2026 - 10.31 WIB
+        </p>
       </div>
 
       {/* Navigation Tabs */}
@@ -430,23 +536,35 @@ export function OnTuitionPenarikan() {
                   <tr key={row.no} className="hover:bg-slate-50">
                     <td className="p-4 text-slate-500">{row.no}</td>
                     <td className="p-4 whitespace-nowrap">{row.waktu}</td>
-                    <td className="p-4 font-medium text-slate-800 whitespace-nowrap">{row.nominal}</td>
+                    <td className="p-4 font-medium text-slate-800 whitespace-nowrap">
+                      {row.nominal}
+                    </td>
                     <td className="p-4 max-w-sm">{row.keterangan}</td>
                     <td className="p-4 whitespace-nowrap">
                       {row.status === "Berhasil" ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-600">
-                          <span className="w-3.5 h-3.5 rounded-full border border-emerald-500 flex items-center justify-center text-[9px] font-bold">✓</span>
+                          <span className="w-3.5 h-3.5 rounded-full border border-emerald-500 flex items-center justify-center text-[9px] font-bold">
+                            ✓
+                          </span>
                           Berhasil
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-red-50 text-red-500">
-                          <span className="w-3.5 h-3.5 rounded-full border border-red-400 flex items-center justify-center text-[9px] font-bold">✕</span>
+                          <span className="w-3.5 h-3.5 rounded-full border border-red-400 flex items-center justify-center text-[9px] font-bold">
+                            ✕
+                          </span>
                           Dibatalkan
                         </span>
                       )}
                     </td>
-                    <td className="p-4 whitespace-nowrap text-slate-500">{row.invoice}</td>
-                    {isTransit && <td className="p-4 whitespace-nowrap text-slate-400">{row.aksi}</td>}
+                    <td className="p-4 whitespace-nowrap text-slate-500">
+                      {row.invoice}
+                    </td>
+                    {isTransit && (
+                      <td className="p-4 whitespace-nowrap text-slate-400">
+                        {row.aksi}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -480,79 +598,559 @@ export function OnTuitionPenarikan() {
 }
 
 export function OnTuitionJurnal() {
-  const [activeTab, setActiveTab] = useState<"monitoring" | "pembayaran" | "transit" | "sekolah">("monitoring");
+  const [activeTab, setActiveTab] = useState<
+    "monitoring" | "pembayaran" | "transit" | "sekolah"
+  >("monitoring");
 
   // Data 1: Jurnal Monitoring
   const monitoringData = [
-    { no: "1", nis: "100129", kelas: "SMP Kelas 7", nama: "Aisyah Maulana", kategori: "Umum", item: "Tes multiple aisyah maulana", bulan: "September", tglPenagihan: "25/09/2026", jatuhTempo: "25/09/2026", nominal: "Rp5.000", dibayarkan: "Rp5.000", belumDibayar: "Rp0", status: "Lunas", tunggakan: "-" },
-    { no: "2", nis: "100129", kelas: "SMP Kelas 7", nama: "Aisyah Maulana", kategori: "Umum", item: "Tes", bulan: "Mei", tglPenagihan: "23/05/2026", jatuhTempo: "30/05/2026", nominal: "Rp12.000", dibayarkan: "Rp12.000", belumDibayar: "Rp0", status: "Lunas", tunggakan: "-" },
-    { no: "3", nis: "100030", kelas: "-", nama: "Intan Permata", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "Desember", tglPenagihan: "01/12/2026", jatuhTempo: "21/12/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "4", nis: "100005", kelas: "SMP Kelas 7", nama: "Rina Wijaya Kurma", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "Desember", tglPenagihan: "01/12/2026", jatuhTempo: "21/12/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "5", nis: "100030", kelas: "-", nama: "Intan Permata", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "November", tglPenagihan: "01/11/2026", jatuhTempo: "21/11/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "6", nis: "100005", kelas: "SMP Kelas 7", nama: "Rina Wijaya Kurma", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "November", tglPenagihan: "01/11/2026", jatuhTempo: "21/11/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "7", nis: "100030", kelas: "-", nama: "Intan Permata", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "Oktober", tglPenagihan: "01/10/2026", jatuhTempo: "21/10/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "8", nis: "100005", kelas: "SMP Kelas 7", nama: "Rina Wijaya Kurma", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "Oktober", tglPenagihan: "01/10/2026", jatuhTempo: "21/10/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Belum Lunas", tunggakan: "-" },
-    { no: "9", nis: "100030", kelas: "-", nama: "Intan Permata", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "September", tglPenagihan: "01/09/2026", jatuhTempo: "21/09/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Tunggakan", tunggakan: "Ya" },
-    { no: "10", nis: "100005", kelas: "SMP Kelas 7", nama: "Rina Wijaya Kurma", kategori: "Bulanan", item: "SPP Bulanan Bersaudara", bulan: "September", tglPenagihan: "01/09/2026", jatuhTempo: "21/09/2026", nominal: "Rp125.000", dibayarkan: "Rp0", belumDibayar: "Rp125.000", status: "Tunggakan", tunggakan: "Ya" },
+    {
+      no: "1",
+      nis: "100129",
+      kelas: "SMP Kelas 7",
+      nama: "Aisyah Maulana",
+      kategori: "Umum",
+      item: "Tes multiple aisyah maulana",
+      bulan: "September",
+      tglPenagihan: "25/09/2026",
+      jatuhTempo: "25/09/2026",
+      nominal: "Rp5.000",
+      dibayarkan: "Rp5.000",
+      belumDibayar: "Rp0",
+      status: "Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "2",
+      nis: "100129",
+      kelas: "SMP Kelas 7",
+      nama: "Aisyah Maulana",
+      kategori: "Umum",
+      item: "Tes",
+      bulan: "Mei",
+      tglPenagihan: "23/05/2026",
+      jatuhTempo: "30/05/2026",
+      nominal: "Rp12.000",
+      dibayarkan: "Rp12.000",
+      belumDibayar: "Rp0",
+      status: "Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "3",
+      nis: "100030",
+      kelas: "-",
+      nama: "Intan Permata",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "Desember",
+      tglPenagihan: "01/12/2026",
+      jatuhTempo: "21/12/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "4",
+      nis: "100005",
+      kelas: "SMP Kelas 7",
+      nama: "Rina Wijaya Kurma",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "Desember",
+      tglPenagihan: "01/12/2026",
+      jatuhTempo: "21/12/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "5",
+      nis: "100030",
+      kelas: "-",
+      nama: "Intan Permata",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "November",
+      tglPenagihan: "01/11/2026",
+      jatuhTempo: "21/11/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "6",
+      nis: "100005",
+      kelas: "SMP Kelas 7",
+      nama: "Rina Wijaya Kurma",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "November",
+      tglPenagihan: "01/11/2026",
+      jatuhTempo: "21/11/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "7",
+      nis: "100030",
+      kelas: "-",
+      nama: "Intan Permata",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "Oktober",
+      tglPenagihan: "01/10/2026",
+      jatuhTempo: "21/10/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "8",
+      nis: "100005",
+      kelas: "SMP Kelas 7",
+      nama: "Rina Wijaya Kurma",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "Oktober",
+      tglPenagihan: "01/10/2026",
+      jatuhTempo: "21/10/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Belum Lunas",
+      tunggakan: "-",
+    },
+    {
+      no: "9",
+      nis: "100030",
+      kelas: "-",
+      nama: "Intan Permata",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "September",
+      tglPenagihan: "01/09/2026",
+      jatuhTempo: "21/09/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Tunggakan",
+      tunggakan: "Ya",
+    },
+    {
+      no: "10",
+      nis: "100005",
+      kelas: "SMP Kelas 7",
+      nama: "Rina Wijaya Kurma",
+      kategori: "Bulanan",
+      item: "SPP Bulanan Bersaudara",
+      bulan: "September",
+      tglPenagihan: "01/09/2026",
+      jatuhTempo: "21/09/2026",
+      nominal: "Rp125.000",
+      dibayarkan: "Rp0",
+      belumDibayar: "Rp125.000",
+      status: "Tunggakan",
+      tunggakan: "Ya",
+    },
   ];
 
   // Data 2: Jurnal Pembayaran
   const pembayaranData = [
-    { no: "1", nis: "100129", kelas: "SMP Kelas 7", nama: "Aisyah Maulana", kategori: "Tes", item: "Tes a.n Aisyah Maulana", waktu: "25/09/2026, 14.55", channel: "Cash", nominal: "Rp12.000", invoice: "PHNX-ONT-20260925145522-...", detail: "Lunas" },
-    { no: "2", nis: "100129", kelas: "SMP Kelas 7", nama: "Aisyah Maulana", kategori: "Tes", item: "Tes multiple aisyah maulana a.n Aisyah Maulana", waktu: "25/09/2026, 14.55", channel: "Cash", nominal: "Rp5.000", invoice: "PHNX-ONT-20260925145522-...", detail: "Lunas" },
-    { no: "3", nis: "567891045", kelas: "-", nama: "Freddy Mercuree", kategori: "SPP Testing Argeo", item: "SPP Testing Argeo Bulan 2026-10 a.n Freddy Mercuree", waktu: "25/09/2026, 10.46", channel: "Cash", nominal: "Rp500.001", invoice: "PHNX-ONT-20260925104616-...", detail: "Lunas" },
-    { no: "4", nis: "567891045", kelas: "-", nama: "Freddy Mercuree", kategori: "SPP Assajadah", item: "SPP Assajadah Bulan 2027-03 a.n Freddy Mercuree [Bank Mandiri | Kode: 05569691]", waktu: "17/09/2026, 12.26", channel: "Transfer Mandiri", nominal: "Rp2.200.000", invoice: "PHNX-ONT-20260917122628-...", detail: "Lunas" },
-    { no: "5", nis: "567891045", kelas: "-", nama: "Freddy Mercuree", kategori: "SPP Assajadah", item: "SPP Assajadah Bulan 2027-05 a.n Freddy Mercuree [Bank Mandiri | Kode: 05569691]", waktu: "17/09/2026, 12.26", channel: "Transfer Mandiri", nominal: "Rp2.200.000", invoice: "PHNX-ONT-20260917122628-...", detail: "Lunas" },
-    { no: "6", nis: "100113", kelas: "-", nama: "Maya Ramadhan", kategori: "SPP Assajadah", item: "SPP Assajadah Bulan 2026-08 a.n Maya Ramadhan", waktu: "14/09/2026, 13.10", channel: "Payment Gateway", nominal: "Rp2.200.000", invoice: "PHNX-ONT-20260914131031-...", detail: "Lunas" },
-    { no: "7", nis: "100113", kelas: "-", nama: "Maya Ramadhan", kategori: "SPP Assajadah", item: "SPP Assajadah Bulan 2026-07 a.n Maya Ramadhan", waktu: "14/09/2026, 13.00", channel: "Payment Gateway", nominal: "Rp2.200.000", invoice: "PHNX-ONT-20260914130032-...", detail: "Lunas" },
-    { no: "8", nis: "100113", kelas: "-", nama: "Maya Ramadhan", kategori: "SPP Bulanan", item: "SPP Bulanan Bulan 2026-09 a.n Maya Ramadhan", waktu: "14/09/2026, 12.55", channel: "Payment Gateway", nominal: "Rp200.000", invoice: "PHNX-ONT-20260914125526-...", detail: "Lunas" },
-    { no: "9", nis: "100016", kelas: "-", nama: "Farhan Nugroho Aja", kategori: "SPP Bulanan", item: "SPP Bulanan Bulan 2026-09 a.n Farhan Nugroho Aja", waktu: "14/09/2026, 12.51", channel: "Payment Gateway", nominal: "Rp200.000", invoice: "PHNX-ONT-20260914125105-...", detail: "Lunas" },
-    { no: "10", nis: "100113", kelas: "-", nama: "Maya Ramadhan", kategori: "Uang Ujian", item: "Uang Ujian a.n Maya Ramadhan", waktu: "11/09/2026, 15.55", channel: "Payment Gateway", nominal: "Rp50.000", invoice: "PHNX-ONT-20260911115505-...", detail: "Lunas" },
+    {
+      no: "1",
+      nis: "100129",
+      kelas: "SMP Kelas 7",
+      nama: "Aisyah Maulana",
+      kategori: "Tes",
+      item: "Tes a.n Aisyah Maulana",
+      waktu: "25/09/2026, 14.55",
+      channel: "Cash",
+      nominal: "Rp12.000",
+      invoice: "PHNX-ONT-20260925145522-...",
+      detail: "Lunas",
+    },
+    {
+      no: "2",
+      nis: "100129",
+      kelas: "SMP Kelas 7",
+      nama: "Aisyah Maulana",
+      kategori: "Tes",
+      item: "Tes multiple aisyah maulana a.n Aisyah Maulana",
+      waktu: "25/09/2026, 14.55",
+      channel: "Cash",
+      nominal: "Rp5.000",
+      invoice: "PHNX-ONT-20260925145522-...",
+      detail: "Lunas",
+    },
+    {
+      no: "3",
+      nis: "567891045",
+      kelas: "-",
+      nama: "Freddy Mercuree",
+      kategori: "SPP Testing Argeo",
+      item: "SPP Testing Argeo Bulan 2026-10 a.n Freddy Mercuree",
+      waktu: "25/09/2026, 10.46",
+      channel: "Cash",
+      nominal: "Rp500.001",
+      invoice: "PHNX-ONT-20260925104616-...",
+      detail: "Lunas",
+    },
+    {
+      no: "4",
+      nis: "567891045",
+      kelas: "-",
+      nama: "Freddy Mercuree",
+      kategori: "SPP Assajadah",
+      item: "SPP Assajadah Bulan 2027-03 a.n Freddy Mercuree [Bank Mandiri | Kode: 05569691]",
+      waktu: "17/09/2026, 12.26",
+      channel: "Transfer Mandiri",
+      nominal: "Rp2.200.000",
+      invoice: "PHNX-ONT-20260917122628-...",
+      detail: "Lunas",
+    },
+    {
+      no: "5",
+      nis: "567891045",
+      kelas: "-",
+      nama: "Freddy Mercuree",
+      kategori: "SPP Assajadah",
+      item: "SPP Assajadah Bulan 2027-05 a.n Freddy Mercuree [Bank Mandiri | Kode: 05569691]",
+      waktu: "17/09/2026, 12.26",
+      channel: "Transfer Mandiri",
+      nominal: "Rp2.200.000",
+      invoice: "PHNX-ONT-20260917122628-...",
+      detail: "Lunas",
+    },
+    {
+      no: "6",
+      nis: "100113",
+      kelas: "-",
+      nama: "Maya Ramadhan",
+      kategori: "SPP Assajadah",
+      item: "SPP Assajadah Bulan 2026-08 a.n Maya Ramadhan",
+      waktu: "14/09/2026, 13.10",
+      channel: "Payment Gateway",
+      nominal: "Rp2.200.000",
+      invoice: "PHNX-ONT-20260914131031-...",
+      detail: "Lunas",
+    },
+    {
+      no: "7",
+      nis: "100113",
+      kelas: "-",
+      nama: "Maya Ramadhan",
+      kategori: "SPP Assajadah",
+      item: "SPP Assajadah Bulan 2026-07 a.n Maya Ramadhan",
+      waktu: "14/09/2026, 13.00",
+      channel: "Payment Gateway",
+      nominal: "Rp2.200.000",
+      invoice: "PHNX-ONT-20260914130032-...",
+      detail: "Lunas",
+    },
+    {
+      no: "8",
+      nis: "100113",
+      kelas: "-",
+      nama: "Maya Ramadhan",
+      kategori: "SPP Bulanan",
+      item: "SPP Bulanan Bulan 2026-09 a.n Maya Ramadhan",
+      waktu: "14/09/2026, 12.55",
+      channel: "Payment Gateway",
+      nominal: "Rp200.000",
+      invoice: "PHNX-ONT-20260914125526-...",
+      detail: "Lunas",
+    },
+    {
+      no: "9",
+      nis: "100016",
+      kelas: "-",
+      nama: "Farhan Nugroho Aja",
+      kategori: "SPP Bulanan",
+      item: "SPP Bulanan Bulan 2026-09 a.n Farhan Nugroho Aja",
+      waktu: "14/09/2026, 12.51",
+      channel: "Payment Gateway",
+      nominal: "Rp200.000",
+      invoice: "PHNX-ONT-20260914125105-...",
+      detail: "Lunas",
+    },
+    {
+      no: "10",
+      nis: "100113",
+      kelas: "-",
+      nama: "Maya Ramadhan",
+      kategori: "Uang Ujian",
+      item: "Uang Ujian a.n Maya Ramadhan",
+      waktu: "11/09/2026, 15.55",
+      channel: "Payment Gateway",
+      nominal: "Rp50.000",
+      invoice: "PHNX-ONT-20260911115505-...",
+      detail: "Lunas",
+    },
   ];
 
   // Data 3: Jurnal Rekening Transit
   const transitData = [
-    { no: "1", idTx: "PHNX-ONT-20260914131031-6108", ket: "(1 tagihan) a.n Maya Ramadhan", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp2.200.000", saldo: "Rp106.246.000", waktu: "14/09/2026, 13.10" },
-    { no: "2", idTx: "PHNX-ONT-20260914130032-5267", ket: "(1 tagihan) a.n Maya Ramadhan", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp2.200.000", saldo: "Rp104.046.000", waktu: "14/09/2026, 13.00" },
-    { no: "3", idTx: "PHNX-ONT-20260914125526-9108", ket: "(1 tagihan) a.n Maya Ramadhan", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp200.000", saldo: "Rp101.846.000", waktu: "14/09/2026, 12.55" },
-    { no: "4", idTx: "PHNX-ONT-20260914125105-6096", ket: "(1 tagihan) a.n Farhan Nugroho Aja", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp200.000", saldo: "Rp101.646.000", waktu: "14/09/2026, 12.51" },
-    { no: "5", idTx: "PHNX-ONT-20260911115505-8534", ket: "(1 tagihan) a.n Maya Ramadhan", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp50.000", saldo: "Rp101.446.000", waktu: "11/09/2026, 15.55" },
-    { no: "6", idTx: "PHNX-ONT-20260911152603-8369", ket: "(1 tagihan) a.n Farhan Nugroho Aja", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp50.000", saldo: "Rp101.396.000", waktu: "11/09/2026, 15.26" },
-    { no: "7", idTx: "PHNX-ONT-20260728115757-2373", ket: "(2 tagihan) a.n Farhan Nugroho", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp400.000", saldo: "Rp101.346.000", waktu: "28/07/2026, 11.57" },
-    { no: "8", idTx: "PHNX-ONT-20260726162945-2691", ket: "Withdrawal request #6 approved by Qrion Super Admin", jenis: "Debit", debit: "1337485954 - BILLING", kredit: "1362586287 - CASH", nominal: "Rp15.000.000", saldo: "Rp100.946.000", waktu: "26/07/2026, 16.29" },
-    { no: "9", idTx: "PHNX-ONT-20260724131231-2297", ket: "(1 tagihan) a.n Farhan Nugroho", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp25.000", saldo: "Rp115.946.000", waktu: "24/07/2026, 13.12" },
-    { no: "10", idTx: "PHNX-ONT-20260724083346-8543", ket: "(1 tagihan) a.n Farhan Nugroho", jenis: "Kredit", debit: "-", kredit: "1337485954 - BILLING", nominal: "Rp50.000", saldo: "Rp115.921.000", waktu: "24/07/2026, 08.33" },
+    {
+      no: "1",
+      idTx: "PHNX-ONT-20260914131031-6108",
+      ket: "(1 tagihan) a.n Maya Ramadhan",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp2.200.000",
+      saldo: "Rp106.246.000",
+      waktu: "14/09/2026, 13.10",
+    },
+    {
+      no: "2",
+      idTx: "PHNX-ONT-20260914130032-5267",
+      ket: "(1 tagihan) a.n Maya Ramadhan",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp2.200.000",
+      saldo: "Rp104.046.000",
+      waktu: "14/09/2026, 13.00",
+    },
+    {
+      no: "3",
+      idTx: "PHNX-ONT-20260914125526-9108",
+      ket: "(1 tagihan) a.n Maya Ramadhan",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp200.000",
+      saldo: "Rp101.846.000",
+      waktu: "14/09/2026, 12.55",
+    },
+    {
+      no: "4",
+      idTx: "PHNX-ONT-20260914125105-6096",
+      ket: "(1 tagihan) a.n Farhan Nugroho Aja",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp200.000",
+      saldo: "Rp101.646.000",
+      waktu: "14/09/2026, 12.51",
+    },
+    {
+      no: "5",
+      idTx: "PHNX-ONT-20260911115505-8534",
+      ket: "(1 tagihan) a.n Maya Ramadhan",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp50.000",
+      saldo: "Rp101.446.000",
+      waktu: "11/09/2026, 15.55",
+    },
+    {
+      no: "6",
+      idTx: "PHNX-ONT-20260911152603-8369",
+      ket: "(1 tagihan) a.n Farhan Nugroho Aja",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp50.000",
+      saldo: "Rp101.396.000",
+      waktu: "11/09/2026, 15.26",
+    },
+    {
+      no: "7",
+      idTx: "PHNX-ONT-20260728115757-2373",
+      ket: "(2 tagihan) a.n Farhan Nugroho",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp400.000",
+      saldo: "Rp101.346.000",
+      waktu: "28/07/2026, 11.57",
+    },
+    {
+      no: "8",
+      idTx: "PHNX-ONT-20260726162945-2691",
+      ket: "Withdrawal request #6 approved by Qrion Super Admin",
+      jenis: "Debit",
+      debit: "1337485954 - BILLING",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp15.000.000",
+      saldo: "Rp100.946.000",
+      waktu: "26/07/2026, 16.29",
+    },
+    {
+      no: "9",
+      idTx: "PHNX-ONT-20260724131231-2297",
+      ket: "(1 tagihan) a.n Farhan Nugroho",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp25.000",
+      saldo: "Rp115.946.000",
+      waktu: "24/07/2026, 13.12",
+    },
+    {
+      no: "10",
+      idTx: "PHNX-ONT-20260724083346-8543",
+      ket: "(1 tagihan) a.n Farhan Nugroho",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1337485954 - BILLING",
+      nominal: "Rp50.000",
+      saldo: "Rp115.921.000",
+      waktu: "24/07/2026, 08.33",
+    },
   ];
 
   // Data 4: Jurnal Rekening Sekolah
   const sekolahData = [
-    { no: "1", idTx: "PHNX-ONT-20260925145522-5997", ket: "(2 tagihan) a.n Aisyah Maulana", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp17.000", saldo: "Rp45.816.001", waktu: "25/09/2026, 14.55" },
-    { no: "2", idTx: "PHNX-ONT-20260925104616-7810", ket: "(1 tagihan) a.n Freddy Mercuree", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp500.001", saldo: "Rp45.799.001", waktu: "25/09/2026, 10.46" },
-    { no: "3", idTx: "PHNX-ONT-20260917122628-2749", ket: "(2 tagihan) a.n Freddy Mercuree", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp4.400.000", saldo: "Rp45.299.000", waktu: "17/09/2026, 12.26" },
-    { no: "4", idTx: "INV-WD-20260913214309-4193", ket: "test withdrawal", jenis: "Debit", debit: "1362586287 - CASH", kredit: "-", nominal: "Rp1.000", saldo: "Rp40.899.000", waktu: "13/09/2026, 21.43" },
-    { no: "5", idTx: "PHNX-ONT-20260904102953-5922", ket: "Uang Pembangunan a.n Rina Wijaya Kurma", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp4.000.000", saldo: "Rp40.900.000", waktu: "04/09/2026, 10.29" },
-    { no: "6", idTx: "PHNX-ONT-20260901112838-4250", ket: "Uang Pembangunan a.n Risky Antonio Pauji", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp1.000.000", saldo: "Rp36.900.000", waktu: "01/09/2026, 11.28" },
-    { no: "7", idTx: "PHNX-ONT-20260901112724-8024", ket: "(2 tagihan) a.n Risky Antonio Pauji", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp1.300.000", saldo: "Rp35.900.000", waktu: "01/09/2026, 11.27" },
-    { no: "8", idTx: "PHNX-ONT-20260827103128-8000", ket: "(1 tagihan) a.n Risky Antonio Pauji", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp3.500.000", saldo: "Rp34.600.000", waktu: "27/08/2026, 10.31" },
-    { no: "9", idTx: "PHNX-ONT-20260821095153-7412", ket: "Spp Bulan 2027-05 a.n Risky Antonio Pauji", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp100.000", saldo: "Rp31.100.000", waktu: "21/08/2026, 09.51" },
-    { no: "10", idTx: "PHNX-ONT-20260819223852-3604", ket: "School Trip to Bangla a.n Risky Antonio Pauji", jenis: "Kredit", debit: "-", kredit: "1362586287 - CASH", nominal: "Rp5.000.000", saldo: "Rp31.000.000", waktu: "19/08/2026, 22.38" },
+    {
+      no: "1",
+      idTx: "PHNX-ONT-20260925145522-5997",
+      ket: "(2 tagihan) a.n Aisyah Maulana",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp17.000",
+      saldo: "Rp45.816.001",
+      waktu: "25/09/2026, 14.55",
+    },
+    {
+      no: "2",
+      idTx: "PHNX-ONT-20260925104616-7810",
+      ket: "(1 tagihan) a.n Freddy Mercuree",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp500.001",
+      saldo: "Rp45.799.001",
+      waktu: "25/09/2026, 10.46",
+    },
+    {
+      no: "3",
+      idTx: "PHNX-ONT-20260917122628-2749",
+      ket: "(2 tagihan) a.n Freddy Mercuree",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp4.400.000",
+      saldo: "Rp45.299.000",
+      waktu: "17/09/2026, 12.26",
+    },
+    {
+      no: "4",
+      idTx: "INV-WD-20260913214309-4193",
+      ket: "test withdrawal",
+      jenis: "Debit",
+      debit: "1362586287 - CASH",
+      kredit: "-",
+      nominal: "Rp1.000",
+      saldo: "Rp40.899.000",
+      waktu: "13/09/2026, 21.43",
+    },
+    {
+      no: "5",
+      idTx: "PHNX-ONT-20260904102953-5922",
+      ket: "Uang Pembangunan a.n Rina Wijaya Kurma",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp4.000.000",
+      saldo: "Rp40.900.000",
+      waktu: "04/09/2026, 10.29",
+    },
+    {
+      no: "6",
+      idTx: "PHNX-ONT-20260901112838-4250",
+      ket: "Uang Pembangunan a.n Risky Antonio Pauji",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp1.000.000",
+      saldo: "Rp36.900.000",
+      waktu: "01/09/2026, 11.28",
+    },
+    {
+      no: "7",
+      idTx: "PHNX-ONT-20260901112724-8024",
+      ket: "(2 tagihan) a.n Risky Antonio Pauji",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp1.300.000",
+      saldo: "Rp35.900.000",
+      waktu: "01/09/2026, 11.27",
+    },
+    {
+      no: "8",
+      idTx: "PHNX-ONT-20260827103128-8000",
+      ket: "(1 tagihan) a.n Risky Antonio Pauji",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp3.500.000",
+      saldo: "Rp34.600.000",
+      waktu: "27/08/2026, 10.31",
+    },
+    {
+      no: "9",
+      idTx: "PHNX-ONT-20260821095153-7412",
+      ket: "Spp Bulan 2027-05 a.n Risky Antonio Pauji",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp100.000",
+      saldo: "Rp31.100.000",
+      waktu: "21/08/2026, 09.51",
+    },
+    {
+      no: "10",
+      idTx: "PHNX-ONT-20260819223852-3604",
+      ket: "School Trip to Bangla a.n Risky Antonio Pauji",
+      jenis: "Kredit",
+      debit: "-",
+      kredit: "1362586287 - CASH",
+      nominal: "Rp5.000.000",
+      saldo: "Rp31.000.000",
+      waktu: "19/08/2026, 22.38",
+    },
   ];
 
   const getTotalCount = () => {
     switch (activeTab) {
-      case "monitoring": return 1224;
-      case "pembayaran": return 65;
-      case "transit": return 42;
-      case "sekolah": return 57;
+      case "monitoring":
+        return 1224;
+      case "pembayaran":
+        return 65;
+      case "transit":
+        return 42;
+      case "sekolah":
+        return 57;
     }
   };
 
   const getMaxPages = () => {
     switch (activeTab) {
-      case "monitoring": return 123;
-      case "pembayaran": return 7;
-      case "transit": return 5;
-      case "sekolah": return 6;
+      case "monitoring":
+        return 123;
+      case "pembayaran":
+        return 7;
+      case "transit":
+        return 5;
+      case "sekolah":
+        return 6;
     }
   };
 
@@ -563,11 +1161,11 @@ export function OnTuitionJurnal() {
         <div>
           <h2 className="text-xl font-bold text-slate-900">Jurnal</h2>
           <p className="text-xs text-slate-400 mt-1">
-            {activeTab === "transit" 
-              ? "Senin, 28 September 2026 - 10.32 WIB" 
-              : activeTab === "sekolah" 
-              ? "Senin, 28 September 2026 - 10.32 WIB" 
-              : "Senin, 28 September 2026 - 10.31 WIB"}
+            {activeTab === "transit"
+              ? "Senin, 28 September 2026 - 10.32 WIB"
+              : activeTab === "sekolah"
+                ? "Senin, 28 September 2026 - 10.32 WIB"
+                : "Senin, 28 September 2026 - 10.31 WIB"}
           </p>
         </div>
 
@@ -653,10 +1251,14 @@ export function OnTuitionJurnal() {
           </div>
         </div>
         <p className="text-[11px] italic text-slate-400">
-          {activeTab === "monitoring" && "Pencarian berdasarkan tanggal penagihan"}
-          {activeTab === "pembayaran" && "Pencarian berdasarkan tanggal transaksi"}
-          {activeTab === "transit" && "Pencarian berdasarkan waktu transaksi jurnal"}
-          {activeTab === "sekolah" && "Pencarian berdasarkan waktu transaksi jurnal"}
+          {activeTab === "monitoring" &&
+            "Pencarian berdasarkan tanggal penagihan"}
+          {activeTab === "pembayaran" &&
+            "Pencarian berdasarkan tanggal transaksi"}
+          {activeTab === "transit" &&
+            "Pencarian berdasarkan waktu transaksi jurnal"}
+          {activeTab === "sekolah" &&
+            "Pencarian berdasarkan waktu transaksi jurnal"}
         </p>
       </div>
 
@@ -690,15 +1292,23 @@ export function OnTuitionJurnal() {
                     <td className="p-4 text-slate-500">{row.no}</td>
                     <td className="p-4">{row.nis}</td>
                     <td className="p-4">{row.kelas}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.nama}</td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.nama}
+                    </td>
                     <td className="p-4">{row.kategori}</td>
                     <td className="p-4 max-w-xs truncate">{row.item}</td>
                     <td className="p-4">{row.bulan}</td>
                     <td className="p-4">{row.tglPenagihan}</td>
                     <td className="p-4">{row.jatuhTempo}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.nominal}</td>
-                    <td className="p-4 text-emerald-600 font-medium">{row.dibayarkan}</td>
-                    <td className="p-4 text-red-500 font-medium">{row.belumDibayar}</td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.nominal}
+                    </td>
+                    <td className="p-4 text-emerald-600 font-medium">
+                      {row.dibayarkan}
+                    </td>
+                    <td className="p-4 text-red-500 font-medium">
+                      {row.belumDibayar}
+                    </td>
                     <td className="p-4">
                       {row.status === "Lunas" && (
                         <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-600">
@@ -755,13 +1365,19 @@ export function OnTuitionJurnal() {
                     <td className="p-4 text-slate-500">{row.no}</td>
                     <td className="p-4">{row.nis}</td>
                     <td className="p-4">{row.kelas}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.nama}</td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.nama}
+                    </td>
                     <td className="p-4">{row.kategori}</td>
                     <td className="p-4 max-w-xs truncate">{row.item}</td>
                     <td className="p-4">{row.waktu}</td>
                     <td className="p-4">{row.channel}</td>
-                    <td className="p-4 font-medium text-emerald-600">{row.nominal}</td>
-                    <td className="p-4 text-slate-500 font-mono text-[11px]">{row.invoice}</td>
+                    <td className="p-4 font-medium text-emerald-600">
+                      {row.nominal}
+                    </td>
+                    <td className="p-4 text-slate-500 font-mono text-[11px]">
+                      {row.invoice}
+                    </td>
                     <td className="p-4">
                       <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-600">
                         {row.detail}
@@ -793,13 +1409,19 @@ export function OnTuitionJurnal() {
                 {transitData.map((row) => (
                   <tr key={row.no} className="hover:bg-slate-50">
                     <td className="p-4 text-slate-500">{row.no}</td>
-                    <td className="p-4 font-mono text-[11px] text-slate-600">{row.idTx}</td>
+                    <td className="p-4 font-mono text-[11px] text-slate-600">
+                      {row.idTx}
+                    </td>
                     <td className="p-4 max-w-xs truncate">{row.ket}</td>
                     <td className="p-4">{row.jenis}</td>
                     <td className="p-4">{row.debit}</td>
                     <td className="p-4 text-slate-700">{row.kredit}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.nominal}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.saldo}</td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.nominal}
+                    </td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.saldo}
+                    </td>
                     <td className="p-4">{row.waktu}</td>
                   </tr>
                 ))}
@@ -827,13 +1449,19 @@ export function OnTuitionJurnal() {
                 {sekolahData.map((row) => (
                   <tr key={row.no} className="hover:bg-slate-50">
                     <td className="p-4 text-slate-500">{row.no}</td>
-                    <td className="p-4 font-mono text-[11px] text-slate-600">{row.idTx}</td>
+                    <td className="p-4 font-mono text-[11px] text-slate-600">
+                      {row.idTx}
+                    </td>
                     <td className="p-4 max-w-xs truncate">{row.ket}</td>
                     <td className="p-4">{row.jenis}</td>
                     <td className="p-4">{row.debit}</td>
                     <td className="p-4 text-slate-700">{row.kredit}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.nominal}</td>
-                    <td className="p-4 font-medium text-slate-800">{row.saldo}</td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.nominal}
+                    </td>
+                    <td className="p-4 font-medium text-slate-800">
+                      {row.saldo}
+                    </td>
                     <td className="p-4">{row.waktu}</td>
                   </tr>
                 ))}
@@ -844,9 +1472,7 @@ export function OnTuitionJurnal() {
 
         {/* Table Footer / Pagination */}
         <div className="p-4 text-xs text-slate-500 bg-[#E8F7F1]/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div>
-            Menampilkan 1 - 10 dari {getTotalCount()} data
-          </div>
+          <div>Menampilkan 1 - 10 dari {getTotalCount()} data</div>
           <div className="flex items-center gap-1.5">
             <button className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-400 hover:bg-slate-50 text-xs">
               Previous
@@ -886,9 +1512,19 @@ export function OnTuitionBroadcast() {
     { id: 2, title: "Selamat Pagi", countText: "2 Siswa", ratio: "2/2" },
     { id: 3, title: "Selamat Pagi", countText: "2 Siswa", ratio: "2/2" },
     { id: 4, title: "Bayar SPP", countText: "1 Siswa", ratio: "1/1" },
-    { id: 5, title: "REMINDER PEMBAYARAN SPP BULAN MEI", countText: "1 Siswa", ratio: "1/1" },
+    {
+      id: 5,
+      title: "REMINDER PEMBAYARAN SPP BULAN MEI",
+      countText: "1 Siswa",
+      ratio: "1/1",
+    },
     { id: 6, title: "Reminder SPP Juli", countText: "1 Siswa", ratio: "1/1" },
-    { id: 7, title: "Reminder SPP Mei 2026", countText: "1 Siswa", ratio: "1/1" },
+    {
+      id: 7,
+      title: "Reminder SPP Mei 2026",
+      countText: "1 Siswa",
+      ratio: "1/1",
+    },
   ];
 
   return (
@@ -918,7 +1554,8 @@ export function OnTuitionBroadcast() {
             <p className="text-xs text-slate-500 font-medium">Total Terkirim</p>
             <p className="text-2xl font-bold text-slate-800">58</p>
             <p className="text-[11px] text-slate-400">
-              <span className="text-emerald-500 font-semibold">100%</span> dari total keseluruhan broadcast
+              <span className="text-emerald-500 font-semibold">100%</span> dari
+              total keseluruhan broadcast
             </p>
           </div>
           <div className="p-3 bg-[#E8F7F1] text-[#3DBA86] rounded-full">
@@ -929,10 +1566,13 @@ export function OnTuitionBroadcast() {
         {/* Broadcast Penagihan */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-xs text-slate-500 font-medium">Broadcast Penagihan</p>
+            <p className="text-xs text-slate-500 font-medium">
+              Broadcast Penagihan
+            </p>
             <p className="text-2xl font-bold text-slate-800">36</p>
             <p className="text-[11px] text-slate-400">
-              <span className="text-purple-500 font-semibold">62%</span> dari total keseluruhan broadcast
+              <span className="text-purple-500 font-semibold">62%</span> dari
+              total keseluruhan broadcast
             </p>
           </div>
           <div className="p-3 bg-purple-50 text-purple-500 rounded-full">
@@ -943,10 +1583,13 @@ export function OnTuitionBroadcast() {
         {/* Broadcast Informasi */}
         <div className="bg-white p-5 rounded-2xl border border-slate-100 flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-xs text-slate-500 font-medium">Broadcast Informasi</p>
+            <p className="text-xs text-slate-500 font-medium">
+              Broadcast Informasi
+            </p>
             <p className="text-2xl font-bold text-slate-800">0</p>
             <p className="text-[11px] text-slate-400">
-              <span className="text-amber-500 font-semibold">0%</span> dari total keseluruhan broadcast
+              <span className="text-amber-500 font-semibold">0%</span> dari
+              total keseluruhan broadcast
             </p>
           </div>
           <div className="p-3 bg-amber-50 text-amber-500 rounded-full">
@@ -975,7 +1618,9 @@ export function OnTuitionBroadcast() {
       {/* Riwayat Broadcast Container */}
       <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-4">
         <div className="flex items-center justify-between pb-2">
-          <h3 className="font-bold text-slate-800 text-sm">Riwayat Broadcast</h3>
+          <h3 className="font-bold text-slate-800 text-sm">
+            Riwayat Broadcast
+          </h3>
           <button className="flex items-center gap-1.5 bg-[#3DBA86] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-[#35a77a] transition">
             <Plus className="w-4 h-4" />
             Buat Broadcast
@@ -1072,8 +1717,12 @@ export function OnTuitionPengaturan() {
             <div className="relative">
               <div className="w-24 h-24 rounded-full bg-[#18A0A4] flex items-center justify-center text-white font-bold text-lg shadow-inner overflow-hidden border-2 border-white">
                 <div className="text-center">
-                  <span className="text-xs tracking-wider opacity-80 block">orion</span>
-                  <span className="text-[10px] font-normal block opacity-60">by qrion</span>
+                  <span className="text-xs tracking-wider opacity-80 block">
+                    orion
+                  </span>
+                  <span className="text-[10px] font-normal block opacity-60">
+                    by qrion
+                  </span>
                 </div>
               </div>
               <button className="absolute bottom-0 right-0 p-1.5 bg-emerald-500 text-white rounded-full border-2 border-white shadow hover:bg-emerald-600 transition">
@@ -1088,7 +1737,9 @@ export function OnTuitionPengaturan() {
           {/* Form Fields */}
           <div className="flex-1 space-y-4 w-full">
             <div>
-              <label className="text-xs font-semibold text-slate-700">Nama Lengkap</label>
+              <label className="text-xs font-semibold text-slate-700">
+                Nama Lengkap
+              </label>
               <input
                 type="text"
                 defaultValue="Argeomerta"
@@ -1096,7 +1747,9 @@ export function OnTuitionPengaturan() {
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-700">No. Telepon</label>
+              <label className="text-xs font-semibold text-slate-700">
+                No. Telepon
+              </label>
               <input
                 type="text"
                 defaultValue="6285264397615"
@@ -1104,7 +1757,9 @@ export function OnTuitionPengaturan() {
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-700">Institusi</label>
+              <label className="text-xs font-semibold text-slate-700">
+                Institusi
+              </label>
               <input
                 type="text"
                 defaultValue="SMP N RND 1 PKU"
@@ -1131,7 +1786,9 @@ export function OnTuitionPengaturan() {
 
         <div className="p-6 space-y-4">
           <div>
-            <label className="text-xs font-semibold text-slate-700">Password Saat Ini</label>
+            <label className="text-xs font-semibold text-slate-700">
+              Password Saat Ini
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPasswordCurrent ? "text" : "password"}
@@ -1152,12 +1809,16 @@ export function OnTuitionPengaturan() {
           <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 flex items-start gap-2.5 text-sky-600 text-[11px]">
             <Info className="w-4 h-4 shrink-0 mt-0.5" />
             <span>
-              Jika Anda belum pernah mengubah password (masih menggunakan password bawaan sistem), kosongkan field "Password Saat Ini" dan langsung isi password baru.
+              Jika Anda belum pernah mengubah password (masih menggunakan
+              password bawaan sistem), kosongkan field &quot;Password Saat
+              Ini&quot; dan langsung isi password baru.
             </span>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-700">Password Baru</label>
+            <label className="text-xs font-semibold text-slate-700">
+              Password Baru
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPasswordNew ? "text" : "password"}
@@ -1175,7 +1836,9 @@ export function OnTuitionPengaturan() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-700">Konfirmasi Password Baru</label>
+            <label className="text-xs font-semibold text-slate-700">
+              Konfirmasi Password Baru
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPasswordConfirm ? "text" : "password"}
@@ -1211,7 +1874,9 @@ export function OnTuitionPengaturan() {
 
         <div className="p-6 space-y-4">
           <div>
-            <label className="text-xs font-semibold text-slate-700">Password Saat Ini</label>
+            <label className="text-xs font-semibold text-slate-700">
+              Password Saat Ini
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPinCurrent ? "text" : "password"}
@@ -1232,13 +1897,17 @@ export function OnTuitionPengaturan() {
           <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 flex items-start gap-2.5 text-sky-600 text-[11px]">
             <Info className="w-4 h-4 shrink-0 mt-0.5" />
             <span>
-              Jika Anda belum pernah mengubah password (masih menggunakan password bawaan sistem), kosongkan field "Password Saat Ini" dan langsung isi PIN baru.
+              Jika Anda belum pernah mengubah password (masih menggunakan
+              password bawaan sistem), kosongkan field &quot;Password Saat
+              Ini&quot; dan langsung isi PIN baru.
             </span>
           </div>
 
           {/* PIN Baru Inputs */}
           <div>
-            <label className="text-xs font-semibold text-slate-700">PIN Baru</label>
+            <label className="text-xs font-semibold text-slate-700">
+              PIN Baru
+            </label>
             <div className="flex gap-2 mt-1.5">
               {[...Array(6)].map((_, i) => (
                 <input
@@ -1253,7 +1922,9 @@ export function OnTuitionPengaturan() {
 
           {/* Konfirmasi PIN Baru Inputs */}
           <div>
-            <label className="text-xs font-semibold text-slate-700">Konfirmasi PIN Baru</label>
+            <label className="text-xs font-semibold text-slate-700">
+              Konfirmasi PIN Baru
+            </label>
             <div className="flex gap-2 mt-1.5">
               {[...Array(6)].map((_, i) => (
                 <input
@@ -1306,7 +1977,9 @@ export function OnTuitionPengaturan() {
                     {item.invoice}
                   </td>
                   <td className="p-4 text-slate-500">{item.tanggal}</td>
-                  <td className="p-4 font-semibold text-slate-800">{item.total}</td>
+                  <td className="p-4 font-semibold text-slate-800">
+                    {item.total}
+                  </td>
                   <td className="p-4">
                     {item.status === "Berhasil" ? (
                       <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-600">

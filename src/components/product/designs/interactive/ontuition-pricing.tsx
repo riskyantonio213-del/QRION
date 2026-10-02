@@ -78,16 +78,13 @@ export function OntuitionPricing() {
                   Rp500.000 / bulan
                 </span>
               </div>
-              <a
-                href="https://admin.ontuition.qrion.id/register"
-                className="mt-8"
-              >
+              <a href="/live-preview/ontuition" className="mt-8">
                 <button className="w-full cursor-pointer rounded-full bg-[#33B77E] py-3.5 text-sm font-semibold text-white shadow-md shadow-[#33B77E]/25 transition-all duration-200 hover:bg-[#2a9666] hover:shadow-lg hover:shadow-[#33B77E]/30">
                   Mulai Sekarang →
                 </button>
               </a>
               <a
-                href="https://demo-admin.ontuition.qrion.id/logindemo"
+                href="/live-preview/ontuition"
                 className="mt-3 block text-center text-xs font-medium text-zinc-400 hover:text-[#33B77E]"
               >
                 Coba demo gratis dulu

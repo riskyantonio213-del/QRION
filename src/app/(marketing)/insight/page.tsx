@@ -1,42 +1,94 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-import { ContentPage } from "@/components/sections/content-page";
+import { Section } from "@/components/layout/section";
+import { PageHero } from "@/components/sections/page-hero";
+import { ArticleCard } from "@/components/sections/article-card";
+import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
+import {
+  articleCategoryList,
+  articlesByCategory,
+  latestArticles,
+} from "@/data/articles";
 
 export const metadata: Metadata = {
-  title: "Insight",
+  title: "Artikel",
   description:
-    "Catatan dan panduan QRION mengenai digitalisasi sekolah, pengelolaan operasional pendidikan, dan penerapan teknologi di institusi pendidikan.",
+    "Wawasan dan artikel terbaru dari QRION seputar digitalisasi sekolah, manajemen operasional pendidikan, kabar mitra, dan inovasi teknologi di lingkungan sekolah.",
   alternates: { canonical: "/insight" },
 };
 
 export default function InsightPage() {
+  const featured = latestArticles(3);
+
   return (
-    <ContentPage
-      eyebrow="Insight"
-      title="Catatan tentang Transformasi Digital Pendidikan"
-      description="Tempat QRION membagikan panduan praktis dan catatan lapangan mengenai pengelolaan operasional sekolah yang lebih terstruktur."
-      breadcrumb={[{ label: "Beranda", href: "/" }, { label: "Insight" }]}
-      note="Belum ada artikel yang dipublikasikan. Halaman ini disiapkan sebagai struktur awal—artikel akan ditambahkan setelah materi editorial QRION siap, bukan sebagai contoh fiktif."
-      blocks={[
-        {
-          title: "Tema yang akan dibahas",
-          paragraphs: [
-            "Konten Insight akan berfokus pada hal-hal yang dapat langsung diterapkan sekolah, bukan sekadar berita industri.",
-          ],
-          bullets: [
-            "Merapikan pencatatan pembayaran sekolah tanpa proses yang rumit",
-            "Menyusun alur presensi digital yang mudah diterima guru dan siswa",
-            "Memanfaatkan data kehadiran dan aktivitas untuk pengambilan keputusan sekolah",
-            "Menyesuaikan penerapan teknologi dengan kebijakan masing-masing institusi",
-          ],
-        },
-        {
-          title: "Untuk siapa konten ini",
-          paragraphs: [
-            "Materi disusun untuk manajemen sekolah, administrator, dan guru yang ingin memahami langkah praktis digitalisasi tanpa harus menjadi ahli teknologi.",
-          ],
-        },
-      ]}
-    />
+    <>
+      <PageHero
+        eyebrow="Artikel"
+        title="Wawasan & Artikel Terbaru"
+        description="Berbagai artikel pilihan yang membahas teknologi, manajemen, dan inovasi di lingkungan sekolah — dari edukasi digitalisasi hingga kabar terbaru mengenai mitra QRION."
+        breadcrumb={[{ label: "Beranda", href: "/" }, { label: "Artikel" }]}
+      />
+
+      {/* Unggulan — artikel terbaru */}
+      <Section background="soft">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((article) => (
+            <ArticleCard
+              key={article.slug}
+              article={article}
+              featured
+              className="h-full"
+            />
+          ))}
+        </div>
+      </Section>
+
+      {/* Section per kategori + "Lihat Selengkapnya" */}
+      {articleCategoryList.map((category, index) => {
+        const categoryArticles = articlesByCategory(category.slug).slice(0, 6);
+        return (
+          <Section
+            key={category.slug}
+            background={index % 2 === 0 ? "default" : "soft"}
+          >
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-4">
+              <div>
+                <h2 className="text-[24px] font-bold leading-tight text-foreground sm:text-[28px]">
+                  {category.name}
+                </h2>
+                <p className="mt-1 text-[13px] text-muted-foreground">
+                  {category.count} artikel
+                </p>
+              </div>
+              <Link
+                href={`/insight/${category.slug}`}
+                className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-lg border border-brand px-4 py-2 text-[13px] font-semibold text-brand transition-colors duration-200 hover:bg-brand hover:text-white"
+              >
+                <OncardRipple color="#51c590" hoverColor="#ffffff" />
+                <span className="relative z-10 flex items-center gap-1.5">
+                  Lihat Selengkapnya
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </span>
+              </Link>
+            </div>
+
+            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {categoryArticles.map((article) => (
+                <ArticleCard
+                  key={article.slug}
+                  article={article}
+                  className="h-full"
+                />
+              ))}
+            </div>
+          </Section>
+        );
+      })}
+    </>
   );
 }

@@ -4,6 +4,7 @@ import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { HeroDashboard } from "@/components/sections/hero-dashboard";
 import { Button } from "@/components/ui/button";
+import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
 import { hero } from "@/data/home";
 
 export function Hero() {
@@ -38,7 +39,10 @@ export function Hero() {
             {/* Badge: green outer container wrapping a white QRION pill. */}
             <span className="inline-flex items-center gap-2 rounded-full bg-brand-mint py-1 pl-1 pr-3.5 text-[13px] font-medium text-qrion-indigo">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-[11px] font-bold tracking-[0.14em] text-qrion-indigo shadow-sm shadow-qrion-indigo/5">
-                <span aria-hidden="true" className="size-1.5 rounded-full bg-brand" />
+                <span
+                  aria-hidden="true"
+                  className="size-1.5 rounded-full bg-brand"
+                />
                 QRION
               </span>
               {hero.eyebrow}
@@ -60,14 +64,31 @@ export function Hero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Button asChild size="xl" className="rounded-full px-7">
+              <Button
+                asChild
+                size="xl"
+                className="relative overflow-hidden rounded-full px-7"
+              >
                 <Link href={hero.primaryCta.href}>
-                  {hero.primaryCta.label}
-                  <ArrowRight aria-hidden="true" className="size-4" />
+                  <OncardRipple color="#51c590" hoverColor="#ffffff" />
+                  <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                    {hero.primaryCta.label}
+                    <ArrowRight aria-hidden="true" className="size-4" />
+                  </span>
                 </Link>
               </Button>
-              <Button asChild size="xl" variant="secondary" className="rounded-full px-7">
-                <Link href={hero.secondaryCta.href}>{hero.secondaryCta.label}</Link>
+              <Button
+                asChild
+                size="xl"
+                variant="secondary"
+                className="relative overflow-hidden rounded-full px-7"
+              >
+                <Link href={hero.secondaryCta.href}>
+                  <OncardRipple color="#35bb82" hoverColor="#ffffff" />
+                  <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                    {hero.secondaryCta.label}
+                  </span>
+                </Link>
               </Button>
             </div>
 

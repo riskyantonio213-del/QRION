@@ -4,6 +4,7 @@ import { products } from "@/data/products";
 import { ArrowRight, Smartphone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,8 +20,8 @@ export function LivePreviewOverview() {
             Preview Semua Layanan QRION
           </h1>
           <p className="mt-4 text-[16px] leading-relaxed text-qrion-text-body">
-            Jelajahi dashboard dari setiap modul ekosistem QRION.
-            Setiap layanan menampilkan data contoh yang dapat ditinjau langsung.
+            Jelajahi dashboard dari setiap modul ekosistem QRION. Setiap layanan
+            menampilkan data contoh yang dapat ditinjau langsung.
           </p>
         </div>
 
@@ -60,10 +61,11 @@ export function LivePreviewOverview() {
                     variant="outline"
                     size="sm"
                     className={cn(
-                      "rounded-full border-brand/40 bg-brand-soft text-brand-indigo hover:bg-brand-mint",
+                      "relative overflow-hidden rounded-full border-brand/40 bg-brand-soft text-brand-indigo hover:bg-brand-mint",
                     )}
                   >
-                    Lihat Dashboard
+                    <OncardRipple color="#35bb82" hoverColor="#ffffff" />
+                    <span className="relative z-10">Lihat Dashboard</span>
                   </Button>
                 </div>
               </Link>
@@ -99,10 +101,11 @@ export function LivePreviewOverview() {
                 variant="outline"
                 size="sm"
                 className={cn(
-                  "rounded-full border-brand/40 bg-brand-soft text-brand-indigo hover:bg-brand-mint",
+                  "relative overflow-hidden rounded-full border-brand/40 bg-brand-soft text-brand-indigo hover:bg-brand-mint",
                 )}
               >
-                Lihat Dashboard
+                <OncardRipple color="#35bb82" hoverColor="#ffffff" />
+                <span className="relative z-10">Lihat Dashboard</span>
               </Button>
             </div>
           </Link>

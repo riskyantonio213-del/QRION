@@ -80,10 +80,10 @@ export default function RootLayout({
           Lewati ke konten utama
         </a>
         {/*
-          * Chrome is deliberately not rendered here: the `(marketing)` route
-          * group provides the public navbar/footer, while /live-preview renders
-          * its own full-bleed application shell.
-          */}
+         * Chrome is deliberately not rendered here: the `(marketing)` route
+         * group provides the public navbar/footer, while /live-preview renders
+         * its own full-bleed application shell.
+         */}
         <div className="flex min-h-dvh flex-col">{children}</div>
       </body>
     </html>

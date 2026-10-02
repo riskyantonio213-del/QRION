@@ -1059,7 +1059,7 @@ export function OncardDashboard() {
             sbOpen === null
               ? undefined
               : sbOpen
-                ? { transform: "translateX(0)" }
+                ? { translate: "0", transform: "translateX(0)" }
                 : { display: "none" }
           }
         >

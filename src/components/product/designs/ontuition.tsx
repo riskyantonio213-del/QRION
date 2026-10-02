@@ -89,7 +89,7 @@ function OntuitionPage() {
                     </svg>
                     Konsultasi Gratis
                   </a>
-                  <a href="https://demo-admin.ontuition.qrion.id/logindemo">
+                  <a href="/live-preview/ontuition">
                     <button className="inline-flex items-center gap-2 rounded-full border-2 border-[#33B77E] bg-white px-6 py-3 text-sm font-semibold text-[#33B77E] shadow-md shadow-[#33B77E]/10 transition-all duration-300 hover:bg-[#33B77E] hover:text-white hover:scale-105 hover:shadow-xl">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,9 @@ function OntuitionPage() {
                 <div className="absolute inset-x-0 bottom-4 h-24 rounded-3xl bg-[#33B77E]/20 blur-3xl" />
                 <div className="absolute inset-x-12 bottom-0 h-12 rounded-3xl bg-[#33B77E]/15 blur-2xl" />
                 <div className="relative w-full max-w-lg animate-[float_4s_ease-in-out_infinite]">
-                  <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/15 ring-1 ring-black/5">
+                  <div
+                    className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/15 ring-1 ring-black/5"
+                  >
                     <div className="flex items-center gap-2 border-b border-zinc-100 bg-zinc-50/90 px-3 py-2">
                       <div className="flex gap-1.5">
                         <div className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
@@ -1987,7 +1989,7 @@ function OntuitionPage() {
             </div>
             <div className="mt-12 flex flex-col items-center gap-4 text-center">
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <a href="https://demo-admin.ontuition.qrion.id/logindemo">
+                <a href="/live-preview/ontuition">
                   <button className="inline-flex items-center gap-2 rounded-full bg-[#33B77E] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#33B77E]/30 transition-all duration-300 hover:bg-[#2a9666] hover:scale-105 hover:shadow-xl hover:shadow-[#33B77E]/40">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -2077,7 +2079,9 @@ function OntuitionPage() {
             </div>
             <div className="relative mx-auto">
               <div className="absolute inset-x-8 -bottom-4 h-16 rounded-3xl bg-[#33B77E]/20 blur-2xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/10 ring-1 ring-black/5 animate-[float_5s_ease-in-out_infinite]">
+              <div
+                className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/10 ring-1 ring-black/5 animate-[float_5s_ease-in-out_infinite]"
+              >
                 <div className="flex items-center gap-3 border-b border-zinc-100 bg-zinc-50/90 px-5 py-3">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
@@ -2940,7 +2944,9 @@ function OntuitionPage() {
                 <div className="absolute inset-x-6 -bottom-6 h-20 rounded-3xl bg-[#33B77E]/20 blur-2xl" />
                 <div className="pointer-events-none absolute -left-6 -top-6 h-24 w-24 rounded-full border border-[#33B77E]/15" />
                 <div className="pointer-events-none absolute -right-4 -bottom-4 h-16 w-16 rounded-full border border-[#33B77E]/10" />
-                <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/10 ring-1 ring-black/5 animate-[float_5s_ease-in-out_infinite]">
+                <div
+                  className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl shadow-[#33B77E]/10 ring-1 ring-black/5 animate-[float_5s_ease-in-out_infinite]"
+                >
                   <div className="flex items-center gap-3 border-b border-zinc-100 bg-zinc-50/90 px-4 py-2.5">
                     <div className="flex items-center gap-1.5">
                       <div className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
@@ -3475,7 +3481,7 @@ function OntuitionPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-3">
-                  <a href="https://demo-admin.ontuition.qrion.id/logindemo">
+                  <a href="/live-preview/ontuition">
                     <button className="inline-flex items-center gap-2 rounded-full bg-[#33B77E] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#33B77E]/30 transition-all duration-300 hover:bg-[#2a9666] hover:scale-105 hover:shadow-xl hover:shadow-[#33B77E]/40">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -5976,7 +5982,7 @@ function OntuitionPage() {
               </p>
             </div>
             <div className="mb-12 flex flex-wrap items-center justify-center gap-4">
-              <a href="https://demo-admin.ontuition.qrion.id/logindemo">
+              <a href="/live-preview/ontuition">
                 <button className="inline-flex items-center gap-2 rounded-full bg-[#33B77E] px-9 py-4 text-sm font-bold text-white shadow-xl shadow-[#33B77E]/30 transition-all duration-300 hover:bg-[#2a9666] hover:scale-105 hover:shadow-2xl hover:shadow-[#33B77E]/40">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

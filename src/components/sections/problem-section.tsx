@@ -8,7 +8,13 @@ import { problemTransition, problems } from "@/data/home";
 
 export function ProblemSection() {
   return (
-    <Section id="masalah" background="soft" aria-labelledby="masalah-heading">
+    <Section
+      id="masalah"
+      size="wide"
+      containerClassName="max-w-[1980px]"
+      background="soft"
+      aria-labelledby="masalah-heading"
+    >
       <SectionHeader
         eyebrow="Tantangan"
         title={

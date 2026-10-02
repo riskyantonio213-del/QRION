@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
+import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
 
 type CTASectionProps = {
   title: string;
@@ -20,7 +21,10 @@ export function CTASection({
   secondaryCta,
 }: CTASectionProps) {
   return (
-    <section aria-labelledby="cta-heading" className="bg-background pb-16 pt-4 sm:pb-20 lg:pb-28">
+    <section
+      aria-labelledby="cta-heading"
+      className="bg-background pb-16 pt-4 sm:pb-20 lg:pb-28"
+    >
       <Container size="wide">
         <Reveal>
           <div
@@ -53,10 +57,17 @@ export function CTASection({
               </div>
 
               <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row lg:flex-col xl:flex-row">
-                <Button asChild size="xl" className="rounded-full px-7">
+                <Button
+                  asChild
+                  size="xl"
+                  className="relative overflow-hidden rounded-full px-7"
+                >
                   <Link href={primaryCta.href}>
-                    {primaryCta.label}
-                    <ArrowRight aria-hidden="true" className="size-4" />
+                    <OncardRipple color="#51c590" hoverColor="#ffffff" />
+                    <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                      {primaryCta.label}
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </span>
                   </Link>
                 </Button>
                 {secondaryCta ? (
@@ -64,9 +75,14 @@ export function CTASection({
                     asChild
                     size="xl"
                     variant="secondary"
-                    className="rounded-full px-7"
+                    className="relative overflow-hidden rounded-full px-7"
                   >
-                    <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                    <Link href={secondaryCta.href}>
+                      <OncardRipple color="#35bb82" hoverColor="#ffffff" />
+                      <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
+                        {secondaryCta.label}
+                      </span>
+                    </Link>
                   </Button>
                 ) : null}
               </div>

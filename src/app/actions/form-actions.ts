@@ -51,7 +51,68 @@ const successMessages: Record<SubmissionKind, string> = {
 
 const fallbackEmail = process.env.QRION_FORM_FALLBACK_EMAIL ?? null;
 
-function validationErrorState(issues: { path: PropertyKey[]; message: string }[]): FormState {
+function supabaseConfig(): { url: string; secretKey: string } | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
+
+  if (!url || !secretKey) return null;
+  return { url: url.replace(/\/+$/, ""), secretKey };
+}
+
+/**
+ * Insert a Live Preview lead into the `live_preview_leads` table using the
+ * server-only secret key (RLS is bypassed; the key never reaches the browser).
+ */
+async function insertLivePreviewLead(row: {
+  name: string;
+  whatsapp: string;
+  institution: string;
+  product?: string;
+}): Promise<{ ok: boolean; reason: string }> {
+  const config = supabaseConfig();
+  if (!config) return { ok: false, reason: "supabase_not_configured" };
+
+  try {
+    const response = await fetch(`${config.url}/rest/v1/live_preview_leads`, {
+      method: "POST",
+      headers: {
+        apikey: config.secretKey,
+        Authorization: `Bearer ${config.secretKey}`,
+        "content-type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        name: row.name,
+        whatsapp: row.whatsapp,
+        institution: row.institution,
+        product: row.product ?? null,
+        source: "live-preview-lead-gate",
+      }),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      // Log status and error code only — never the submitted personal data.
+      const body = await response.text().catch(() => "");
+      console.error(
+        `[QRION] live-preview lead insert failed (status ${response.status}): ${body.slice(0, 300)}`,
+      );
+      return { ok: false, reason: `http_${response.status}` };
+    }
+
+    return { ok: true, reason: "ok" };
+  } catch (error) {
+    console.error(
+      "[QRION] live-preview lead insert request failed:",
+      error instanceof Error ? error.message : "unknown error",
+    );
+    return { ok: false, reason: "network_error" };
+  }
+}
+
+function validationErrorState(
+  issues: { path: PropertyKey[]; message: string }[],
+): FormState {
   const fieldErrors: Record<string, string> = {};
 
   for (const issue of issues) {
@@ -144,16 +205,40 @@ export async function submitContactForm(
 }
 
 /**
- * Lead gate for /live-preview. The visitor can always continue into the demo;
- * this only records the lead and reports the real delivery outcome back.
+ * Lead gate for /live-preview/[produk]. Submission is stored in Supabase
+ * (`live_preview_leads`); the visitor is only let through after a confirmed
+ * success so no lead is silently lost. Falls back to the CRM webhook flow
+ * when Supabase is not configured.
  */
 export async function submitLivePreviewLead(
   values: LivePreviewLeadValues,
+  context?: { product?: string },
 ): Promise<FormState> {
   const parsed = livePreviewLeadSchema.safeParse(values);
 
   if (!parsed.success) {
     return validationErrorState(parsed.error.issues);
+  }
+
+  if (supabaseConfig()) {
+    const result = await insertLivePreviewLead({
+      ...parsed.data,
+      product: context?.product,
+    });
+
+    if (result.ok) {
+      return {
+        status: "success",
+        message: successMessages["live-preview"],
+      };
+    }
+
+    return {
+      status: "error",
+      message: fallbackEmail
+        ? `Pengiriman gagal. Silakan coba lagi, atau hubungi kami langsung melalui ${fallbackEmail}.`
+        : "Pengiriman gagal. Silakan coba beberapa saat lagi atau hubungi tim QRION melalui halaman kontak.",
+    };
   }
 
   return deliverSubmission("live-preview", {

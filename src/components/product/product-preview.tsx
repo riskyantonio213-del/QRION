@@ -5,7 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import type { Product, StatusTone } from "@/data/products";
 import { cn } from "@/lib/utils";
 
-const toneToBadge: Record<StatusTone, "success" | "warning" | "info" | "neutral"> = {
+const toneToBadge: Record<
+  StatusTone,
+  "success" | "warning" | "info" | "neutral"
+> = {
   success: "success",
   warning: "warning",
   info: "info",
@@ -33,7 +36,9 @@ function KindStrip({ product }: { product: Product }) {
         <p className="mt-6 font-mono text-[13px] tracking-[0.2em] text-white/85">
           •••• •••• 4821
         </p>
-        <p className="mt-1 text-[11px] text-white/60">Kartu siswa — contoh tampilan</p>
+        <p className="mt-1 text-[11px] text-white/60">
+          Kartu siswa — contoh tampilan
+        </p>
       </div>
     );
   }
@@ -47,7 +52,10 @@ function KindStrip({ product }: { product: Product }) {
             product.accent.iconWrap,
           )}
         >
-          <ScanLine aria-hidden="true" className={cn("size-4", product.accent.icon)} />
+          <ScanLine
+            aria-hidden="true"
+            className={cn("size-4", product.accent.icon)}
+          />
         </span>
         <div className="min-w-0">
           <p className="truncate text-[13px] font-semibold text-foreground">
@@ -184,10 +192,18 @@ export function ProductPreview({
               aria-label={`${preview.chartTitle} (contoh data)`}
             >
               {preview.series.map((point) => (
-                <div key={point.label} className="flex flex-1 flex-col items-center gap-1.5">
+                <div
+                  key={point.label}
+                  className="flex flex-1 flex-col items-center gap-1.5"
+                >
                   <span
-                    className={cn("w-full rounded-md opacity-90", product.accent.bar)}
-                    style={{ height: `${Math.max((point.value / max) * 100, 8)}%` }}
+                    className={cn(
+                      "w-full rounded-md opacity-90",
+                      product.accent.bar,
+                    )}
+                    style={{
+                      height: `${Math.max((point.value / max) * 100, 8)}%`,
+                    }}
                   />
                   <span className="truncate text-[9px] font-medium text-muted-foreground">
                     {point.label}

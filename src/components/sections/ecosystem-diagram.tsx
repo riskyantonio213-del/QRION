@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-import { LogoMark } from "@/components/layout/logo";
 import { products } from "@/data/products";
 import { cn } from "@/lib/utils";
+
+/** Natural pixel sizes of the wordmark PNGs in /public/images (for aspect ratio). */
+const productImageSize: Record<string, { width: number; height: number }> = {
+  ontuition: { width: 828, height: 238 },
+  oncard: { width: 666, height: 238 },
+  ontime: { width: 667, height: 252 },
+  jurnal: { width: 467, height: 206 },
+  spmb: { width: 488, height: 214 },
+};
 
 /**
  * Node positions on a pentagon around the QRION core, expressed as container
@@ -28,7 +37,7 @@ function ProductNode({
   className?: string;
 }) {
   const product = products[index];
-  const Icon = product.icon;
+  const size = productImageSize[product.slug];
 
   return (
     <Link
@@ -39,16 +48,14 @@ function ProductNode({
         className,
       )}
     >
-      <span
-        className={cn(
-          "flex size-8 items-center justify-center rounded-lg border",
-          product.accent.iconWrap,
-        )}
-      >
-        <Icon aria-hidden="true" className={cn("size-4", product.accent.icon)} />
-      </span>
-      <span className="font-display text-[13px] font-bold uppercase tracking-[0.08em] text-foreground xl:text-sm">
-        {product.name}
+      <span className="flex h-8 items-center">
+        <Image
+          src={`/images/${product.slug}.png`}
+          alt={product.name}
+          width={size.width}
+          height={size.height}
+          className="h-6 w-auto object-contain xl:h-7"
+        />
       </span>
       <span className="text-[12px] leading-snug text-muted-foreground">
         {product.category}
@@ -89,9 +96,15 @@ export function EcosystemDiagram() {
                 strokeDasharray="4 5"
                 vectorEffect="non-scaling-stroke"
                 initial={prefersReducedMotion ? undefined : { pathLength: 0 }}
-                whileInView={prefersReducedMotion ? undefined : { pathLength: 1 }}
+                whileInView={
+                  prefersReducedMotion ? undefined : { pathLength: 1 }
+                }
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.9, delay: 0.15 + index * 0.1, ease: "easeInOut" }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.15 + index * 0.1,
+                  ease: "easeInOut",
+                }}
               />
             ))}
           </svg>
@@ -109,17 +122,24 @@ export function EcosystemDiagram() {
           {/* QRION core */}
           <motion.div
             className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
-            initial={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.92 }}
-            whileInView={prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }}
+            initial={
+              prefersReducedMotion ? undefined : { opacity: 0, scale: 0.92 }
+            }
+            whileInView={
+              prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }
+            }
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex flex-col items-center gap-2.5 rounded-2xl border border-brand-indigo-dark bg-brand-indigo-dark px-8 py-6 shadow-[0_8px_30px_rgba(48,46,89,0.18)]">
-              <span className="flex size-11 items-center justify-center rounded-xl bg-white">
-                <LogoMark className="size-8 rounded-lg" />
-              </span>
-              <span className="font-display text-base font-extrabold tracking-[0.16em] text-white">
-                QRION
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-brand-indigo-dark bg-brand-indigo-dark px-8 py-6 shadow-[0_8px_30px_rgba(48,46,89,0.18)]">
+              <span className="flex h-11 items-center justify-center rounded-xl bg-white px-5">
+                <Image
+                  src="/images/qrion-logo2.png"
+                  alt="QRION"
+                  width={109}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
               </span>
               <span className="text-center text-[11px] font-medium uppercase tracking-[0.12em] text-white/65">
                 Ekosistem Terintegrasi
@@ -134,7 +154,9 @@ export function EcosystemDiagram() {
               className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
               style={{ left: `${position.left}%`, top: `${position.top}%` }}
               initial={prefersReducedMotion ? undefined : { opacity: 0, y: 12 }}
-              whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+              whileInView={
+                prefersReducedMotion ? undefined : { opacity: 1, y: 0 }
+              }
               viewport={{ once: true, margin: "-100px" }}
               transition={{
                 duration: 0.55,
@@ -148,20 +170,24 @@ export function EcosystemDiagram() {
         </div>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Pilih modul yang dibutuhkan, lalu hubungkan semuanya melalui satu ekosistem.
+          Pilih modul yang dibutuhkan, lalu hubungkan semuanya melalui satu
+          ekosistem.
         </p>
       </div>
 
       {/* ------------------------------- Mobile ------------------------------- */}
       <div className="lg:hidden">
-        <div className="flex flex-col items-center rounded-2xl bg-brand-indigo-dark p-6">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-white">
-            <LogoMark className="size-8 rounded-lg" />
+        <div className="flex flex-col items-center gap-3 rounded-2xl bg-brand-indigo-dark p-6">
+          <span className="flex h-11 items-center justify-center rounded-xl bg-white px-5">
+            <Image
+              src="/images/qrion-logo2.png"
+              alt="QRION"
+              width={109}
+              height={40}
+              className="h-6 w-auto object-contain"
+            />
           </span>
-          <span className="mt-2 font-display text-base font-extrabold tracking-[0.16em] text-white">
-            QRION
-          </span>
-          <span className="mt-1 text-center text-[11px] font-medium uppercase tracking-[0.12em] text-white/65">
+          <span className="text-center text-[11px] font-medium uppercase tracking-[0.12em] text-white/65">
             Ekosistem Terintegrasi
           </span>
         </div>
@@ -173,31 +199,24 @@ export function EcosystemDiagram() {
 
         <ul className="grid gap-3 sm:grid-cols-2">
           {products.map((product) => {
-            const Icon = product.icon;
+            const size = productImageSize[product.slug];
             return (
               <li key={product.slug}>
                 <Link
                   href={`/produk/${product.slug}`}
-                  className="flex h-full items-start gap-3 rounded-xl border border-border bg-background p-4 transition-colors hover:border-brand-mint-medium hover:bg-soft active:bg-soft"
+                  className="flex h-full flex-col gap-2 rounded-xl border border-border bg-background p-4 transition-colors hover:border-brand-mint-medium hover:bg-soft active:bg-soft"
                 >
-                  <span
-                    className={cn(
-                      "flex size-9 shrink-0 items-center justify-center rounded-lg border",
-                      product.accent.iconWrap,
-                    )}
-                  >
-                    <Icon
-                      aria-hidden="true"
-                      className={cn("size-[18px]", product.accent.icon)}
+                  <span className="flex h-7 items-center">
+                    <Image
+                      src={`/images/${product.slug}.png`}
+                      alt={product.name}
+                      width={size.width}
+                      height={size.height}
+                      className="h-6 w-auto object-contain"
                     />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block font-display text-[13px] font-bold uppercase tracking-[0.08em] text-foreground">
-                      {product.name}
-                    </span>
-                    <span className="mt-1 block text-[13px] leading-snug text-muted-foreground">
-                      {product.tagline}
-                    </span>
+                  <span className="text-[13px] leading-snug text-muted-foreground">
+                    {product.tagline}
                   </span>
                 </Link>
               </li>

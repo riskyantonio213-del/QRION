@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -10,7 +11,7 @@ type LogoProps = {
 };
 
 /**
- * QRION logo lockup: an abstract "ecosystem node" mark next to the wordmark.
+ * Square "ecosystem node" mark — small slots only (modal, product preview).
  * The gradient uses a fixed id on purpose — the SVG is byte-identical wherever
  * it appears, so sharing one gradient definition keeps the markup small.
  */
@@ -43,23 +44,23 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
+/** Full QRION wordmark (`public/images/qrion-logo2.png`), inverted via white filter. */
 export function Logo({
   className,
   variant = "default",
   href = "/",
 }: LogoProps) {
   const content = (
-    <>
-      <LogoMark />
-      <span
-        className={cn(
-          "font-display text-[19px] font-extrabold tracking-[0.16em]",
-          variant === "inverted" ? "text-white" : "text-foreground",
-        )}
-      >
-        QRION
-      </span>
-    </>
+    <Image
+      src="/images/qrion-logo2.png"
+      alt="QRION"
+      width={1081}
+      height={347}
+      className={cn(
+        "h-8 w-auto select-none",
+        variant === "inverted" && "[filter:brightness(0)_invert(1)]",
+      )}
+    />
   );
 
   const baseClass = cn(

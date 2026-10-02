@@ -275,6 +275,46 @@
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/* Landing product showcase (pintro-style): main image fades up, floating       */
+/* info cards emerge from behind the image with a stagger.                      */
+/* -------------------------------------------------------------------------- */
+
+@keyframes qrion-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes qrion-emerge {
+  from {
+    opacity: 0;
+    transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(0.92);
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes qrion-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
 /* ONCARD preview frame: 🌙 dark mode (invert-hue trick keeps source photos sane) */
 .oc-dark {
   filter: invert(1) hue-rotate(180deg);
@@ -285,4 +325,121 @@
 .oc-dark video,
 .oc-dark picture {
   filter: invert(1) hue-rotate(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   Konten artikel (HTML dari qrion.id) — styling untuk .article-content
+   -------------------------------------------------------------------------- */
+.article-content {
+  font-size: 15.5px;
+  line-height: 1.8;
+  color: var(--qrion-text-body);
+}
+
+.article-content > *:first-child {
+  margin-top: 0;
+}
+
+.article-content p {
+  margin: 1.1em 0;
+}
+
+.article-content h2 {
+  margin: 1.9em 0 0.6em;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--qrion-indigo);
+}
+
+.article-content h3 {
+  margin: 1.6em 0 0.5em;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--qrion-indigo);
+}
+
+.article-content h4 {
+  margin: 1.4em 0 0.4em;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--qrion-indigo);
+}
+
+.article-content strong,
+.article-content b {
+  font-weight: 700;
+  color: var(--qrion-indigo);
+}
+
+.article-content a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-content ul,
+.article-content ol {
+  margin: 1.1em 0;
+  padding-left: 1.4rem;
+}
+
+.article-content ul {
+  list-style: disc;
+}
+
+.article-content ol {
+  list-style: decimal;
+}
+
+.article-content li {
+  margin: 0.45em 0;
+}
+
+.article-content li::marker {
+  color: var(--brand);
+}
+
+.article-content blockquote {
+  margin: 1.6em 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--brand);
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: var(--soft);
+  font-style: italic;
+  color: var(--qrion-indigo);
+}
+
+.article-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 0.75rem;
+}
+
+.article-content figure {
+  margin: 1.5em 0;
+}
+
+.article-content figcaption {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.article-content hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+
+.article-content iframe {
+  width: 100%;
+  margin: 1.5em 0;
+  border: 0;
+  border-radius: 0.75rem;
+  aspect-ratio: 16 / 9;
 }

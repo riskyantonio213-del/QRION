@@ -110,7 +110,7 @@ export const mainNav: NavItem[] = [
   { title: "Solusi", href: "/solusi" },
   { title: "Live Preview", href: "/live-preview" },
   { title: "Tentang Kami", href: "/tentang" },
-  { title: "Insight", href: "/insight" },
+  { title: "Artikel", href: "/insight" },
   { title: "Hubungi Kami", href: "/kontak" },
 ];
 
@@ -130,7 +130,7 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
     items: [
       { title: "Tentang Kami", href: "/tentang" },
       { title: "Karier", href: "/karier" },
-      { title: "Insight", href: "/insight" },
+      { title: "Artikel", href: "/insight" },
       { title: "Kontak", href: "/kontak" },
     ],
   },
