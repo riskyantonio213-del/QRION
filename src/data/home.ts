@@ -36,9 +36,11 @@ export type IconCard = {
 
 export const hero = {
   eyebrow: "Partner Digitalisasi Sekolah",
-  headline: "Karya Terbaik Kami Untuk Sekolah Anda",
+  headline: "Karya Terbaik Kami,",
+  headline2: "Untuk Sekolah Anda",
   /** Emphasised supporting line, rendered in QRION green. */
-  highlight: "Sederhana, Terintegrasi, dan Siap Digunakan Hari Ini.",
+  highlight: "Seluruh Sekolah terhubung dalam satu ekosistem ",
+  highlight2: "digital yang memudahkan sekolah,guru,siswa, dan orang tua.",
   description:
     "QRION membantu sekolah, madrasah, dan pesantren mengelola administrasi, pembayaran, presensi, kartu digital, jurnal pembelajaran, hingga penerimaan siswa baru dalam satu ekosistem yang terintegrasi.",
   primaryCta: { label: "Coba Live Preview", href: "/live-preview" },

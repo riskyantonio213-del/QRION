@@ -176,11 +176,6 @@ export function Hero() {
           priority
           className="object-cover"
         />
-        {/* Vignette bawah — transisi lembut gambar → bg putih */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-b from-transparent via-background/60 to-background"
-        />
       </motion.div>
 
       {/* Layer 1b — awan (di atas latar, di bawah konten hero) */}
@@ -214,39 +209,39 @@ export function Hero() {
             id="hero-heading"
             className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
           >
-            {hero.headline}
+            {hero.headline} <br/>
+            {hero.headline2}
           </h1>
 
-          <p className="mt-4 text-lg font-semibold text-brand-dark">
-            {hero.highlight}
+          <p className="mt-4 text-lg font-semibold text-brand-light">
+            {hero.highlight} <br/> {hero.highlight2}
           </p>
 
           <div className="mt-14 flex items-center justify-center">
-            <Link
-              href="/live-preview"
-              className="qbtn"
-              aria-label="Coba Live Preview"
-            >
-              <span className="qbtn-fx" aria-hidden="true" />
-              <span className="qbtn-fx qbtn-fx-bottom" aria-hidden="true" />
-              <span className="qbtn-content">
-                <span>Coba Live Preview</span>
-                <svg
-                  viewBox="0 0 1200 1200"
-                  height={30}
-                  width={30}
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path fill="#fed3fe" d="m150 550h775v100h-775z" />
-                  <path
-                    fill="#fed3fe"
-                    d="m710 935-70-70 265-265-265-265 70-70 335 335z"
-                  />
-                </svg>
-              </span>
-            </Link>
-          </div>
+  <Link
+    href="/live-preview"
+    className="group relative inline-flex items-center justify-between rounded-full bg-blue-600 px-6 py-3.5 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-1 ring-white/30 backdrop-blur-md transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_8px_30px_rgb(37,99,235,0.3)]"
+    aria-label="Coba Live Preview"
+  >
+    {/* Teks Tombol */}
+    <span className="pr-6 font-medium tracking-wide">Coba Live Preview</span>
+
+    {/* Lingkaran Putih Berisi Panah di Kanan */}
+    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-800 shadow-md transition-transform duration-300 group-hover:translate-x-1">
+      <svg
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </span>
+  </Link>
+</div>
         </div>
       </section>
 
@@ -269,11 +264,11 @@ export function Hero() {
               width={1280}
               height={703}
               priority
-              className="aspect-[1060/1127] w-full rounded-2xl bg-background object-contain"
+              className="h-auto w-full rounded-2xl shadow-[0_24px_60px_rgba(48,46,89,0.18)]"
             />
           </Reveal>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+          {/* <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {dashboardSection.bullets.map((bullet, index) => (
               <Reveal key={bullet} delay={index * 0.07}>
                 <div className="flex items-start gap-3 rounded-xl border border-border bg-background p-4">
@@ -287,7 +282,7 @@ export function Hero() {
                 </div>
               </Reveal>
             ))}
-          </div>
+          </div> */}
         </Section>
       </motion.div>
 
@@ -310,6 +305,12 @@ export function Hero() {
           className="h-auto w-full"
         />
       </motion.div>
+
+      {/* Vignette bawah — di depan rumput (z-40), transisi rumput → bg putih */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-[30%] bg-gradient-to-b from-transparent via-background to-background"
+      />
     </div>
   );
 }

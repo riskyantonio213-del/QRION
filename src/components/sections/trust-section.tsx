@@ -7,7 +7,7 @@ export function TrustSection() {
   return (
     <section
       id="kepercayaan"
-      className="bg-background border-t border-border/70 py-12 sm:py-14 lg:py-16"
+      className="bg-background  py-12 sm:py-14 lg:py-16"
     >
       <Container>
         <SectionHeader
