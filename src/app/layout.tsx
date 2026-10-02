@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import { siteConfig } from "@/config/site";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 
 import "./globals.css";
 
@@ -73,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <body className="min-h-dvh bg-background font-sans antialiased">
+        <SmoothScroll />
         <a
           href="#konten-utama"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-primary-foreground"

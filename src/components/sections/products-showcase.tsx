@@ -361,10 +361,10 @@ export function ProductsShowcase() {
           height={current.height}
           priority
           className={cn(
-            "z-10 h-auto shrink-0 animate-[qrion-fade-up_0.7s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none",
+            "z-10 h-auto min-w-0 animate-[qrion-fade-up_0.7s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none",
             current.phone
               ? "w-[190px] rounded-3xl shadow-[0_24px_60px_rgba(48,46,89,0.22)] sm:w-[230px] xl:w-[260px]"
-              : "w-[90%] rounded-xl shadow-[0_24px_60px_rgba(48,46,89,0.18)] sm:w-[75%] xl:w-[1080px]",
+              : "w-[90%] rounded-xl shadow-[0_24px_60px_rgba(48,46,89,0.18)] sm:w-[75%] xl:w-full xl:max-w-[1080px]",
           )}
         />
 

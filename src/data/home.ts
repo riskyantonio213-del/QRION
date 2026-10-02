@@ -36,7 +36,7 @@ export type IconCard = {
 
 export const hero = {
   eyebrow: "Partner Digitalisasi Sekolah",
-  headline: "Satu Ekosistem Digital untuk Transformasi Sekolah",
+  headline: "Karya Terbaik Kami Untuk Sekolah Anda",
   /** Emphasised supporting line, rendered in QRION green. */
   highlight: "Sederhana, Terintegrasi, dan Siap Digunakan Hari Ini.",
   description:

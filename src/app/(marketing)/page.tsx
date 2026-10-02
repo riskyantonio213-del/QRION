@@ -7,7 +7,7 @@ import { EcosystemSection } from "@/components/sections/ecosystem-section";
 import { ProductsSection } from "@/components/sections/products-section";
 // import { HowItWorks } from "@/components/sections/how-it-works";
 // import { BenefitsSection } from "@/components/sections/benefits-section";
-import { DashboardSection } from "@/components/sections/dashboard-section";
+// Bagian dashboard sudah digabung ke dalam <Hero /> (hero stage berlapis)
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { InsightSection } from "@/components/sections/insight-section";
 // import { RolesSection } from "@/components/sections/roles-section";
@@ -32,7 +32,6 @@ export default function HomePage() {
       <ProductsSection />
       {/* <HowItWorks /> */}
       {/* <BenefitsSection /> */}
-      <DashboardSection />
       <TestimonialSection />
       <InsightSection />
       {/* <RolesSection /> */}

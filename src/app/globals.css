@@ -185,6 +185,24 @@
     scroll-behavior: smooth;
   }
 
+  /* Lenis smooth scroll — rekomendasi resmi lenis. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -442,4 +460,229 @@
   border: 0;
   border-radius: 0.75rem;
   aspect-ratio: 16 / 9;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Hero CTA — tombol 3D "Join Today" (diport dari design user, styled-       */
+/*  components dilepas jadi CSS biasa + namespace .qbtn biar aman global).     */
+/* -------------------------------------------------------------------------- */
+
+.qbtn {
+  --q-purple-100: #fed3fe;
+  --q-purple-200: #f4b1ff;
+  --q-purple-300: #d892ff;
+  --q-purple-400: #c780ff;
+  --q-purple-500: #bc73f5;
+  --q-purple-600: #a35ce0;
+  --q-purple-700: #9946dd;
+  --q-purple-800: #8630c9;
+  --q-purple-900: #7723ba;
+  --q-purple-1000: #5b2b86;
+
+  position: relative;
+  display: inline-block;
+  min-width: 230px;
+  height: 84px;
+  padding: 1rem;
+  border: none;
+  border-radius: 22px;
+  background-color: var(--q-purple-1000);
+  box-shadow: var(--q-purple-1000) 0 0 10px;
+  color: var(--q-purple-100);
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: normal;
+  text-decoration: none;
+  transform: rotate(-10deg) skew(2deg);
+  transition: all 0.3s ease;
+}
+
+.qbtn:focus-visible {
+  outline: 3px solid var(--qrion-green-primary);
+  outline-offset: 4px;
+}
+
+.qbtn-content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-bottom: 5px;
+  border-radius: 20px;
+  background: linear-gradient(
+    to top,
+    var(--q-purple-900) 5%,
+    var(--q-purple-700) 30%,
+    var(--q-purple-500) 60%,
+    var(--q-purple-400) 80%,
+    var(--q-purple-200) 100%
+  );
+  box-shadow: var(--q-purple-1000) -16px 20px 30px 2px;
+  transform: translate(6px, -8px);
+  transition: all 0.3s ease;
+}
+
+.qbtn-content::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    var(--q-purple-500),
+    var(--q-purple-600),
+    var(--q-purple-800)
+  );
+  box-shadow:
+    inset 0 -8px 20px -3px rgba(0, 0, 0, 0.43),
+    inset 0 10px 14px -5px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.qbtn-content span,
+.qbtn-content svg {
+  position: relative;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  filter: drop-shadow(1px 2px 3px var(--q-purple-800));
+  text-shadow: 1px 2px var(--q-purple-800);
+}
+
+.qbtn-content svg {
+  transition: all 0.4s ease-out;
+}
+
+.qbtn:hover {
+  filter: brightness(1.1);
+}
+
+.qbtn:active {
+  filter: none;
+}
+
+.qbtn:hover .qbtn-content svg {
+  transform: translateX(7px);
+}
+
+.qbtn:active .qbtn-content {
+  transform: translate(3px, -4px);
+  box-shadow: none;
+}
+
+.qbtn:active .qbtn-content::before {
+  box-shadow:
+    inset 0 8px 20px -3px rgba(0, 0, 0, 0.43),
+    inset 0 -10px 14px -5px rgba(255, 255, 255, 0.3);
+}
+
+.qbtn-fx {
+  position: absolute;
+  top: -90%;
+  left: 50%;
+  width: 120%;
+  height: 100%;
+  transform: translateX(-50%);
+  background-repeat: no-repeat;
+}
+
+.qbtn-fx-bottom {
+  /* efek lapis kedua: diputar + digeser ke bawah saat :active (lihat aturan di bawah) */
+}
+
+.qbtn:active .qbtn-fx-bottom {
+  transform: scale(-1) translateY(-185%) translateX(60%);
+}
+
+.qbtn:active .qbtn-fx {
+  background-image:
+    radial-gradient(circle, var(--q-purple-500) 10%, transparent 10%),
+    radial-gradient(circle, var(--q-purple-200) 15%, transparent 15%),
+    radial-gradient(circle, var(--q-purple-300) 22%, transparent 22%),
+    radial-gradient(circle, var(--q-purple-900) 10%, transparent 22%),
+    radial-gradient(circle, var(--q-purple-700) 15%, transparent 15%),
+    radial-gradient(circle, var(--q-purple-500) 20%, transparent 20%),
+    radial-gradient(circle, var(--q-purple-400) 22%, transparent 22%),
+    radial-gradient(circle, var(--q-purple-400) 10%, transparent 10%),
+    radial-gradient(circle, var(--q-purple-300) 22%, transparent 22%),
+    radial-gradient(circle, var(--q-purple-1000) 10%, transparent 10%),
+    radial-gradient(circle, var(--q-purple-1000) 15%, transparent 15%);
+  background-size:
+    15% 15%,
+    25% 25%,
+    20% 20%,
+    25% 25%,
+    18% 18%,
+    18% 18%,
+    15% 15%,
+    22% 22%,
+    15% 15%,
+    25% 25%,
+    20% 20%;
+  background-position: 50% 125%;
+  animation: qbtnBubbles 0.9s ease;
+}
+
+@keyframes qbtnBubbles {
+  0% {
+    background-position:
+      10% 95%,
+      15% 95%,
+      15% 95%,
+      20% 95%,
+      30% 95%,
+      30% 95%,
+      45% 95%,
+      65% 95%,
+      75% 95%,
+      10% 95%,
+      15% 95%,
+      15% 95%;
+  }
+  70% {
+    background-position:
+      5% 85%,
+      5% 25%,
+      15% 45%,
+      25% 5%,
+      35% 35%,
+      27% 55%,
+      55% 55%,
+      75% 25%,
+      95% 35%,
+      5% 85%,
+      15% 45%;
+  }
+  100% {
+    background-position:
+      5% 75%,
+      5% 15%,
+      15% 35%,
+      25% 0%,
+      35% 25%,
+      27% 45%,
+      55% 45%,
+      70% 15%,
+      95% 25%,
+      5% 75%,
+      15% 35%;
+    background-size: 0% 0%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qbtn,
+  .qbtn-content,
+  .qbtn-content svg {
+    transition: none;
+  }
+  .qbtn:active .qbtn-fx {
+    animation: none;
+  }
 }
