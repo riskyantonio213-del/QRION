@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Check } from "lucide-react";
@@ -237,20 +242,93 @@ const slides: Slide[] = [
   },
 ];
 
-/** Vektor awal emerge: kartu keluar dari belakang gambar (kiri → kanan, kanan → kiri). */
-const emergeVector = (index: number) => ({
-  fx: index % 2 === 0 ? "360px" : "-360px",
-  fy: ["140px", "0px", "-140px"][Math.min(Math.floor(index / 2), 2)],
-});
+/**
+ * Sisi kanan showcase: gambar dengan rotasi 3D istirahat + tilt mengikuti
+ * kursor saat hover — meniru mockup hero gis-project-web (rest: rotateY(-10deg)
+ * rotateX(3deg), perspective 1500px, hanya >=1024px & perangkat hover).
+ */
+const REST_TILT_CLASS =
+  "lg:[transform:perspective(1500px)_rotateY(-10deg)_rotateX(3deg)]";
+
+function TiltStage({
+  current,
+  active,
+  children,
+}: {
+  current: Slide;
+  active: number;
+  children: ReactNode;
+}) {
+  const [tilt, setTilt] = useState<{ rx: number; ry: number } | null>(null);
+
+  const handleTiltMove = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (
+      !window.matchMedia("(hover: hover) and (min-width: 1024px)").matches
+    ) {
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    const rx = -((event.clientY - rect.top - rect.height / 2) / 15);
+    const ry = (event.clientX - rect.left - rect.width / 2) / 15;
+    setTilt((prev) =>
+      prev && Math.abs(prev.rx - rx) < 0.05 && Math.abs(prev.ry - ry) < 0.05
+        ? prev
+        : { rx, ry },
+    );
+  };
+
+  return (
+    <div
+      className="relative flex w-full flex-col items-center justify-center lg:w-7/12 lg:flex-row lg:items-center lg:justify-end"
+      onMouseMove={handleTiltMove}
+      onMouseLeave={() => setTilt(null)}
+    >
+      <div
+        key={`img-${active}`}
+        className={cn(
+          "z-10 w-full animate-[qrion-fade-up_0.7s_cubic-bezier(0.22,1,0.36,1)_both]",
+          current.phone ? "max-w-[260px] lg:mr-16" : "max-w-[920px]",
+        )}
+      >
+        <Image
+          src={current.image}
+          alt={`Tampilan ${current.label} — QRION`}
+          width={current.width}
+          height={current.height}
+          priority
+          style={
+            tilt
+              ? {
+                  transform: `perspective(1500px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+                }
+              : undefined
+          }
+          className={cn(
+            "h-auto w-full transition-transform duration-500 ease-out",
+            REST_TILT_CLASS,
+            current.phone
+              ? "rounded-[2.5rem] shadow-[0_24px_60px_rgba(48,46,89,0.22)]"
+              : "rounded-2xl border border-slate-100 shadow-[0_24px_60px_rgba(48,46,89,0.12)]",
+          )}
+        />
+      </div>
+      {children}
+    </div>
+  );
+}
 
 export function ProductsShowcase() {
   const [active, setActive] = useState(0);
   const current = slides[active];
-  // Distribusi kartu: genap → kolom kiri, ganjil → kolom kanan (tinggi seimbang).
-  const leftFloats = current.floats.filter((_, i) => i % 2 === 0);
-  const rightFloats = current.floats.filter((_, i) => i % 2 === 1);
 
-  // Preload semua gambar slide supaya transisi pill tidak kedip.
+  // Efek magnetic pada tombol CTA — tombol "menempel" ke kursor (mirip .btn-magnetic)
+  const [btnOffset, setBtnOffset] = useState({ x: 0, y: 0 });
+  
+  // Memisahkan data float intro (untuk deskripsi kiri) dan sisanya (untuk fitur kanan)
+  const introFloat = current.floats[0];
+  const featureFloats = current.floats.slice(1, 5); // Menampilkan maksimal 4 fitur di kanan
+
+  // Preload semua gambar slide supaya transisi tidak kedip
   useEffect(() => {
     slides.forEach((slide) => {
       const img = new window.Image();
@@ -258,75 +336,10 @@ export function ProductsShowcase() {
     });
   }, []);
 
-  const renderFloat = (float: Float, index: number) => {
-    const { fx, fy } = emergeVector(index);
-    return (
-      <div
-        key={`${active}-${index}`}
-        className="relative z-0 w-full animate-[qrion-emerge_0.65s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none"
-        style={
-          {
-            "--fx": fx,
-            "--fy": fy,
-            animationDelay: `${0.6 + index * 0.07}s`,
-          } as CSSProperties
-        }
-      >
-        {/* Lapisan dalam: melayang terus setelah selesai emerge */}
-        <div
-          className="animate-[qrion-float_4.5s_ease-in-out_infinite] motion-reduce:animate-none"
-          style={{ animationDelay: `${1.5 + (index % 3) * 0.45}s` }}
-        >
-          {float.check ? (
-            <div className="rounded-xl border border-border bg-background/95 p-4 shadow-[0_12px_36px_rgba(48,46,89,0.12)]">
-              <div className="flex items-start gap-2.5">
-                <Check
-                  aria-hidden="true"
-                  className="mt-0.5 size-4 shrink-0 text-brand"
-                />
-                <div className="min-w-0">
-                  {float.title && (
-                    <p className="text-[13px] font-semibold leading-snug text-foreground">
-                      {float.title}
-                    </p>
-                  )}
-                  <p
-                    className={cn(
-                      float.title
-                        ? "mt-1 text-[12.5px] leading-relaxed text-muted-foreground"
-                        : "text-[13px] leading-snug text-foreground/85",
-                    )}
-                  >
-                    {float.text}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="rounded-xl border border-border bg-background/95 p-4 shadow-[0_12px_36px_rgba(48,46,89,0.12)]">
-              {float.chip && (
-                <span className="inline-block rounded-full border border-brand-mint-medium bg-brand-mint px-2.5 py-1 text-[11px] font-medium text-brand-dark">
-                  {float.chip}
-                </span>
-              )}
-              {float.title && (
-                <h4 className="mt-2.5 font-display text-[17px] font-bold text-foreground">
-                  {float.title}
-                </h4>
-              )}
-              <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
-                {float.text}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="mt-12">
-      <div className="flex w-full overflow-x-auto">
+      {/* Pilihan Produk (Tabs) */}
+      <div className="flex w-full overflow-x-auto pb-6">
         <JellyRadio
           items={slides.map((slide) => ({
             value: slide.label,
@@ -336,7 +349,7 @@ export function ProductsShowcase() {
           onChange={(_, index) => setActive(index)}
           ariaLabel="Pilih produk QRION"
           chipColor="#ffffff"
-          activeColor="#35bb82"
+          activeColor="#35bb82" // Menyesuaikan warna indikator tab 
           textColor="#475569"
           activeTextColor="#ffffff"
           gap={10}
@@ -345,46 +358,93 @@ export function ProductsShowcase() {
         />
       </div>
 
-      {/* Stage: flow 3 kolom — kartu mengikuti lebar gambar, tidak pernah overlap */}
-      <div className="mt-10 flex w-full items-center justify-center gap-5 xl:gap-6">
-        {/* Kolom kiri */}
-        <div className="hidden w-[248px] shrink-0 flex-col gap-4 xl:flex">
-          {leftFloats.map((float, i) => renderFloat(float, i * 2))}
+      {/* Area Utama 2 Kolom */}
+      <div className="mx-auto mt-10 flex w-full flex-col-reverse items-center gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-16 xl:gap-20">
+        
+        {/* Kolom Kiri: Teks & Tombol */}
+        <div className="flex w-full flex-col items-start text-left lg:w-5/12 lg:pr-6 xl:pr-10">
+          
+          {/* Badge Label */}
+          <div className="mb-6 flex items-center gap-3 rounded-full bg-indigo-50 py-1.5 pl-2.5 pr-5 shadow-sm ring-1 ring-indigo-100">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-white shadow-md">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <span className="text-[15px] font-bold text-indigo-700">{current.label}</span>
+          </div>
+
+          {/* Heading - Dirancang menyamai gaya referensi "Terhubung, Tanpa Batas" */}
+          <h2 className="mb-6 font-display text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl lg:text-[42px] xl:text-5xl">
+            {introFloat.title} Terhubung, <br className="hidden lg:block"/> Tanpa Batas
+          </h2>
+
+          {/* Paragraf */}
+          <p className="mb-10 text-base leading-relaxed text-slate-600 md:text-lg">
+            {introFloat.text}
+          </p>
+
+          {/* Tombol Action (Bentuk Pil Hijau sesuai referensi) */}
+          <Link
+            href={current.href}
+            style={{ transform: `translate(${btnOffset.x}px, ${btnOffset.y}px)` }}
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect();
+              setBtnOffset({
+                x: (event.clientX - rect.left - rect.width / 2) * 0.3,
+                y: (event.clientY - rect.top - rect.height / 2) * 0.3,
+              });
+            }}
+            onMouseLeave={() => setBtnOffset({ x: 0, y: 0 })}
+            className="group relative inline-flex items-center justify-between rounded-full bg-emerald-500 px-7 py-3.5 text-white shadow-[0_8px_30px_rgb(16,185,129,0.25)] ring-1 ring-white/30 backdrop-blur-md transition-all duration-300 ease-out hover:bg-emerald-600 hover:shadow-[0_8px_30px_rgb(16,185,129,0.4)]"
+            aria-label={current.linkLabel}
+          >
+            <span className="pr-6 font-semibold tracking-wide text-[15px]">{current.linkLabel}</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-900 shadow-md transition-transform duration-300 group-hover:translate-x-1">
+              <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+            </span>
+          </Link>
         </div>
 
-        {/* Gambar utama */}
-        <Image
-          key={`img-${active}`}
-          src={current.image}
-          alt={`Tampilan ${current.label} — QRION`}
-          width={current.width}
-          height={current.height}
-          priority
-          className={cn(
-            "z-10 h-auto min-w-0 animate-[qrion-fade-up_0.7s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none",
-            current.phone
-              ? "w-[190px] rounded-3xl shadow-[0_24px_60px_rgba(48,46,89,0.22)] sm:w-[230px] xl:w-[260px]"
-              : "w-[90%] rounded-xl shadow-[0_24px_60px_rgba(48,46,89,0.18)] sm:w-[75%] xl:w-full xl:max-w-[1080px]",
-          )}
-        />
+        {/* Kolom Kanan: Gambar Dashboard & Floating Card */}
+        <TiltStage current={current} active={active}>
 
-        {/* Kolom kanan */}
-        <div className="hidden w-[248px] shrink-0 flex-col gap-4 xl:flex">
-          {rightFloats.map((float, i) => renderFloat(float, i * 2 + 1))}
-        </div>
-      </div>
+          {/* Floating Card Checklist — static di mobile (di luar gambar), absolute mulai lg */}
+          <div className="relative z-20 mt-6 w-full max-w-[340px] animate-[qrion-emerge_0.65s_cubic-bezier(0.22,1,0.36,1)_both] lg:absolute lg:-right-4 lg:bottom-16 lg:mt-0 lg:w-[280px] lg:max-w-none xl:-right-6 xl:bottom-20">
+            {/* Wrapper animasi floating berkelanjutan */}
+            <div className="animate-[qrion-float_4.5s_ease-in-out_infinite] rounded-2xl border border-white/60 bg-white/95 p-6 shadow-[0_20px_50px_rgba(48,46,89,0.15)] backdrop-blur-xl">
+              
+              {/* Header Card */}
+              <div className="mb-5 flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M4 20h2V9H4v11zm6 0h2V4h-2v16zm6 0h2v-7h-2v7zm6 0h2v-4h-2v4z"/>
+                    </svg>
+                  </div>
+                  <h4 className="text-[14px] font-bold leading-tight text-slate-800">
+                    {introFloat.title} lebih terstruktur
+                  </h4>
+                </div>
+                <ArrowRight className="h-4 w-4 text-emerald-500 shrink-0" strokeWidth={2.5} />
+              </div>
 
-      <div className="mt-8 flex justify-center">
-        <Link
-          href={current.href}
-          className="group inline-flex items-center gap-2 rounded-lg bg-brand-indigo-dark px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-brand"
-        >
-          {current.linkLabel}
-          <ArrowRight
-            aria-hidden="true"
-            className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
-          />
-        </Link>
+              {/* List Checklist (Mengambil dari sub-fitur) */}
+              <div className="flex flex-col gap-3.5">
+                {featureFloats.map((float, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <Check className="h-4 w-4 shrink-0 text-emerald-500" strokeWidth={3} />
+                    <span className="text-[13px] font-medium text-slate-600">
+                      {float.title || float.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+        </TiltStage>
       </div>
     </div>
   );

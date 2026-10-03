@@ -8,7 +8,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useSyncExternalStore } from "react";
 import { Check } from "lucide-react";
 
 import { Section } from "@/components/layout/section";
@@ -34,28 +34,42 @@ import { dashboardSection, hero } from "@/data/home";
 const SCROLL = {
   bgBack: { range: [0, 1], y: ["0%", "32%"] },
   dashboard: {
-    range: [0, 0.35],
-    y: [-40, 0],
+    range: [0, 0.55],
     scale: [0.644, 1],
   },
 } as const;
 
+/** Tinggi hero (px) — stage minimal setinggi ini. */
+const STAGE_H = 1600;
+
 /**
- * ==== Rumput depan (bg-hero4) — atur kapan turun & kapan hilang di sini ====
- * Nilainya posisi scroll dalam PIXEL dari atas halaman:
+ * Posisi awal rumput: jarak dari atas stage = (GRASS_BOTTOM_SVH × viewport)
+ * + 1rem. Nilai ini dipakai di 2 tempat (style bottom Layer 4 & hitungan
+ * jarak turun) — ubah di sini saja.
+ */
+const GRASS_BOTTOM_SVH = 140;
+const GRASS_BOTTOM_REM = 16;
+
+/**
+ * ==== Rumput depan (bg-hero4) — parallax tenggelam ke bawah ====
+ * Rumput terus turun (sink) mengikuti scroll seperti parallax, sambil
+ * membesar, lalu memudar. Semua angka satuan scroll dalam PIXEL:
  *
- *   moveStart → moveEnd : rumput TURUN (y) + membesar (scale)
- *   fadeStart → fadeEnd : rumput HILANG (opacity 1 → 0; 0 = tak terlihat)
+ *   [moveStart → moveEnd]   rumput TURUN terus (parallax) sampai `sinkExtra`
+ *                           px lewat batas bawah hero → "tenggelam"
+ *   [growStart → growEnd]   rumput membesar (tumpang tindih dgn turun)
+ *   [fadeStart → fadeEnd]   rumput memudar (1 → 0)
  *
- * Contoh: biarkan tetap terlihat sampai scroll 800px → fadeEnd: 800.
- * Turun lebih awal → kecilkan moveStart. Belum perlu turun → moveStart besar.
+ * Jarak turun total = grassDrop (sampai tepat batas hero) + sinkExtra.
  */
 const GRASS = {
   moveStart: 0,
   moveEnd: 737,
+  sinkExtra: 1020,
+  growStart: 100,
+  growEnd: 649,
   fadeStart: 649,
   fadeEnd: 700,
-  y: "80%",
   scale: 5.3,
 } as const;
 
@@ -105,18 +119,40 @@ const GRASS = {
 //   );
 // }
 
+/** Tinggi/lebar viewport (untuk SSR aman: default, disesuaikan setelah mount). */
+const subscribeVH = (cb: () => void) => {
+  window.addEventListener("resize", cb);
+  return () => window.removeEventListener("resize", cb);
+};
+const getVH = () => window.innerHeight;
+const subscribeVW = (cb: () => void) => {
+  window.addEventListener("resize", cb);
+  return () => window.removeEventListener("resize", cb);
+};
+const getVW = () => window.innerWidth;
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export function Hero() {
   const stageRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
+  const dashImgRef = useRef<HTMLImageElement>(null);
   const prefersReducedMotion = useReducedMotion() ?? false;
+  const vh = useSyncExternalStore(subscribeVH, getVH, () => 900);
+  const vw = useSyncExternalStore(subscribeVW, getVW, () => 1440);
+  // Mobile (< sm) = layout rapat, SEMUA efek scroll mati.
+  const isMobile = vw < 640;
 
   const { scrollYProgress, scrollY } = useScroll({
     target: stageRef,
     offset: ["start start", "end end"],
   });
 
-  // Jika user memilih reduced motion, semua nilai dikunci ke posisi awal.
+  // Jika reduced motion ATAU mobile, semua efek dikunci ke posisi awal.
+  const disabled = prefersReducedMotion || isMobile;
   const pick = <T,>(from: T, to: T): [T, T] =>
-    prefersReducedMotion ? [from, from] : [from, to];
+    disabled ? [from, from] : [from, to];
 
   const bgBackY = useTransform(
     scrollYProgress,
@@ -124,15 +160,23 @@ export function Hero() {
     pick<string>(SCROLL.bgBack.y[0], SCROLL.bgBack.y[1]),
   );
 
-  // Rumput depan — dikontrol penuh lewat konstanta GRASS (satuan: pixel).
+  // Jarak turun rumput = dari posisi awalnya sampai tepat batas bawah hero
+  // (STAGE_H). Negatif = posisi awal sudah lewat batas → 0.
+  const grassDrop = Math.max(
+    0,
+    STAGE_H - (vh * (GRASS_BOTTOM_SVH / 100) + GRASS_BOTTOM_REM),
+  );
+
+  // Rumput depan — parallax: terus turun/tenggelam selama scroll.
   const bgFrontY = useTransform(
     scrollY,
     [GRASS.moveStart, GRASS.moveEnd],
-    pick<string>("0%", GRASS.y),
+    pick<string>("0px", `${grassDrop + GRASS.sinkExtra}px`),
   );
+  // Membesar tumpang tindih dgn gerak turun.
   const bgFrontScale = useTransform(
     scrollY,
-    [GRASS.moveStart, GRASS.moveEnd],
+    [GRASS.growStart, GRASS.growEnd],
     pick<number>(1, GRASS.scale),
   );
   // clamp:false agar framer tidak memakai jalur "accelerate" (WAAPI) yang
@@ -145,29 +189,66 @@ export function Hero() {
     { clamp: false },
   );
 
-  const dashY = useTransform(
-    scrollYProgress,
-    [...SCROLL.dashboard.range],
-    pick<number>(SCROLL.dashboard.y[0], SCROLL.dashboard.y[1]),
-  );
   const dashScale = useTransform(
     scrollYProgress,
     [...SCROLL.dashboard.range],
-    pick<number>(SCROLL.dashboard.scale[0], SCROLL.dashboard.scale[1]),
+    pick<number>(
+      isMobile ? 1 : SCROLL.dashboard.scale[0],
+      SCROLL.dashboard.scale[1],
+    ),
   );
+
+  // Posisi dashboard TETAP (tanpa gerak y): translate pas-kan bagian bawah
+  // gambar di awal (scale0) agar PAS dengan batas bawah layar.
+  // Mobile: efek dimatikan, tanpa translate, ukuran natural.
+  useIsomorphicLayoutEffect(() => {
+    const stage = stageRef.current;
+    const layer = layerRef.current;
+    const img = dashImgRef.current;
+    if (!stage || !layer || !img) return;
+
+    if (isMobile) {
+      layer.style.removeProperty("translate");
+      return;
+    }
+
+    const apply = () => {
+      layer.style.removeProperty("translate");
+
+      const stageDoc = stage.getBoundingClientRect().top + window.scrollY;
+      let top = 0;
+      let el: HTMLElement | null = img;
+      while (el && el !== stage) {
+        top += el.offsetTop;
+        el = el.offsetParent as HTMLElement | null;
+      }
+
+      const imgH = img.offsetHeight || 1;
+      const scale0 = SCROLL.dashboard.scale[0];
+      const bottom0 = stageDoc + top + scale0 * imgH;
+      const delta = window.innerHeight - bottom0;
+      layer.style.setProperty("translate", `0 ${delta}px`, "important");
+    };
+
+    apply();
+    window.addEventListener("resize", apply);
+    return () => window.removeEventListener("resize", apply);
+  }, [isMobile]);
 
   return (
     <div
       ref={stageRef}
-      className="relative isolate -mt-[76px] overflow-hidden bg-background pb-[10svh] pt-[76px] lg:-mt-[84px] lg:pt-[84px]"
+      className="relative isolate -mt-[76px] min-h-svh overflow-hidden bg-background pb-[10svh] pt-[76px] sm:min-h-[1600px] lg:-mt-[84px] lg:pt-[84px]"
     >
+      
       {/* Layer 1 — latar belakang (paling belakang); top negatif = gambar
           merambat ke balik navbar (kapsul Dynamic Island melayang di atasnya) */}
       <motion.div
         aria-hidden="true"
-        style={{ y: bgBackY }}
+        // style={{ y: bgBackY }}
         className="absolute inset-x-0 -top-[76px] z-0 h-[115svh] overflow-hidden lg:-top-[84px]"
       >
+        
         <Image
           src="/images/bg-hero5.png"
           alt=""
@@ -176,7 +257,15 @@ export function Hero() {
           priority
           className="object-cover"
         />
+
+        {/* Vignette — mobile: di bawah akhir hero; sm+: di tengah depan
+            bg-hero5 (posisi/tinggi bebas diatur manual) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-b from-transparent via-background to-background sm:bottom-auto sm:mt-138 sm:top-1/2 sm:-translate-y-1/2"
+        />
       </motion.div>
+      
 
       {/* Layer 1b — awan (di atas latar, di bawah konten hero) */}
       {/* {CLOUDS.length > 0 && (
@@ -195,10 +284,11 @@ export function Hero() {
         </div>
       )} */}
 
-      {/* Layer 2 — konten hero */}
+      {/* Layer 2 — konten hero; mobile: rapat tanpa min-h (dashboard langsung
+          di bawah teks), sm+: layout desktop (tengah + ruang tumpang tindih) */}
       <section
         aria-labelledby="hero-heading"
-        className="relative z-10 flex min-h-svh flex-col items-center justify-center px-6 pb-[50svh] pt-0 text-center sm:px-12"
+        className="relative z-10 flex flex-col items-center justify-center px-6 pb-2 pt-6 text-center sm:min-h-svh sm:px-12 sm:pb-[50svh] sm:pt-0"
       >
         <div className="mx-auto max-w-3xl">
           <span className="inline-block rounded-full bg-background/80 px-3 py-1 text-sm font-medium text-foreground shadow-sm backdrop-blur-sm">
@@ -217,7 +307,7 @@ export function Hero() {
             {hero.highlight} <br/> {hero.highlight2}
           </p>
 
-          <div className="mt-14 flex items-center justify-center">
+          <div className="mt-6 flex items-center justify-center sm:mt-14">
   <Link
     href="/live-preview"
     className="group relative inline-flex items-center justify-between rounded-full bg-blue-600 px-6 py-3.5 text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-1 ring-white/30 backdrop-blur-md transition-all duration-300 hover:bg-blue-700 hover:shadow-[0_8px_30px_rgb(37,99,235,0.3)]"
@@ -243,12 +333,15 @@ export function Hero() {
   </Link>
 </div>
         </div>
+        
       </section>
 
-      {/* Layer 3 — dashboard: mulai kecil (±683px), membesar ke 1124px saat scroll */}
+      {/* Layer 3 — dashboard: posisi tetap, membesar pelan (tanpa gerak y);
+          mobile: langsung rapat di bawah CTA */}
       <motion.div
-        style={{ y: dashY, scale: dashScale }}
-        className="relative z-20 mx-auto -mt-[24svh] w-full max-w-[1124px] origin-top sm:-mt-[50svh]"
+        ref={layerRef}
+        style={{ scale: dashScale }}
+        className="relative z-20 mx-auto mt-6 w-full max-w-[1124px] origin-top sm:-mt-[50svh]"
       >
         <Section
           id="dashboard"
@@ -259,6 +352,7 @@ export function Hero() {
         >
           <Reveal className="mt-0">
             <Image
+              ref={dashImgRef}
               src="/images/onboard.jpeg"
               alt="Dashboard ONBOARD QRION"
               width={1280}
@@ -293,9 +387,11 @@ export function Hero() {
           y: bgFrontY,
           scale: bgFrontScale,
           opacity: bgFrontOpacity,
-          bottom: "calc(100% - 150svh - 1rem)",
+          bottom: isMobile
+            ? "0px"
+            : `calc(100% - ${GRASS_BOTTOM_SVH}svh - ${GRASS_BOTTOM_REM}px)`,
         }}
-        className="pointer-events-none absolute inset-x-0 z-30"
+        className="pointer-events-none absolute inset-x-0 z-30 hidden sm:block"
       >
         <Image
           src="/images/bg-hero4.avif"
@@ -306,11 +402,6 @@ export function Hero() {
         />
       </motion.div>
 
-      {/* Vignette bawah — di depan rumput (z-40), transisi rumput → bg putih */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-[30%] bg-gradient-to-b from-transparent via-background to-background"
-      />
     </div>
   );
 }

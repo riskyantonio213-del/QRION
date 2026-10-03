@@ -4,7 +4,12 @@ import { ProductsShowcase } from "@/components/sections/products-showcase";
 
 export function ProductsSection() {
   return (
-    <Section id="produk" background="soft" aria-labelledby="produk-heading">
+    <Section
+      id="produk"
+      background="soft"
+      aria-labelledby="produk-heading"
+      containerClassName="max-w-[1400px]"
+    >
       <SectionHeader
         eyebrow="Produk"
         title={
