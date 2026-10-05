@@ -43,7 +43,10 @@ type Slide = {
 const productBySlug = Object.fromEntries(products.map((p) => [p.slug, p]));
 
 /** Keterangan resmi per produk: intro + daftar fitur (judul + penjelasan). */
-const floatCopy: Record<string, { intro: string; features: Feature[] }> = {
+const floatCopy: Record<
+  string,
+  { intro: string; chip?: string; title?: string; features: Feature[] }
+> = {
   ontuition: {
     intro:
       "Sistem pembayaran pendidikan yang membantu sekolah mengelola tagihan, pembayaran SPP, monitoring transaksi, dan laporan keuangan secara lebih terstruktur.",
@@ -72,7 +75,7 @@ const floatCopy: Record<string, { intro: string; features: Feature[] }> = {
   },
   oncard: {
     intro:
-      "Kartu pintar untuk mendukung identitas dan berbagai aktivitas digital siswa dalam ekosistem sekolah.",
+      "Sistem cashless untuk memudahkan siswa bertransaksi di kantin dan berbagai merchant dalam lingkungan sekolah.",
     features: [
       {
         title: "Identitas siswa",
@@ -120,7 +123,7 @@ const floatCopy: Record<string, { intro: string; features: Feature[] }> = {
   },
   jurnal: {
     intro:
-      "Sistem jurnal digital untuk membantu sekolah dan guru mencatat serta memonitor aktivitas pembelajaran secara lebih terstruktur.",
+      "Sistem pencatatan keuangan sekolah untuk mengelola kas, donasi, dan berbagai transaksi secara praktis dan terstruktur.",
     features: [
       {
         title: "Jurnal pembelajaran",
@@ -170,13 +173,46 @@ const floatCopy: Record<string, { intro: string; features: Feature[] }> = {
       },
     ],
   },
+  pos: {
+    chip: "Digital School POS",
+    title: "Qrion POS",
+    intro:
+      "Sistem digital untuk membantu sekolah mengelola proses penerimaan murid baru secara lebih efektif.",
+    features: [
+      {
+        title: "Pendaftaran online",
+        text: "Membuka akses seluas-luasnya bagi calon pendaftar untuk mengisi formulir dan mendaftarkan diri secara daring dari mana saja.",
+      },
+      {
+        title: "Pengelolaan data calon siswa",
+        text: "Menyimpan dan merapikan seluruh berkas serta informasi pendaftar di dalam satu database terpusat yang aman.",
+      },
+      {
+        title: "Monitoring proses pendaftaran",
+        text: "Membantu panitia sekolah melacak sejauh mana tahapan seleksi atau kelengkapan berkas yang telah diselesaikan oleh setiap pendaftar.",
+      },
+      {
+        title: "Informasi penerimaan",
+        text: "Sarana pengumuman hasil seleksi dan status kelulusan secara transparan dan cepat kepada calon siswa.",
+      },
+      {
+        title: "Rekap data pendaftar",
+        text: "Menghasilkan laporan statistik total pendaftar secara otomatis guna memudahkan analisis kuota penerimaan sekolah.",
+      },
+    ],
+  },
 };
 
 const floatsFor = (slug: string): Float[] => {
   const product = productBySlug[slug];
   const copy = floatCopy[slug];
+  if (!copy) return [];
   return [
-    { chip: product.category, title: product.name, text: copy.intro },
+    {
+      chip: product?.category ?? copy.chip,
+      title: product?.name ?? copy.title,
+      text: copy.intro,
+    },
     ...copy.features.map((feature) => ({
       title: feature.title,
       text: feature.text,
@@ -250,6 +286,19 @@ const slides: Slide[] = [
     href: "/produk/spmb",
     linkLabel: "Lihat detail Qrion SPMB",
     floats: floatsFor("spmb"),
+  },
+  {
+    label: "Qrion POS",
+    heading: "School Admission Management System",
+    image: "/images/pos.jpeg",
+    width: 1217,
+    height: 698,
+    icon: "/images/pos.png",
+    iconWidth: 467,
+    iconHeight: 206,
+    href: "https://play.google.com/store/apps/details?id=id.qrion.pos&hl=id",
+    linkLabel: "Lihat detail Qrion POS",
+    floats: floatsFor("pos"),
   },
   {
     label: "QRION Mobile",
@@ -430,6 +479,8 @@ export function ProductsShowcase() {
           {/* Tombol Action (Bentuk Pil Hijau sesuai referensi) */}
           <Link
             href={current.href}
+            target={current.href.startsWith("http") ? "_blank" : undefined}
+            rel={current.href.startsWith("http") ? "noopener noreferrer" : undefined}
             style={{ transform: `translate(${btnOffset.x}px, ${btnOffset.y}px)` }}
             onMouseMove={(event) => {
               const rect = event.currentTarget.getBoundingClientRect();

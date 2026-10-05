@@ -89,7 +89,14 @@ export function ProductPage({ product }: { product: Product }) {
   const design = getProductDesign(product.slug);
 
   if (design.page) {
-    return <div style={design.themeVars}>{design.page(product)}</div>;
+    // Tarik desain custom ke bawah sticky header (76px / 84px di lg) seperti
+    // PageHero, supaya latar hero mengisi area atas — bukan body putih polos
+    // yang terlihat seperti "kotak putih" di belakang navbar.
+    return (
+      <div style={design.themeVars} className="-mt-[76px] lg:-mt-[84px]">
+        {design.page(product)}
+      </div>
+    );
   }
 
   return (

@@ -13,6 +13,7 @@ import {
   useLayoutEffect,
   useRef,
   useSyncExternalStore,
+  type CSSProperties,
 } from "react";
 import {
   Check,
@@ -25,6 +26,7 @@ import {
 
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
+import TechText from "@/components/tech-text";
 import { dashboardSection, hero } from "@/data/home";
 
 /**
@@ -79,31 +81,110 @@ const GRASS = {
 } as const;
 
 /**
- * Awan.
+ * Awan — posisi/kecepatan/ukuran bervariasi (random-terlihat), drift kanan → kiri
+ * via CSS `qrion-cloud-drift`. `top`/`height` memakai svh supaya band aman di
+ * atas badge/judul hero ikut skala viewport (layer = 115svh dari atas stage,
+ * stage sendiri mulai -76px di bawah navbar).
  */
-// const CLOUDS = [
-//   {
-//     src: "/images/cloud-1.png",
-//     width: 1185,
-//     height: 689,
-//     travel: "18%",
-//     className: "absolute -left-[8%] top-[14%] w-[42%]",
-//   },
-//   {
-//     src: "/images/cloud-2.png",
-//     width: 1186,
-//     height: 548,
-//     travel: "26%",
-//     className: "absolute -right-[10%] top-[22%] w-[38%]",
-//   },
-//   {
-//     src: "/images/cloud-3.png",
-//     width: 1192,
-//     height: 714,
-//     travel: "12%",
-//     className: "absolute left-[30%] top-[48%] w-[34%]",
-//   },
-// ] as const;
+const CLOUDS = [
+  {
+    id: "c1",
+    src: "/images/awan2.avif",
+    width: 1024,
+    height: 1024,
+    top: "-4svh",
+    size: "15svh",
+    duration: 52,
+    delay: -8,
+    opacity: 0.95,
+    bob: "9s",
+  },
+  {
+    id: "c2",
+    src: "/images/awan1.avif",
+    width: 1024,
+    height: 1024,
+    top: "5svh",
+    size: "12svh",
+    duration: 68,
+    delay: -34,
+    opacity: 0.8,
+    bob: "11s",
+  },
+  {
+    id: "c3",
+    src: "/images/awan3.avif",
+    width: 1024,
+    height: 1024,
+    top: "1svh",
+    size: "9svh",
+    duration: 44,
+    delay: -14,
+    opacity: 0.9,
+    bob: "7s",
+  },
+  {
+    id: "c4",
+    src: "/images/awan1.avif",
+    width: 3024,
+    height: 3024,
+    top: "-7svh",
+    size: "16svh",
+    duration: 76,
+    delay: -55,
+    opacity: 0.7,
+    bob: "12s",
+  },
+  {
+    id: "c5",
+    src: "/images/awan2.avif",
+    width: 3024,
+    height: 3024,
+    top: "8svh",
+    size: "10svh",
+    duration: 58,
+    delay: -47,
+    opacity: 0.85,
+    bob: "10s",
+  },
+  {
+    id: "c6",
+    src: "/images/awan3.avif",
+    width: 3024,
+    height: 3024,
+    top: "0svh",
+    size: "8svh",
+    duration: 40,
+    delay: -26,
+    opacity: 0.75,
+    bob: "8s",
+  },
+] as const;
+
+/** Konfigurasi efek TechText untuk headline hero (dua baris). */
+const HEADLINE_TECH_STYLE = {
+  fontWeight: 700,
+  fontSize: 150,
+  reveal: "letter",
+  dashLength: 4,
+  dashGap: 1,
+  specks: 15,
+  fontFamily: "",
+  color: "#302E59",
+  borderColor: "#ffffff",
+  accentColor: "#ffffff",
+  letterSpacing: -0.01,
+  reach: 200,
+  softness: 0.7,
+  strokeWidth: 3.5,
+  speed: 1,
+  lineStyle: "dashed",
+  selection: true,
+  labels: true,
+  draggable: true,
+  sweep: false,
+  pad: 500,
+} as const;
 
 /**
  * Tinggi/lebar viewport.
@@ -530,7 +611,7 @@ export function Hero() {
         "
       >
         <Image
-          src="/images/bg-hero5.png"
+          src="/images/bg-hero7.png"
           alt=""
           fill
           sizes="100vw"
@@ -538,7 +619,7 @@ export function Hero() {
           className="object-cover"
         />
 
-        {/* Vignette */}
+        {/* Vignette — mobile */}
         <div
           aria-hidden="true"
           className="
@@ -551,42 +632,73 @@ export function Hero() {
             from-transparent
             via-background
             to-background
-            sm:bottom-auto
-            sm:mt-138
-            sm:top-1/2
-            sm:-translate-y-1/2
+            sm:hidden
           "
         />
-      </motion.div>
 
-      {/* ===================================================
-       * LAYER 1B
-       * CLOUD
-       * ================================================= */}
-
-      {/* {CLOUDS.length > 0 && (
+        {/* Vignette — desktop */}
         <div
           aria-hidden="true"
           className="
             pointer-events-none
             absolute
             inset-x-0
-            top-0
-            z-[5]
-            h-[115svh]
-            overflow-hidden
+            bottom-0
+            h-[30%]
+            hidden
+            bg-gradient-to-b
+            from-transparent
+            via-background
+            to-background
+            sm:bottom-auto
+            sm:mt-138
+            sm:top-1/2
+            sm:-translate-y-1/2
+            sm:block
           "
-        >
-          {CLOUDS.map((cloud) => (
-            <Cloud
-              key={cloud.src}
-              {...cloud}
-              progress={scrollYProgress}
-              reduced={prefersReducedMotion}
+        />
+      </motion.div>
+
+      {/* ===================================================
+       * LAYER 1B
+       * CLOUDS — drift kanan → kiri, looping mulus
+       * ================================================= */}
+
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          inset-x-0
+          top-20
+          z-[5]
+          h-[315svh]
+          overflow-hidden
+        "
+      >
+        {CLOUDS.map((cloud) => (
+          <div
+            key={cloud.id}
+            className="qrion-cloud absolute"
+            style={{
+              top: cloud.top,
+              height: cloud.size,
+              opacity: cloud.opacity,
+              animationDuration: `${cloud.duration}s`,
+              animationDelay: `${cloud.delay}s`,
+            }}
+          >
+            <Image
+              src={cloud.src}
+              alt=""
+              width={cloud.width}
+              height={cloud.height}
+              className="block h-full w-auto"
+              style={{ "--cloud-bob": cloud.bob } as CSSProperties}
             />
-          ))}
-        </div>
-      )} */}
+          </div>
+        ))}
+      </div>
 
       {/* ===================================================
        * LAYER 2
@@ -612,7 +724,7 @@ export function Hero() {
           sm:pt-0
         "
       >
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto w-full max-w-5xl">
           <span
             className="
               inline-block
@@ -632,36 +744,38 @@ export function Hero() {
 
           <h1
             id="hero-heading"
-            className="
-              mt-6
-              text-4xl
-              font-extrabold
-              tracking-tight
-              text-white
-              sm:text-5xl
-              lg:text-6xl
-            "
+            className="-mx-6 mt-6 w-[calc(100%_+_3rem)] sm:mx-0 sm:w-full"
           >
-            {hero.headline}
+            <span className="sr-only ">
+              {hero.headline} {hero.headline2}
+            </span>
 
-            <br />
+            <span
+              aria-hidden="true"
+              className="block h-14 w-full sm:h-20 lg:h-28"
+            >
+              <TechText text={hero.headline} {...HEADLINE_TECH_STYLE} />
+            </span>
 
-            {hero.headline2}
+            <span
+              aria-hidden="true"
+              className="block h-14 w-full sm:h-20 lg:h-28"
+            >
+              <TechText text={hero.headline2} {...HEADLINE_TECH_STYLE} />
+            </span>
           </h1>
 
           <p
             className="
+              mx-auto
               mt-4
+              max-w-3xl
               text-lg
               font-semibold
               text-brand-light
             "
           >
             {hero.highlight}
-
-            <br />
-
-            {hero.highlight2}
           </p>
 
           <div
@@ -675,70 +789,19 @@ export function Hero() {
           >
             <Link
               href="/live-preview"
-              className="
-                group
-                relative
-                inline-flex
-                items-center
-                justify-between
-                rounded-full
-                bg-blue-600
-                px-6
-                py-3.5
-                text-white
-                shadow-[0_8px_30px_rgb(0,0,0,0.12)]
-                ring-1
-                ring-white/30
-                backdrop-blur-md
-                transition-all
-                duration-300
-                hover:bg-blue-700
-                hover:shadow-[0_8px_30px_rgb(37,99,235,0.3)]
-              "
+              className="btn"
               aria-label="Coba Live Preview"
             >
-              <span
-                className="
-                  pr-6
-                  font-medium
-                  tracking-wide
-                "
-              >
-                Coba Live Preview
-              </span>
+              <strong>Coba Live Preview</strong>
 
-              <span
-                className="
-                  flex
-                  h-9
-                  w-9
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-white
-                  text-slate-800
-                  shadow-md
-                  transition-transform
-                  duration-300
-                  group-hover:translate-x-1
-                "
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-              </span>
+              <div id="container-stars">
+                <div id="stars" />
+              </div>
+
+              <div id="glow">
+                <div className="circle" />
+                <div className="circle" />
+              </div>
             </Link>
           </div>
         </div>

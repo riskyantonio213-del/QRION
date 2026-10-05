@@ -10,3 +10,13 @@ export function cn(...inputs: ClassValue[]) {
 export function absoluteUrl(base: string, path = "/") {
   return new URL(path, base).toString();
 }
+
+/**
+ * Props tambahan untuk <Link>/<a> agar URL eksternal (mis. WhatsApp)
+ * terbuka di tab baru; href internal tetap tanpa target.
+ */
+export function externalLinkProps(href: string | null | undefined) {
+  return href && /^https?:\/\//i.test(href)
+    ? ({ target: "_blank", rel: "noopener noreferrer" } as const)
+    : undefined;
+}

@@ -9,6 +9,7 @@ import { ProductsSection } from "@/components/sections/products-section";
 // import { BenefitsSection } from "@/components/sections/benefits-section";
 // Bagian dashboard sudah digabung ke dalam <Hero /> (hero stage berlapis)
 import { TestimonialSection } from "@/components/sections/testimonial-section";
+import { PricingSection } from "@/components/sections/pricing-section";
 import { InsightSection } from "@/components/sections/insight-section";
 import { RolesSection } from "@/components/sections/roles-section";
 import { FAQSection } from "@/components/sections/faq-section";
@@ -33,9 +34,10 @@ export default function HomePage() {
       <ProductsSection />
       {/* <HowItWorks /> */}
       {/* <BenefitsSection /> */}
-      <TestimonialSection />
-      <InsightSection />
       <RolesSection />
+      <TestimonialSection />
+      <PricingSection />
+      <InsightSection />
       <FAQSection />
 
       <CTASection

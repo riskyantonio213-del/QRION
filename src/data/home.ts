@@ -36,11 +36,11 @@ export type IconCard = {
 
 export const hero = {
   eyebrow: "Partner Digitalisasi Sekolah",
-  headline: "Karya Terbaik Kami,",
+  headline: "Karya Terbaik Kami",
   headline2: "Untuk Sekolah Anda",
   /** Emphasised supporting line, rendered in QRION green. */
-  highlight: "Seluruh Sekolah terhubung dalam satu ekosistem ",
-  highlight2: "digital yang memudahkan sekolah,guru,siswa, dan orang tua.",
+  highlight: "Semua terhubung dalam satu ekosistem QRION.",
+  // highlight2: "digital yang memudahkan sekolah,guru,siswa, dan orang tua.",
   description:
     "QRION membantu sekolah, madrasah, dan pesantren mengelola administrasi, pembayaran, presensi, kartu digital, jurnal pembelajaran, hingga penerimaan siswa baru dalam satu ekosistem yang terintegrasi.",
   primaryCta: { label: "Coba Live Preview", href: "/live-preview" },
@@ -200,7 +200,7 @@ export const finalCta = {
   description:
     "Diskusikan kebutuhan sekolah Anda bersama tim QRION dan lihat bagaimana teknologi dapat membantu membuat operasional sekolah lebih sederhana.",
   primaryCta: { label: "Jadwalkan Demo", href: "/demo" },
-  secondaryCta: { label: "Hubungi Tim QRION", href: "/kontak" },
+  secondaryCta: { label: "Hubungi Tim QRION", href: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
 };
 
 export const dashboardSection = {

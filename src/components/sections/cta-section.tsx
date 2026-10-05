@@ -5,6 +5,7 @@ import { Container } from "@/components/layout/container";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
+import { externalLinkProps } from "@/lib/utils";
 
 type CTASectionProps = {
   title: string;
@@ -62,7 +63,7 @@ export function CTASection({
                   size="xl"
                   className="relative overflow-hidden rounded-full px-7"
                 >
-                  <Link href={primaryCta.href}>
+                  <Link href={primaryCta.href} {...externalLinkProps(primaryCta.href)}>
                     <OncardRipple color="#51c590" hoverColor="#ffffff" />
                     <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
                       {primaryCta.label}
@@ -77,7 +78,7 @@ export function CTASection({
                     variant="secondary"
                     className="relative overflow-hidden rounded-full px-7"
                   >
-                    <Link href={secondaryCta.href}>
+                    <Link href={secondaryCta.href} {...externalLinkProps(secondaryCta.href)}>
                       <OncardRipple color="#35bb82" hoverColor="#ffffff" />
                       <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
                         {secondaryCta.label}

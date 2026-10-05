@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Logo } from "@/components/layout/logo";
 import { contactChannels, footerNav, siteConfig, socialLinks } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, externalLinkProps } from "@/lib/utils";
 
 function SocialButton({
   title,
@@ -98,6 +98,7 @@ export function Footer() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
+                        {...externalLinkProps(item.href)}
                         className="inline-block rounded py-1 text-sm text-white/70 transition-colors hover:text-brand-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                       >
                         {item.title}

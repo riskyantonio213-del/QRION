@@ -6,7 +6,8 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/layout/section";
 import { ContactForm } from "@/components/forms/contact-form";
 import { Reveal } from "@/components/motion/reveal";
-import { contactChannels, ctaLinks } from "@/config/site";
+import { contactChannels, ctaLinks, siteConfig } from "@/config/site";
+import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Hubungi Kami",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     title: "Hubungi Tim QRION",
     description:
       "Sampaikan kebutuhan institusi Anda dan tim QRION akan menindaklanjuti melalui email atau WhatsApp.",
-    url: "/kontak",
+    url: absoluteUrl(siteConfig.url, "/kontak"),
   },
 };
 

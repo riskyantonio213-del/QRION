@@ -24,7 +24,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import { ctaLinks } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, externalLinkProps } from "@/lib/utils";
 
 /* =========================================================
  * FAQ CONTENT
@@ -195,6 +195,7 @@ function ContactCard() {
 
       <Link
         href={ctaLinks.contact}
+        {...externalLinkProps(ctaLinks.contact)}
         className="mt-5 inline-flex items-center gap-3 rounded-full bg-slate-950 py-3 pl-5 pr-4 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
       >
         <MessageCircle aria-hidden="true" className="size-4" />

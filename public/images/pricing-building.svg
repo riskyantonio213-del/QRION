@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" fill="none">
+  <g font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+    <!-- clouds -->
+    <g fill="#ffffff" opacity="0.85">
+      <ellipse cx="118" cy="64" rx="34" ry="16"/>
+      <ellipse cx="146" cy="58" rx="24" ry="18"/>
+      <ellipse cx="536" cy="52" rx="30" ry="14"/>
+      <ellipse cx="562" cy="46" rx="20" ry="16"/>
+    </g>
+
+    <!-- ground shadow -->
+    <ellipse cx="320" cy="374" rx="226" ry="20" fill="#cfe9dd" opacity="0.7"/>
+
+    <!-- side annex (right) -->
+    <rect x="470" y="248" width="112" height="118" rx="8" fill="#ffffff"/>
+    <rect x="462" y="234" width="128" height="16" rx="8" fill="#35bb82"/>
+    <rect x="486" y="268" width="32" height="26" rx="4" fill="#dbeafe"/>
+    <rect x="534" y="268" width="32" height="26" rx="4" fill="#dbeafe"/>
+    <rect x="510" y="312" width="36" height="54" rx="5" fill="#e2e8f0"/>
+    <rect x="504" y="304" width="48" height="10" rx="5" fill="#15152b"/>
+
+    <!-- main building -->
+    <rect x="160" y="132" width="320" height="234" rx="12" fill="#ffffff"/>
+    <rect x="150" y="118" width="340" height="18" rx="9" fill="#35bb82"/>
+
+    <!-- sign -->
+    <rect x="252" y="146" width="136" height="46" rx="10" fill="#15152b"/>
+    <text x="320" y="177" text-anchor="middle" font-size="26" font-weight="700" fill="#ffffff" letter-spacing="4">QRION</text>
+
+    <!-- windows row 1 -->
+    <rect x="190" y="212" width="46" height="34" rx="5" fill="#dbeafe"/>
+    <rect x="256" y="212" width="46" height="34" rx="5" fill="#d1fae5"/>
+    <rect x="338" y="212" width="46" height="34" rx="5" fill="#dbeafe"/>
+    <rect x="404" y="212" width="46" height="34" rx="5" fill="#dbeafe"/>
+    <!-- windows row 2 -->
+    <rect x="190" y="262" width="46" height="34" rx="5" fill="#d1fae5"/>
+    <rect x="256" y="262" width="46" height="34" rx="5" fill="#dbeafe"/>
+    <rect x="338" y="262" width="46" height="34" rx="5" fill="#dbeafe"/>
+    <rect x="404" y="262" width="46" height="34" rx="5" fill="#d1fae5"/>
+
+    <!-- entrance -->
+    <rect x="294" y="308" width="52" height="58" rx="6" fill="#35bb82"/>
+    <rect x="318" y="308" width="4" height="58" fill="#2aa571"/>
+    <rect x="284" y="298" width="72" height="12" rx="6" fill="#15152b"/>
+    <rect x="278" y="364" width="84" height="7" rx="3.5" fill="#cbd5e1"/>
+
+    <!-- left tree -->
+    <rect x="84" y="304" width="12" height="56" rx="4" fill="#8d6e63"/>
+    <circle cx="90" cy="270" r="36" fill="#2fa66f"/>
+    <circle cx="64" cy="296" r="24" fill="#35bb82"/>
+    <circle cx="116" cy="296" r="24" fill="#35bb82"/>
+
+    <!-- right tree -->
+    <rect x="594" y="308" width="11" height="52" rx="4" fill="#8d6e63"/>
+    <circle cx="600" cy="278" r="32" fill="#2fa66f"/>
+    <circle cx="576" cy="302" r="22" fill="#35bb82"/>
+    <circle cx="624" cy="302" r="22" fill="#35bb82"/>
+
+    <!-- bushes -->
+    <circle cx="210" cy="360" r="16" fill="#35bb82"/>
+    <circle cx="232" cy="364" r="12" fill="#2fa66f"/>
+    <circle cx="424" cy="360" r="16" fill="#35bb82"/>
+    <circle cx="402" cy="364" r="12" fill="#2fa66f"/>
+  </g>
+</svg>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu } from "lucide-react";
@@ -90,9 +91,34 @@ function ProductsDropdown({
   clear: boolean;
 }) {
   const active = isActivePath(pathname, "/produk");
+  // Panel dikontrol CSS (hover / focus-within). Saat link produk ditekan,
+  // kursor masih di atas panel sehingga ia ikut terbuka setelah navigasi —
+  // tutup paksa sampai kursor benar-benar keluar dari grup.
+  const [suppress, setSuppress] = useState(false);
+  const hovering = useRef(false);
 
   return (
-    <div className="group relative">
+    <div
+      className="group relative"
+      onClickCapture={() => setSuppress(true)}
+      onMouseEnter={() => {
+        hovering.current = true;
+      }}
+      onMouseLeave={() => {
+        hovering.current = false;
+        setSuppress(false);
+      }}
+      onBlur={(event) => {
+        // Reset hanya kalau fokus pindah keluar DAN kursor tidak sedang di
+        // dalam grup (klik tetap menutup panel meski fokus pindah ke body).
+        if (
+          !event.currentTarget.contains(event.relatedTarget) &&
+          !hovering.current
+        ) {
+          setSuppress(false);
+        }
+      }}
+    >
       <Link
         href="/produk"
         className={cn(navLinkClasses({ clear, active }), "gap-1.5")}
@@ -112,43 +138,39 @@ function ProductsDropdown({
       <div
         className={cn(
           "invisible absolute left-0 top-full z-50 w-[340px] translate-y-1 pt-6 opacity-0 transition-all duration-200",
-          "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
-          "group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
+          !suppress && [
+            "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
+            "group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
+          ],
         )}
       >
         <div className="rounded-xl border border-border bg-popover p-2 shadow-sm shadow-foreground/5">
           <ul className="grid gap-0.5">
-            {products.map((product) => {
-              const Icon = product.icon;
-              return (
-                <li key={product.slug}>
-                  <Link
-                    href={`/produk/${product.slug}`}
-                    className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-                  >
-                    <span
-                      className={cn(
-                        "mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-md border",
-                        product.accent.iconWrap,
-                      )}
-                    >
-                      <Icon
-                        aria-hidden="true"
-                        className={cn("size-4", product.accent.icon)}
-                      />
+            {products.map((product) => (
+              <li key={product.slug}>
+                <Link
+                  href={`/produk/${product.slug}`}
+                  className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                >
+                  <Image
+                    src={`/icon/icon-${product.slug}.png`}
+                    alt=""
+                    aria-hidden="true"
+                    width={20}
+                    height={20}
+                      className="mt-0.5 size-5 shrink-0 object-contain"
+                  />
+                  <span className="grid gap-0.5">
+                    <span className="text-sm font-medium text-foreground">
+                      {product.name}
                     </span>
-                    <span className="grid gap-0.5">
-                      <span className="text-sm font-medium text-foreground">
-                        {product.name}
-                      </span>
-                      <span className="text-[13px] leading-snug text-muted-foreground">
-                        {product.category}
-                      </span>
+                    <span className="text-[13px] leading-snug text-muted-foreground">
+                      {product.category}
                     </span>
-                  </Link>
-                </li>
-              );
-            })}
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
           <div className="mt-1 border-t border-border pt-1">
             <Link

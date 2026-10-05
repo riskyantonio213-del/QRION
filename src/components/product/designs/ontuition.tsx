@@ -33,7 +33,7 @@ function OntuitionPage() {
           <div className="pointer-events-none absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-[#33B77E]/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-[#33B77E]/10 blur-3xl" />
           <div className="pointer-events-none absolute top-1/3 left-1/3 h-56 w-56 rounded-full bg-[#33B77E]/5 blur-2xl" />
-          <div className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-6xl items-center px-6 py-16">
+          <div className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-6xl items-center px-6 pb-16 pt-24 md:py-16">
             <div className="grid w-full grid-cols-1 items-center gap-12 md:grid-cols-2">
               <div className="space-y-7">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#33B77E]/30 bg-white/80 px-4 py-1.5 text-xs font-semibold text-[#33B77E] shadow-sm backdrop-blur-sm">

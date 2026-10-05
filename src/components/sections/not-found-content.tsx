@@ -34,7 +34,13 @@ export function NotFoundContent() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="rounded-full px-6">
-              <Link href="/kontak">Hubungi Tim QRION</Link>
+              <Link
+                href="https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Hubungi Tim QRION
+              </Link>
             </Button>
           </div>
         </div>

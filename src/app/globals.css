@@ -333,6 +333,37 @@
   }
 }
 
+/* Landing hero: awan drift kanan → kiri. Kedua ujung animasi berada di luar
+   layar sehingga reset loop tidak terlihat (mulus, tanpa patah). */
+@keyframes qrion-cloud-drift {
+  from {
+    transform: translate3d(100vw, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-100vw - 100%), 0, 0);
+  }
+}
+
+.qrion-cloud {
+  left: 0;
+  will-change: transform;
+  animation-name: qrion-cloud-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+}
+
+.qrion-cloud img {
+  animation: qrion-float var(--cloud-bob, 9s) ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qrion-cloud,
+  .qrion-cloud img {
+    animation-play-state: paused;
+  }
+}
+
 /* ONCARD preview frame: 🌙 dark mode (invert-hue trick keeps source photos sane) */
 .oc-dark {
   filter: invert(1) hue-rotate(180deg);
@@ -684,5 +715,205 @@
   }
   .qbtn:active .qbtn-fx {
     animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Hero CTA "Coba Live Preview" — tombol glass putih + bintang
+ * (Uiverse.io by DrashtySoni, disesuaikan):
+ *  - position:relative ditambahkan agar #container-stars/#glow mengisi tombol
+ *  - rgba glow diperbaiki (1860 -> 186), font-family Poppins dibuang (project
+ *    pakai Inter), width 13rem -> min-width + width:max-content agar label
+ *    panjang tidak terpotong, selector strong di-scope ke .btn
+ *  - warna: bg kaca putih translusen + border gradasi putih/abu + teks gelap,
+ *    bintang jadi debu gelap (putih di putih tak terlihat), glow biru di-soft
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 13rem;
+  width: max-content;
+  padding: 0 1.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 3rem;
+  background-size: 300% 300%;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+  transition: 0.5s;
+  animation: gradient_301 5s ease infinite;
+  border: double 4px transparent;
+  background-image:
+    linear-gradient(rgba(13, 0, 255, 0.699), rgba(13, 0, 255, 0.788)),
+    linear-gradient(
+      137.48deg,
+      rgb(245, 245, 248) 10%,
+      rgb(248, 248, 250) 45%,
+      rgb(246, 246, 247) 67%,
+      rgb(244, 244, 247) 87%
+    );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+#container-stars {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  transition: 0.5s;
+  backdrop-filter: blur(1rem);
+  border-radius: 5rem;
+}
+
+.btn strong {
+  z-index: 2;
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: #ffff;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.75);
+}
+
+#glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  width: 12rem;
+  pointer-events: none;
+}
+
+#glow .circle {
+  width: 100%;
+  height: 30px;
+  filter: blur(2rem);
+  animation: pulse_3011 4s infinite;
+  z-index: -1;
+}
+
+#glow .circle:nth-of-type(1) {
+  background: rgba(41, 91, 255, 0.5);
+}
+
+#glow .circle:nth-of-type(2) {
+  background: rgba(41, 91, 255, 0.5);
+}
+
+.btn:hover #container-stars {
+  z-index: 1;
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.btn:active {
+  border: double 4px #fe53bb;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation: none;
+}
+
+.btn:active #glow .circle {
+  background: #fe53bb;
+}
+
+#stars {
+  position: relative;
+  background: transparent;
+  width: 200rem;
+  height: 200rem;
+}
+
+#stars::after {
+  content: "";
+  position: absolute;
+  top: -10rem;
+  left: -100rem;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(33, 33, 33, 0.65) 1px, transparent 1%);
+  background-size: 50px 50px;
+  animation: animStarRotate 90s linear infinite;
+}
+
+#stars::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 170%;
+  height: 500%;
+  background-image: radial-gradient(rgba(33, 33, 33, 0.65) 1px, transparent 1%);
+  background-size: 50px 50px;
+  opacity: 0.5;
+  animation: animStar 60s linear infinite;
+}
+
+@keyframes animStar {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-135rem);
+  }
+}
+
+@keyframes animStarRotate {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0);
+  }
+}
+
+@keyframes gradient_301 {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse_3011 {
+  0% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    transform: scale(0.75);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  #glow .circle,
+  #stars::before,
+  #stars::after {
+    animation-play-state: paused;
   }
 }

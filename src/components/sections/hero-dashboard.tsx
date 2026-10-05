@@ -3,8 +3,26 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Bell, Check, TrendingUp } from "lucide-react";
 
+import CountUp from "@/components/motion/count-up";
 import { attendanceSeries, heroActivity, heroFloatingCards, heroStats } from "@/data/dashboard";
 import { cn } from "@/lib/utils";
+
+/**
+ * Angka statistik dashboard dengan animasi hitung saat masuk viewport.
+ * Nilai yang bukan angka murni (mis. "Rp 96,2 jt") dirender apa adanya.
+ */
+function StatValue({ value }: { value: string }) {
+  const match = value.match(/^([\d.,]+)(%?)$/);
+  if (!match) return <>{value}</>;
+  const numeric = Number(match[1].replace(/[.,]/g, ""));
+  if (Number.isNaN(numeric)) return <>{value}</>;
+  return (
+    <>
+      <CountUp from={0} to={numeric} separator="." duration={1} />
+      {match[2]}
+    </>
+  );
+}
 
 const floatTone: Record<string, { iconWrap: string; icon: string }> = {
   indigo: { iconWrap: "bg-brand-mint border-brand-mint-medium", icon: "text-brand-indigo" },
@@ -148,7 +166,7 @@ export function HeroDashboard() {
                   {stat.label}
                 </p>
                 <p className="mt-1 font-display text-lg font-bold text-foreground sm:text-xl">
-                  {stat.value}
+                  <StatValue value={stat.value} />
                 </p>
                 <p className="mt-0.5 text-[10px] text-muted-foreground/70">
                   {stat.hint}

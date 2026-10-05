@@ -22,18 +22,32 @@ export function ProductHero({
   return (
     <section
       aria-labelledby="product-hero-heading"
-      className="relative isolate overflow-x-clip border-b border-border bg-background pb-14 pt-10 sm:pb-16 sm:pt-12 lg:pb-20 lg:pt-16"
+      className="relative isolate -mt-[76px] overflow-x-clip border-b border-border bg-background pb-14 pt-[116px] sm:pb-16 sm:pt-[124px] lg:-mt-[84px] lg:pb-20 lg:pt-[148px]"
     >
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-br",
+          "pointer-events-none absolute inset-x-0 top-0 -z-10 h-[496px] bg-gradient-to-br lg:h-[504px]",
           product.accent.gradient,
         )}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-grid opacity-[0.25] [mask-image:radial-gradient(640px_320px_at_20%_0%,black,transparent)]"
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-0 -z-10 h-[496px] bg-gradient-to-br lg:hidden",
+          product.accent.gradient,
+        )}
+      />
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute inset-x-0 top-0 -z-10 h-[496px] bg-gradient-to-br lg:hidden",
+          product.accent.gradient,
+        )}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[496px] bg-grid opacity-[0.25] [mask-image:radial-gradient(640px_320px_at_20%_0%,black,transparent)] lg:h-[504px]"
       />
 
       {design?.heroDecor}
@@ -111,7 +125,13 @@ export function ProductHero({
                 </Link>
               </Button>
               <Button asChild size="xl" variant="secondary">
-                <Link href="/kontak">Hubungi Tim QRION</Link>
+                <Link
+                  href="https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Hubungi Tim QRION
+                </Link>
               </Button>
             </div>
           </div>

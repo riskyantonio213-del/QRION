@@ -107,11 +107,10 @@ export const mainNav: NavItem[] = [
       },
     ],
   },
-  { title: "Solusi", href: "/solusi" },
+  // { title: "Solusi", href: "/solusi" },
   { title: "Live Preview", href: "/live-preview" },
   { title: "Tentang Kami", href: "/tentang" },
   { title: "Artikel", href: "/insight" },
-  { title: "Hubungi Kami", href: "/kontak" },
 ];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
@@ -131,7 +130,7 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
       { title: "Tentang Kami", href: "/tentang" },
       { title: "Karier", href: "/karier" },
       { title: "Artikel", href: "/insight" },
-      { title: "Kontak", href: "/kontak" },
+      { title: "Kontak", href: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
     ],
   },
   {
@@ -183,6 +182,6 @@ export const socialLinks: SocialLink[] = [
 /** Primary conversion CTAs reused across the site. */
 export const ctaLinks = {
   demo: "/demo",
-  contact: "/kontak",
+  contact: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0",
   livePreview: "/live-preview",
 };
