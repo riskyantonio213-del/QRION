@@ -14,7 +14,7 @@ import { DashboardPreview } from "@/components/dashboard/dashboard-preview";
 import { getProductDesign } from "@/components/product/designs";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
-import { Faq } from "@/components/sections/faq";
+import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { Reveal } from "@/components/motion/reveal";
 import type { Product } from "@/data/products";
@@ -102,7 +102,7 @@ export function ProductPage({ product }: { product: Product }) {
       <ProductBenefits product={product} />
       <ProductRoles product={product} />
       <ProductIntegration product={product} />
-      <Faq items={product.faq} />
+      <FAQSection items={product.faq} />
       <CTASection
         title={product.cta.title}
         description={product.cta.description}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { PageHero } from "@/components/sections/page-hero";
-import { Faq } from "@/components/sections/faq";
+import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { generalFaq } from "@/data/faq";
 import { finalCta } from "@/data/home";
@@ -26,13 +26,7 @@ export default function FaqPage() {
         breadcrumb={[{ label: "Beranda", href: "/" }, { label: "FAQ" }]}
       />
 
-      <Faq
-        items={generalFaq}
-        eyebrow="Pertanyaan Umum"
-        title="Hal yang Sering Ditanyakan"
-        description="Jika jawaban di bawah belum menjawab kebutuhan Anda, silakan hubungi tim QRION langsung."
-        background="soft"
-      />
+      <FAQSection items={generalFaq} background="soft" />
 
       <div className="pb-4">
         <div className="mx-auto w-full max-w-2xl px-5 text-center sm:px-6">

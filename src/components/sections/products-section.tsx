@@ -8,6 +8,7 @@ export function ProductsSection() {
       id="produk"
       background="soft"
       aria-labelledby="produk-heading"
+      className="overflow-x-clip"
       containerClassName="max-w-[1400px]"
     >
       <SectionHeader

@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // 76: cache-bust for the home bento artwork — the dev optimizer keeps a
+    // process-memory cache that ignores public/ file rewrites until restart.
+    qualities: [75, 76],
   },
 };
 

@@ -1,55 +1,60 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
+import { Reveal } from "@/components/motion/reveal";
 import { ExternalImage } from "@/components/ui/external-image";
 import { testimonials } from "@/data/testimonials";
-import { cn } from "@/lib/utils";
 
-function usePerView() {
-  const [perView, setPerView] = useState(1);
+/**
+ * Marquee testimoni — looping mulus tanpa jeda.
+ *
+ * Track berisi dua salinan identik testimoni; `oc-marquee-left` bergerak
+ * 0 → -50% sehingga tepat satu set penuh berganti dengan set berikutnya
+ * tanpa lompatan. Lebar slide tetap (termasuk padding kanan sebagai gutter)
+ * agar -50% presisi. Hover menjeda animasi; prefers-reduced-motion
+ * menonaktifkan animasi dan mengubah container jadi scrollable.
+ */
 
-  useEffect(() => {
-    const lg = window.matchMedia("(min-width: 1024px)");
-    const sm = window.matchMedia("(min-width: 640px)");
-    const update = () => setPerView(lg.matches ? 3 : sm.matches ? 2 : 1);
-    update();
-    lg.addEventListener("change", update);
-    sm.addEventListener("change", update);
-    return () => {
-      lg.removeEventListener("change", update);
-      sm.removeEventListener("change", update);
-    };
-  }, []);
-
-  return perView;
+function TestimonialCard({
+  testimonial,
+}: {
+  testimonial: (typeof testimonials)[number];
+}) {
+  return (
+    <figure className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-background p-6 shadow-[0_8px_30px_rgba(48,46,89,0.05)] transition duration-300 hover:-translate-y-1.5 hover:border-brand-mint-medium hover:shadow-[0_20px_46px_rgba(48,46,89,0.10)]">
+      <span
+        aria-hidden="true"
+        className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-mint text-brand-dark"
+      >
+        <Quote className="size-5 -scale-x-100" />
+      </span>
+      <blockquote className="flex-1 text-[14px] leading-relaxed text-muted-foreground">
+        &ldquo;{testimonial.quote}&rdquo;
+      </blockquote>
+      <figcaption className="flex items-center gap-3 border-t border-border pt-4">
+        <ExternalImage
+          src={testimonial.photo}
+          alt={testimonial.name}
+          className="size-11 shrink-0 rounded-full object-cover"
+          fallbackClassName="size-11 shrink-0 rounded-full object-contain bg-white p-1"
+        />
+        <div className="min-w-0">
+          <p className="text-[14px] font-bold text-foreground">
+            {testimonial.name}
+          </p>
+          <p className="text-[12.5px] leading-snug text-muted-foreground">
+            {testimonial.role}
+          </p>
+        </div>
+      </figcaption>
+    </figure>
+  );
 }
 
 export function TestimonialSection() {
-  const perView = usePerView();
   const count = testimonials.length;
-  const maxIndex = Math.max(count - perView, 0);
-  const [rawIndex, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const index = Math.min(rawIndex, maxIndex);
-
-  useEffect(() => {
-    if (paused) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => {
-      setIndex((i) => (i >= maxIndex ? 0 : i + 1));
-    }, 5000);
-    return () => window.clearInterval(timer);
-  }, [paused, maxIndex]);
-
-  const go = useCallback(
-    (delta: number) =>
-      setIndex((i) => Math.min(Math.max(i + delta, 0), maxIndex)),
-    [maxIndex],
-  );
+  const loop = [...testimonials, ...testimonials];
 
   return (
     <Section
@@ -63,98 +68,36 @@ export function TestimonialSection() {
         description="Pengalaman langsung dari sekolah dan pengguna yang telah merasakan manfaat ekosistem digital kami."
       />
 
-      <div
-        className="group relative mt-12"
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Testimoni mitra QRION"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-      >
-        <div className="overflow-hidden">
-          <div
-            className="flex -mx-2.5 transition-transform duration-500 ease-out motion-reduce:transition-none [--per-view:1] sm:[--per-view:2] lg:[--per-view:3]"
-            style={{
-              transform: `translateX(calc(${index * -100}% / var(--per-view)))`,
-            }}
-          >
-            {testimonials.map((testimonial, i) => (
-              <div
-                key={testimonial.name}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${i + 1} dari ${count}`}
-                className="basis-[calc(100%_/_var(--per-view))] shrink-0 grow-0 px-2.5"
-              >
-                <figure className="flex h-full flex-col gap-4 rounded-xl border border-border bg-background p-6 shadow-[0_8px_30px_rgba(48,46,89,0.05)]">
-                  <Quote
-                    aria-hidden="true"
-                    className="size-7 shrink-0 -scale-x-100 text-brand/60"
-                  />
-                  <blockquote className="flex-1 text-[14px] leading-relaxed text-muted-foreground">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </blockquote>
-                  <figcaption className="flex items-center gap-3 border-t border-border pt-4">
-                    <ExternalImage
-                      src={testimonial.photo}
-                      alt={testimonial.name}
-                      className="size-11 shrink-0 rounded-full object-cover"
-                      fallbackClassName="size-11 shrink-0 rounded-full object-contain bg-white p-1"
-                    />
-                    <div className="min-w-0">
-                      <p className="text-[14px] font-bold text-foreground">
-                        {testimonial.name}
-                      </p>
-                      <p className="text-[12.5px] leading-snug text-muted-foreground">
-                        {testimonial.role}
-                      </p>
-                    </div>
-                  </figcaption>
-                </figure>
-              </div>
-            ))}
+      <Reveal delay={0.1}>
+        <div
+          className="group relative mt-12 overflow-hidden py-2 motion-reduce:overflow-x-auto [-webkit-mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Testimoni mitra QRION"
+        >
+          <div className="flex w-max animate-[oc-marquee-left_55s_linear_infinite] group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+            {loop.map((testimonial, i) => {
+              const isClone = i >= count;
+              return (
+                <div
+                  key={`${testimonial.name}-${i}`}
+                  role={isClone ? undefined : "group"}
+                  aria-roledescription={isClone ? undefined : "slide"}
+                  aria-label={
+                    isClone ? undefined : `${i + 1} dari ${count}`
+                  }
+                  aria-hidden={isClone || undefined}
+                  className={`w-[280px] shrink-0 pr-5 sm:w-[330px] lg:w-[360px] ${
+                    isClone ? "motion-reduce:hidden" : ""
+                  }`}
+                >
+                  <TestimonialCard testimonial={testimonial} />
+                </div>
+              );
+            })}
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          disabled={index === 0}
-          aria-label="Testimoni sebelumnya"
-          className="absolute left-0 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm backdrop-blur transition-all hover:bg-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-0"
-        >
-          <ArrowLeft aria-hidden="true" className="size-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => go(1)}
-          disabled={index >= maxIndex}
-          aria-label="Testimoni berikutnya"
-          className="absolute right-0 top-1/2 z-10 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-foreground shadow-sm backdrop-blur transition-all hover:bg-brand hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 disabled:pointer-events-none disabled:opacity-0"
-        >
-          <ArrowRight aria-hidden="true" className="size-4" />
-        </button>
-      </div>
-
-      <div className="mt-7 flex items-center justify-center gap-2">
-        {Array.from({ length: maxIndex + 1 }, (_, dot) => (
-          <button
-            key={dot}
-            type="button"
-            onClick={() => setIndex(dot)}
-            aria-label={`Ke testimoni ${dot + 1}`}
-            aria-current={dot === index ? "true" : undefined}
-            className={cn(
-              "h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
-              dot === index
-                ? "w-6 bg-brand"
-                : "w-2 bg-border hover:bg-brand/50",
-            )}
-          />
-        ))}
-      </div>
+      </Reveal>
     </Section>
   );
 }

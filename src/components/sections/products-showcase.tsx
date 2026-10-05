@@ -28,6 +28,12 @@ type Slide = {
   image: string;
   width: number;
   height: number;
+  /** Gambar label badge (logo transparan) */
+  icon: string;
+  iconWidth: number;
+  iconHeight: number;
+  /** Judul h2 per produk — tulis manual di sini. */
+  heading: string;
   href: string;
   linkLabel: string;
   phone?: boolean;
@@ -182,45 +188,78 @@ const floatsFor = (slug: string): Float[] => {
 const slides: Slide[] = [
   {
     label: "Ontuition",
+    heading: "Billing & Payment Management System",
     image: "/images/dahsboard-ontuition.png",
     width: 1220,
     height: 724,
+    icon: "/images/ontuition.png",
+    iconWidth: 828,
+    iconHeight: 238,
     href: "/produk/ontuition",
     linkLabel: "Lihat detail Ontuition",
     floats: floatsFor("ontuition"),
   },
   {
     label: "Oncard",
+    heading: "Cashless & E-Wallet System",
     image: "/images/dashboard-oncar.png",
     width: 1214,
     height: 724,
+    icon: "/images/oncard.png",
+    iconWidth: 666,
+    iconHeight: 238,
     href: "/produk/oncard",
     linkLabel: "Lihat detail Oncard",
     floats: floatsFor("oncard"),
   },
   {
     label: "Ontime",
+    heading: "School Digital Attendance System",
     image: "/images/dashboard-ontime.png",
     width: 1218,
     height: 728,
+    icon: "/images/ontime.png",
+    iconWidth: 667,
+    iconHeight: 252,
     href: "/produk/ontime",
     linkLabel: "Lihat detail Ontime",
     floats: floatsFor("ontime"),
   },
   {
     label: "Qrion Jurnal",
+    heading: "Cash Management & Fundraising System",
     image: "/images/dashboard-jurnal.png",
     width: 1217,
     height: 698,
+    icon: "/images/jurnal.png",
+    iconWidth: 467,
+    iconHeight: 206,
     href: "/produk/jurnal",
     linkLabel: "Lihat detail Qrion Jurnal",
     floats: floatsFor("jurnal"),
   },
   {
+    label: "Qrion SPMB",
+    heading: "School Admission Management System",
+    image: "/images/spmb-qrion.png",
+    width: 1217,
+    height: 698,
+    icon: "/images/spmb.png",
+    iconWidth: 467,
+    iconHeight: 206,
+    href: "/produk/spmb",
+    linkLabel: "Lihat detail Qrion SPMB",
+    floats: floatsFor("spmb"),
+  },
+  {
     label: "QRION Mobile",
-    image: "/images/qrion-mobile.png",
+    heading: "QRION Mobile",
+    image: "/images/qrion-mobile.jpeg",
     width: 328,
     height: 676,
+    icon: "/images/qrion-logo2.png",
+    iconWidth: 1081,
+    iconHeight: 347,
     href: "/live-preview/qrion-mobile",
     linkLabel: "Lihat live preview QRION Mobile",
     phone: true,
@@ -279,15 +318,18 @@ function TiltStage({
 
   return (
     <div
-      className="relative flex w-full flex-col items-center justify-center lg:w-7/12 lg:flex-row lg:items-center lg:justify-end"
-      onMouseMove={handleTiltMove}
-      onMouseLeave={() => setTilt(null)}
+      className={cn(
+        "relative flex w-full flex-col items-center gap-6 lg:w-7/12",
+        current.phone && "lg:flex-row lg:justify-center",
+      )}
     >
       <div
         key={`img-${active}`}
+        onMouseMove={handleTiltMove}
+        onMouseLeave={() => setTilt(null)}
         className={cn(
           "z-10 w-full animate-[qrion-fade-up_0.7s_cubic-bezier(0.22,1,0.36,1)_both]",
-          current.phone ? "max-w-[260px] lg:mr-16" : "max-w-[920px]",
+          current.phone ? "max-w-[280px] lg:shrink-0" : "max-w-[920px]",
         )}
       >
         <Image
@@ -365,18 +407,19 @@ export function ProductsShowcase() {
         <div className="flex w-full flex-col items-start text-left lg:w-5/12 lg:pr-6 xl:pr-10">
           
           {/* Badge Label */}
-          <div className="mb-6 flex items-center gap-3 rounded-full bg-indigo-50 py-1.5 pl-2.5 pr-5 shadow-sm ring-1 ring-indigo-100">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-white shadow-md">
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-              </svg>
-            </div>
-            <span className="text-[15px] font-bold text-indigo-700">{current.label}</span>
-          </div>
+              
+            <Image
+              src={current.icon}
+              alt={current.label}
+              width={current.iconWidth}
+              height={current.iconHeight}
+              sizes="140px"
+              className="h-10 mb-5 gap-10 w-auto"
+            />
 
           {/* Heading - Dirancang menyamai gaya referensi "Terhubung, Tanpa Batas" */}
           <h2 className="mb-6 font-display text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl lg:text-[42px] xl:text-5xl">
-            {introFloat.title} Terhubung, <br className="hidden lg:block"/> Tanpa Batas
+            {current.heading}
           </h2>
 
           {/* Paragraf */}
@@ -409,8 +452,13 @@ export function ProductsShowcase() {
         {/* Kolom Kanan: Gambar Dashboard & Floating Card */}
         <TiltStage current={current} active={active}>
 
-          {/* Floating Card Checklist — static di mobile (di luar gambar), absolute mulai lg */}
-          <div className="relative z-20 mt-6 w-full max-w-[340px] animate-[qrion-emerge_0.65s_cubic-bezier(0.22,1,0.36,1)_both] lg:absolute lg:-right-4 lg:bottom-16 lg:mt-0 lg:w-[280px] lg:max-w-none xl:-right-6 xl:bottom-20">
+          {/* Floating Card Checklist — dashboard: nimpa dekat sudut kanan atas (agak offside keluar), phone: di samping, mobile: di bawah */}
+          <div
+            className={cn(
+              "relative z-20 w-full max-w-[340px] animate-[qrion-emerge_0.65s_cubic-bezier(0.22,1,0.36,1)_both] lg:w-[280px] lg:max-w-none lg:shrink-0",
+              !current.phone && "lg:absolute lg:-top-20 lg:-right-45",
+            )}
+          >
             {/* Wrapper animasi floating berkelanjutan */}
             <div className="animate-[qrion-float_4.5s_ease-in-out_infinite] rounded-2xl border border-white/60 bg-white/95 p-6 shadow-[0_20px_50px_rgba(48,46,89,0.15)] backdrop-blur-xl">
               

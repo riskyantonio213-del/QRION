@@ -10,7 +10,8 @@ import { ProductsSection } from "@/components/sections/products-section";
 // Bagian dashboard sudah digabung ke dalam <Hero /> (hero stage berlapis)
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { InsightSection } from "@/components/sections/insight-section";
-// import { RolesSection } from "@/components/sections/roles-section";
+import { RolesSection } from "@/components/sections/roles-section";
+import { FAQSection } from "@/components/sections/faq-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { finalCta } from "@/data/home";
 import { ctaLinks } from "@/config/site";
@@ -34,7 +35,8 @@ export default function HomePage() {
       {/* <BenefitsSection /> */}
       <TestimonialSection />
       <InsightSection />
-      {/* <RolesSection /> */}
+      <RolesSection />
+      <FAQSection />
 
       <CTASection
         title={finalCta.title}

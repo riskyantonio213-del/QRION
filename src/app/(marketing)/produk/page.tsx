@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
-import { EcosystemSection } from "@/components/sections/ecosystem-section";
-import { Section } from "@/components/layout/section";
-import { SectionHeader } from "@/components/layout/section-header";
-import { Reveal } from "@/components/motion/reveal";
-import { ProductCard } from "@/components/product/product-card";
+import { ProductsSection } from "@/components/sections/products-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { products } from "@/data/products";
 import { finalCta } from "@/data/home";
@@ -41,30 +37,14 @@ export default function ProdukPage() {
         </p>
       </PageHero>
 
-      <Section aria-labelledby="daftar-produk-heading">
-        <SectionHeader
-          eyebrow="Daftar Modul"
-          title={<span id="daftar-produk-heading">Pilih Modul Sesuai Kebutuhan</span>}
-          description="Setiap halaman produk menjelaskan masalah yang diselesaikan, fitur utama, alur kerja, hingga manfaatnya bagi sekolah."
-        />
+      <ProductsSection />
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, index) => (
-            <Reveal key={product.slug} delay={(index % 3) * 0.08} className="h-full">
-              <ProductCard product={product} className="h-full" />
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      <EcosystemSection />
-
-      <CTASection
+      {/* <CTASection
         title={finalCta.title}
         description={finalCta.description}
         primaryCta={finalCta.primaryCta}
         secondaryCta={{ label: finalCta.secondaryCta.label, href: ctaLinks.contact }}
-      />
+      /> */}
     </>
   );
 }

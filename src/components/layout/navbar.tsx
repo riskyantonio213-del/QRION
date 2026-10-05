@@ -36,7 +36,7 @@ function navLinkClasses({
   active: boolean;
 }) {
   return cn(
-    "relative isolate inline-flex h-9 items-center rounded-lg px-3 text-sm font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0",
+    "relative isolate inline-flex h-9 items-center whitespace-nowrap rounded-lg px-2 text-[13px] font-medium transition-colors duration-300 xl:px-3 xl:text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-0",
     "before:absolute before:inset-y-0 before:-inset-x-1.5 before:-z-10 before:origin-left before:scale-x-0 before:rounded-full before:bg-[var(--nav-hover)] before:transition-transform before:duration-300 before:ease-out hover:before:scale-x-100 motion-reduce:before:transition-none",
     clear ? "focus-visible:ring-white/60" : "focus-visible:ring-ring/40",
     active
@@ -111,7 +111,7 @@ function ProductsDropdown({
       {/* Panel opens on hover *and* keyboard focus, so it is reachable without a mouse. */}
       <div
         className={cn(
-          "invisible absolute left-0 top-full z-50 w-[340px] translate-y-1 pt-2 opacity-0 transition-all duration-200",
+          "invisible absolute left-0 top-full z-50 w-[340px] translate-y-1 pt-6 opacity-0 transition-all duration-200",
           "group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
           "group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100",
         )}
@@ -248,7 +248,7 @@ export function Navbar() {
     <header ref={headerRef} className="sticky top-0 z-50 w-full">
       <Container size="wide">
         <div
-          className="mx-auto mt-3 flex h-16 items-center justify-between gap-4 rounded-full px-4 transition-shadow duration-300 lg:h-[72px] lg:px-5"
+          className="mx-auto mt-3 flex h-16 items-center justify-between gap-4 rounded-full px-4 transition-shadow duration-300 lg:h-[72px] lg:gap-2 lg:px-3 xl:gap-4 xl:px-5"
           style={{
             maxWidth: "calc(100% - var(--glass-inset, 24px))",
             backgroundColor: "rgb(255 255 255 / var(--glass-alpha, 0.06))",
@@ -266,7 +266,7 @@ export function Navbar() {
           <Logo variant={clear ? "inverted" : "default"} />
 
           <nav aria-label="Navigasi utama" className="hidden lg:block">
-            <ul className="flex items-center gap-1">
+            <ul className="flex items-center gap-0 xl:gap-1">
               {mainNav.map((item) => {
                 if (item.children) {
                   return (
@@ -291,9 +291,9 @@ export function Navbar() {
             </ul>
           </nav>
 
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden items-center gap-1.5 lg:flex xl:gap-2">
             <LoginButton variant={clear ? "inverted-outline" : "secondary"} />
-            <Button size="sm" asChild className="rounded-full px-4">
+            <Button size="sm" asChild className="rounded-full px-3 xl:px-4">
               <Link href={ctaLinks.demo}>Jadwalkan Demo</Link>
             </Button>
           </div>

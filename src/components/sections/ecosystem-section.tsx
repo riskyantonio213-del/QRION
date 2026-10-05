@@ -9,11 +9,11 @@ export function EcosystemSection() {
       size="wide"
       aria-labelledby="ekosistem-heading"
     >
-      <SectionHeader
+      {/* <SectionHeader
         eyebrow="Ekosistem QRION"
         title={<span id="ekosistem-heading">Satu Ekosistem. Berbagai Kebutuhan Sekolah.</span>}
         description="Gunakan produk sesuai kebutuhan sekolah dan hubungkan semuanya melalui ekosistem QRION."
-      />
+      /> */}
       <EcosystemDiagram />
     </Section>
   );
