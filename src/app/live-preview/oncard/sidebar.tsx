@@ -76,6 +76,23 @@ const navSections: NavSection[] = [
   },
 ];
 
+/** Daftar tab datar untuk tab bar seluler (sidebar hanya tampil di lg ke atas). */
+export const oncardMobileNavItems: { id: OncardTab; label: string }[] = [
+  { id: "dashboard", label: "Dashboard" },
+  { id: "transfer", label: "Transfer" },
+  { id: "ganti-password", label: "Ganti Password" },
+  { id: "withdraw-institusi", label: "WD Institusi" },
+  { id: "withdraw-merchant", label: "WD Merchant" },
+  { id: "akun-host", label: "Akun Host" },
+  { id: "akun-merchant", label: "Akun Merchant" },
+  { id: "akun-user", label: "Akun User" },
+  { id: "jurnal-institusi", label: "Jurnal Institusi" },
+  { id: "jurnal-pendapatan", label: "Jurnal Pendapatan" },
+  { id: "jurnal-host", label: "Jurnal Host" },
+  { id: "jurnal-merchant", label: "Jurnal Merchant" },
+  { id: "jurnal-user", label: "Jurnal User" },
+];
+
 export function OncardSidebar({
   active,
   onSelect,
@@ -84,7 +101,7 @@ export function OncardSidebar({
   onSelect: (tab: OncardTab) => void;
 }) {
   return (
-    <aside className="w-64 shrink-0 h-screen bg-white border-r border-slate-100 flex flex-col justify-between select-none">
+    <aside className="hidden w-64 shrink-0 h-screen bg-white border-r border-slate-100 flex flex-col justify-between select-none lg:flex">
       {/* Upper Area (Logo & Navigation) */}
       <div className="flex-1 overflow-y-auto flex flex-col min-h-0">
         {/* Header Logo */}

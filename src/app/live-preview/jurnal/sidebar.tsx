@@ -18,7 +18,7 @@ export type JurnalTab =
   | "jurnal"
   | "pengaturan";
 
-const navItems: { id: JurnalTab; icon: typeof PieChart; label: string }[] = [
+export const navItems: { id: JurnalTab; icon: typeof PieChart; label: string }[] = [
   { id: "dashboard", icon: PieChart, label: "Dashboard" },
   { id: "manajemen-kas", icon: Folder, label: "Manajemen Kas" },
   { id: "fundraising", icon: HandHeart, label: "Fundraising" },

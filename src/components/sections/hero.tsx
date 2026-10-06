@@ -329,10 +329,10 @@ export function Hero() {
     offset: ["start start", "end end"],
   });
 
-  // Jika reduced motion ATAU mobile,
-  // semua efek dikunci ke posisi awal.
+  // Efek scroll dimatikan jika reduced-motion ATAU mobile (< lg / 1024px)
+  // supaya tidak ada transform yang ditulis tiap frame saat scroll di HP.
   const disabled =
-    prefersReducedMotion || isMobile;
+    prefersReducedMotion || vw < 1024;
 
   const pick = <T,>(
     from: T,
@@ -446,7 +446,7 @@ export function Hero() {
       0.14,
     ],
 
-    prefersReducedMotion
+    disabled
       ? [
         "0px",
         "0px",
@@ -468,7 +468,7 @@ export function Hero() {
       0.14,
     ],
 
-    prefersReducedMotion
+    disabled
       ? [
         "0px",
         "0px",
@@ -584,7 +584,7 @@ export function Hero() {
         bg-background
         pb-[10svh]
         pt-[76px]
-        sm:min-h-[1600px]
+        sm:min-h-[1400px]
         lg:-mt-[84px]
         lg:pt-[84px]
       "

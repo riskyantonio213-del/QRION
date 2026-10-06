@@ -6,9 +6,7 @@ import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
 import { ExternalImage } from "@/components/ui/external-image";
-import { CTASection } from "@/components/sections/cta-section";
-import { finalCta } from "@/data/home";
-import { ctaLinks, siteConfig } from "@/config/site";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
@@ -243,16 +241,6 @@ export default function TentangPage() {
           </Reveal>
         </div>
       </Section>
-
-      <CTASection
-        title={finalCta.title}
-        description={finalCta.description}
-        primaryCta={finalCta.primaryCta}
-        secondaryCta={{
-          label: finalCta.secondaryCta.label,
-          href: ctaLinks.contact,
-        }}
-      />
     </>
   );
 }

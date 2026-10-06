@@ -15,14 +15,11 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { mainNav, externalLinks, ctaLinks, type NavItem } from "@/config/site";
+import { mainNav, externalLinks, ctaLinks } from "@/config/site";
+import { MobileNavItem, isActivePath } from "@/components/layout/mobile-nav-item";
+import { LivePreviewMenuPanel } from "@/components/live-preview/live-preview-menu-panel";
 import { products } from "@/data/products";
 import { cn } from "@/lib/utils";
-
-function isActivePath(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 /**
  * Kelas dasar link navbar. Efek "glide": highlight pill meluncur masuk dari
@@ -186,44 +183,6 @@ function ProductsDropdown({
   );
 }
 
-function MobileNavItem({ item }: { item: NavItem }) {
-  const pathname = usePathname();
-  const active = isActivePath(pathname, item.href);
-
-  return (
-    <li>
-      <SheetClose asChild>
-        <Link
-          href={item.href}
-          className={cn(
-            "flex min-h-11 items-center rounded-lg px-3 text-[15px] font-medium transition-colors hover:bg-soft",
-            active ? "text-brand" : "text-foreground",
-          )}
-          aria-current={active ? "page" : undefined}
-        >
-          {item.title}
-        </Link>
-      </SheetClose>
-      {item.children ? (
-        <ul className="mb-1 ml-3 mt-0.5 grid gap-0.5 border-l border-border pl-3">
-          {item.children.map((child) => (
-            <li key={child.href}>
-              <SheetClose asChild>
-                <Link
-                  href={child.href}
-                  className="flex min-h-10 items-center rounded-lg px-3 text-sm text-muted-foreground transition-colors hover:bg-soft hover:text-foreground"
-                >
-                  {child.title}
-                </Link>
-              </SheetClose>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </li>
-  );
-}
-
 export function Navbar() {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
@@ -231,10 +190,15 @@ export function Navbar() {
   // Scroll sedikit saja → kapsul berubah jadi kaca putih transparan + teks gelap.
   const [atTop, setAtTop] = useState(true);
   const clear = pathname === "/" && atTop;
+  // Halaman produk Live Preview (/live-preview/[produk]): menu seluler
+  // menampilkan panel penuh ganti-produk (pengganti sidebar di mobile).
+  const isPreviewPanel = pathname.startsWith("/live-preview/");
 
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
+
+    const mqNarrow = window.matchMedia("(max-width: 1023px)");
 
     const update = () => {
       const t = Math.min(window.scrollY / 56, 1);
@@ -242,6 +206,14 @@ export function Navbar() {
       setAtTop((prev) => (prev === nextTop ? prev : nextTop));
 
       const onHero = pathname === "/";
+      // Mobile (< lg): backdrop-filter dimatikan total — kaca blur di atas
+      // konten yang bergerak (cloud/scroll) adalah beban GPU terbesar di HP.
+      header.style.setProperty(
+        "--glass-fx",
+        mqNarrow.matches
+          ? "none"
+          : "saturate(180%) blur(var(--glass-blur, 16px))",
+      );
       // Di puncak: bening (hanya blur + hairline); makin scroll: putih transparan.
       header.style.setProperty("--glass-alpha", (0.06 + t * 0.74).toFixed(3));
       header.style.setProperty("--glass-blur", `${(16 + t * 10).toFixed(1)}px`);
@@ -263,7 +235,11 @@ export function Navbar() {
 
     update();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    mqNarrow.addEventListener("change", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      mqNarrow.removeEventListener("change", update);
+    };
   }, [pathname]);
 
   return (
@@ -274,9 +250,10 @@ export function Navbar() {
           style={{
             maxWidth: "calc(100% - var(--glass-inset, 24px))",
             backgroundColor: "rgb(255 255 255 / var(--glass-alpha, 0.06))",
-            backdropFilter: "saturate(180%) blur(var(--glass-blur, 16px))",
+            backdropFilter:
+              "var(--glass-fx, saturate(180%) blur(var(--glass-blur, 16px)))",
             WebkitBackdropFilter:
-              "saturate(180%) blur(var(--glass-blur, 16px))",
+              "var(--glass-fx, saturate(180%) blur(var(--glass-blur, 16px)))",
             border:
               "1px solid rgb(var(--glass-border-color, 15 23 42) / var(--glass-border, 0.12))",
             boxShadow:
@@ -335,32 +312,38 @@ export function Navbar() {
                 <div className="flex h-16 items-center border-b border-border px-5 pr-16">
                   <Logo />
                 </div>
-                <div className="flex-1 overflow-y-auto px-3 py-4">
-                  <nav aria-label="Navigasi seluler">
-                    <ul className="grid gap-0.5">
-                      {mainNav.map((item) => (
-                        <MobileNavItem key={item.href} item={item} />
-                      ))}
-                    </ul>
-                  </nav>
-                </div>
-                <div className="grid gap-2 border-t border-border p-5">
-                  <SheetClose asChild>
-                    <Link
-                      href={ctaLinks.demo}
-                      className={cn(
-                        buttonVariants({ size: "lg" }),
-                        "rounded-full",
-                      )}
-                    >
-                      Jadwalkan Demo
-                    </Link>
-                  </SheetClose>
-                  <LoginButton className="w-full" />
-                  <p className="pt-1 text-center text-xs text-muted-foreground">
-                    Ekosistem digital untuk sekolah, madrasah, dan pesantren.
-                  </p>
-                </div>
+                {isPreviewPanel ? (
+                  <LivePreviewMenuPanel />
+                ) : (
+                  <>
+                    <div className="flex-1 overflow-y-auto px-3 py-4">
+                      <nav aria-label="Navigasi seluler">
+                        <ul className="grid gap-0.5">
+                          {mainNav.map((item) => (
+                            <MobileNavItem key={item.href} item={item} />
+                          ))}
+                        </ul>
+                      </nav>
+                    </div>
+                    <div className="grid gap-2 border-t border-border p-5">
+                      <SheetClose asChild>
+                        <Link
+                          href={ctaLinks.demo}
+                          className={cn(
+                            buttonVariants({ size: "lg" }),
+                            "rounded-full",
+                          )}
+                        >
+                          Jadwalkan Demo
+                        </Link>
+                      </SheetClose>
+                      <LoginButton className="w-full" />
+                      <p className="pt-1 text-center text-xs text-muted-foreground">
+                        Ekosistem digital untuk sekolah, madrasah, dan pesantren.
+                      </p>
+                    </div>
+                  </>
+                )}
               </SheetContent>
             </Sheet>
           </div>

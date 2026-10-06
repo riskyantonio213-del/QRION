@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   title: "Jadwalkan Demo",
   description:
     "Ajukan sesi demo QRION untuk melihat bagaimana pembayaran, presensi, kartu siswa, jurnal pembelajaran, dan penerimaan murid baru dapat berjalan dalam satu ekosistem.",
-  alternates: { canonical: "/demo" },
+  alternates: { canonical: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
   openGraph: {
     title: "Jadwalkan Demo QRION",
     description:
       "Lihat bagaimana QRION dapat membantu sekolah Anda mengelola operasional secara lebih sederhana.",
-    url: "/demo",
+    url: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0",
   },
 };
 

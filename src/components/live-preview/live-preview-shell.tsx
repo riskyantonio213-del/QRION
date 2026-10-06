@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { Sparkles } from "lucide-react";
 
 import { products } from "@/data/products";
+import { DesktopHint } from "@/components/live-preview/desktop-hint";
 
 interface LivePreviewShellProps {
   slug: string;
@@ -27,6 +28,9 @@ export function LivePreviewShell({
   const product = products.find((p) => p.slug === slug);
   const ProductIcon = product?.icon ?? Sparkles;
 
+  // Mockup QRION Mobile dipertahankan dengan tampilan klasiknya (padding & tinggi asli).
+  const classicLayout = slug === "qrion-mobile";
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,7 +45,11 @@ export function LivePreviewShell({
   return (
     <section
       className={`relative w-full overflow-hidden font-sans ${
-        compact ? "px-0 py-0" : "px-4 py-24 sm:px-6 lg:px-10 xl:px-16"
+        compact
+          ? "px-0 py-0"
+          : classicLayout
+            ? "px-4 py-24 sm:px-6 lg:px-10 lg:py-6 xl:px-16"
+            : "px-3 py-8 sm:px-6 sm:py-14 lg:px-10 lg:py-6 xl:px-16"
       }`}
     >
       {/* Background Decor */}
@@ -50,12 +58,17 @@ export function LivePreviewShell({
         <div className="absolute inset-0 bg-[radial-gradient(#dcefe7_1px,transparent_1px)] [background-size:24px_24px] opacity-30" />
       </div>
 
+      {/* Petunjuk mobile */}
+      <DesktopHint className="mb-3" />
+
       {/* Dashboard Shell */}
       <div
         className={`relative z-10 mx-auto flex w-full flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_35px_100px_rgba(15,23,42,0.13)] ${
-          size === "lg"
-            ? "h-[1080px] max-w-[1980px]"
-            : "h-[820px] max-w-[1380px]"
+          classicLayout
+            ? "h-[820px] max-w-[1380px] lg:h-[calc(100dvh-11.5rem)]"
+            : size === "lg"
+              ? "h-[calc(100dvh-11rem)] min-h-[560px] max-w-[1980px] lg:h-[1080px] lg:min-h-0"
+              : "h-[calc(100dvh-11rem)] min-h-[560px] max-w-[1380px] lg:h-[calc(100dvh-11.5rem)] lg:min-h-0"
         }`}
       >
         {/* Browser Bar Mockup */}
@@ -98,7 +111,7 @@ export function LivePreviewShell({
         </div>
       </div>
 
-      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3 text-[10px] font-medium text-slate-500">
+      <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3 text-[10px] font-medium text-slate-500 lg:mt-4">
         <span>Sistem terisolasi (Sandbox)</span>
         <span className="h-1 w-1 rounded-full bg-brand" />
         <span>Terintegrasi Ekosistem QRION</span>

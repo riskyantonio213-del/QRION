@@ -44,7 +44,7 @@ export const hero = {
   description:
     "QRION membantu sekolah, madrasah, dan pesantren mengelola administrasi, pembayaran, presensi, kartu digital, jurnal pembelajaran, hingga penerimaan siswa baru dalam satu ekosistem yang terintegrasi.",
   primaryCta: { label: "Coba Live Preview", href: "/live-preview" },
-  secondaryCta: { label: "Jadwalkan Demo", href: "/demo" },
+  secondaryCta: { label: "Jadwalkan Demo", href: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
   trustNote:
     "Teknologi yang dirancang untuk membuat operasional sekolah lebih sederhana, transparan, dan terintegrasi.",
 };

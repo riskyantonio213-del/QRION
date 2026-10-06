@@ -4,10 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 import { PageHero } from "@/components/sections/page-hero";
 import { FAQSection } from "@/components/sections/faq-section";
-import { CTASection } from "@/components/sections/cta-section";
 import { generalFaq } from "@/data/faq";
-import { finalCta } from "@/data/home";
-import { ctaLinks } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -39,13 +36,6 @@ export default function FaqPage() {
           </Link>
         </div>
       </div>
-
-      <CTASection
-        title={finalCta.title}
-        description={finalCta.description}
-        primaryCta={finalCta.primaryCta}
-        secondaryCta={{ label: finalCta.secondaryCta.label, href: ctaLinks.contact }}
-      />
     </>
   );
 }

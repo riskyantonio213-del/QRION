@@ -74,62 +74,60 @@ export default async function ArticleDetailPage({ params }: ArticleRouteProps) {
 
   return (
     <>
-      {/* Hero cover dengan overlay judul — mengikuti tata letak pcr.ac.id/artikel/read */}
+      {/* Judul di atas (latar polos), cover bersih di bawah tanpa overlay */}
       <section className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <div className="relative mt-6 flex min-h-[320px] items-end overflow-hidden rounded-2xl sm:min-h-[380px] lg:min-h-[440px]">
+        <div className="pt-8 sm:pt-10">
+          <nav aria-label="Breadcrumb">
+            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]">
+              <li>
+                <Link
+                  href="/"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Beranda
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-border">
+                ›
+              </li>
+              <li>
+                <Link
+                  href="/insight"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Artikel
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-border">
+                ›
+              </li>
+              <li className="min-w-0 max-w-full truncate font-medium text-foreground">
+                {article.title}
+              </li>
+            </ol>
+          </nav>
+
+          <span className="mt-5 inline-flex rounded-full border border-border bg-soft px-3 py-1 text-[12px] font-semibold text-brand">
+            {article.category}
+          </span>
+
+          <h1 className="mt-4 max-w-4xl text-[28px] font-bold leading-[1.15] text-foreground sm:text-[36px] lg:text-[44px]">
+            {article.title}
+          </h1>
+        </div>
+
+        {/* Cover — tampil utuh, tanpa gradient atau teks di atasnya */}
+        <div className="mt-7 overflow-hidden rounded-2xl border border-border bg-soft">
           {article.image ? (
-            <div className="absolute inset-0">
-              <ExternalImage
-                src={article.image}
-                alt={article.title}
-                className="h-full w-full object-cover"
-                fallbackClassName="h-full w-full object-cover"
-              />
-            </div>
+            <ExternalImage
+              src={article.image}
+              alt={article.title}
+              className="block h-auto w-full"
+              fallbackClassName="block aspect-[16/9] w-full object-contain p-10"
+            />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand to-brand-mint" />
+            <div className="aspect-[16/9] w-full bg-gradient-to-br from-brand-dark via-brand to-brand-mint" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/30" />
-
-          <div className="relative z-10 w-full p-6 sm:p-9 lg:p-12">
-            <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]">
-                <li>
-                  <Link
-                    href="/"
-                    className="text-white/70 transition-colors hover:text-white"
-                  >
-                    Beranda
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-white/40">
-                  ›
-                </li>
-                <li>
-                  <Link
-                    href="/insight"
-                    className="text-white/70 transition-colors hover:text-white"
-                  >
-                    Artikel
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-white/40">
-                  ›
-                </li>
-                <li className="min-w-0 max-w-full truncate text-white/90">
-                  {article.title}
-                </li>
-              </ol>
-            </nav>
-
-            <span className="mt-5 inline-flex rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[12px] font-semibold text-white backdrop-blur-sm">
-              {article.category}
-            </span>
-
-            <h1 className="mt-4 max-w-4xl text-[28px] font-bold leading-[1.15] text-white sm:text-[36px] lg:text-[44px]">
-              {article.title}
-            </h1>
-          </div>
         </div>
       </section>
 

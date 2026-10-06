@@ -7,10 +7,8 @@ import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
 import { RoleCard } from "@/components/sections/cards";
-import { CTASection } from "@/components/sections/cta-section";
 import { products } from "@/data/products";
-import { roles, finalCta } from "@/data/home";
-import { ctaLinks } from "@/config/site";
+import { roles } from "@/data/home";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -178,13 +176,6 @@ export default function SolusiPage() {
           ))}
         </div>
       </Section>
-
-      <CTASection
-        title={finalCta.title}
-        description={finalCta.description}
-        primaryCta={finalCta.primaryCta}
-        secondaryCta={{ label: finalCta.secondaryCta.label, href: ctaLinks.contact }}
-      />
     </>
   );
 }

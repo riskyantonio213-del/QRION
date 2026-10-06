@@ -4,6 +4,7 @@ import { products } from "@/data/products";
 import { ArrowRight, Smartphone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { DesktopHint } from "@/components/live-preview/desktop-hint";
 import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ export function LivePreviewOverview() {
             Jelajahi dashboard dari setiap modul ekosistem QRION. Setiap layanan
             menampilkan data contoh yang dapat ditinjau langsung.
           </p>
+          <DesktopHint className="mt-6" />
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

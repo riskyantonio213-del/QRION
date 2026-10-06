@@ -58,7 +58,7 @@ export function QrionMobileApp() {
 
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden bg-gradient-to-b from-[#F1F7F4] to-[#E6EFEA] p-4 font-sans">
-      <div className="relative flex h-[780px] w-full max-w-[384px] flex-col overflow-hidden rounded-[44px] border-[10px] border-[#0F172A] bg-[#F8FAFC] shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+      <div className="relative flex h-[780px] lg:h-full lg:max-h-[780px] w-full max-w-[384px] flex-col overflow-hidden rounded-[44px] border-[10px] border-[#0F172A] bg-[#F8FAFC] shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
         
         {/* Region Konten */}
         <div className="relative flex-1 min-h-0 overflow-hidden">

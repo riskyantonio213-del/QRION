@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { OnTuitionSidebar } from "./sidebar";
+import { OnTuitionSidebar, navItems as ontuitionNavItems } from "./sidebar";
 import { OnTuitionNavbar } from "./navbar";
+import { MobileTabBar } from "@/components/live-preview/mobile-tab-bar";
 import { OnTuitionDashboard } from "./dashboard";
 import { 
   OnTuitionManajemenBiaya, 
@@ -33,6 +34,11 @@ export function OnTuitionApp() {
       {/* 2. Kolom Kanan (Navbar + Content Area) */}
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         <OnTuitionNavbar />
+        <MobileTabBar
+          items={ontuitionNavItems}
+          active={active}
+          onSelect={setActive}
+        />
         <main className="flex-1 overflow-y-auto p-6">
           {active === "dashboard" && <OnTuitionDashboard />}
           {active === "manajemen-biaya" && <OnTuitionManajemenBiaya />}

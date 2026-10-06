@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { OncardSidebar, OncardTab } from "./sidebar";
+import {
+  OncardSidebar,
+  oncardMobileNavItems,
+  type OncardTab,
+} from "./sidebar";
 import { OncardNavbar } from "./navbar";
+import { MobileTabBar } from "@/components/live-preview/mobile-tab-bar";
 import { OncardDashboard } from "./dashboard";
 
 // Import komponen view sesuai struktur sidebar baru
@@ -37,6 +42,11 @@ export function OncardApp() {
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         {/* Pass state 'active' ke 'activeTab' navbar */}
         <OncardNavbar activeTab={active} />
+        <MobileTabBar
+          items={oncardMobileNavItems}
+          active={active}
+          onSelect={setActive}
+        />
 
         {/* Main View Container */}
         <main className="flex-1 overflow-y-auto p-6">

@@ -4,7 +4,7 @@ import { Wallet, BarChart3, CreditCard, TrendingDown, FileText, Megaphone, Setti
 import { cn } from "@/lib/utils";
 import type { OnTuitionTab } from "./view";
 
-const navItems: { id: OnTuitionTab; icon: typeof Wallet; label: string }[] = [
+export const navItems: { id: OnTuitionTab; icon: typeof Wallet; label: string }[] = [
   { id: "dashboard", icon: Wallet, label: "Dashboard" },
   { id: "manajemen-biaya", icon: BarChart3, label: "Manajemen Biaya" },
   { id: "pembayaran", icon: CreditCard, label: "Pembayaran" },

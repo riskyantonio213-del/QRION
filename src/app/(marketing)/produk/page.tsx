@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
 import { ProductsSection } from "@/components/sections/products-section";
-import { CTASection } from "@/components/sections/cta-section";
 import { products } from "@/data/products";
-import { finalCta } from "@/data/home";
-import { ctaLinks } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Produk",
@@ -38,13 +35,6 @@ export default function ProdukPage() {
       </PageHero>
 
       <ProductsSection />
-
-      {/* <CTASection
-        title={finalCta.title}
-        description={finalCta.description}
-        primaryCta={finalCta.primaryCta}
-        secondaryCta={{ label: finalCta.secondaryCta.label, href: ctaLinks.contact }}
-      /> */}
     </>
   );
 }

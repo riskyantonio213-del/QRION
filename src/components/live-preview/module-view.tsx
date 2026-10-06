@@ -320,7 +320,7 @@ export function ModuleView({
               </Button>
             )}
             <Button asChild variant="secondary" className="w-full rounded-full">
-              <Link href="/demo">
+              <Link href="https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer">
                 Jadwalkan Demo
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>

@@ -15,11 +15,9 @@ import { getProductDesign } from "@/components/product/designs";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { FAQSection } from "@/components/sections/faq-section";
-import { CTASection } from "@/components/sections/cta-section";
 import { Reveal } from "@/components/motion/reveal";
 import type { Product } from "@/data/products";
 import { products } from "@/data/products";
-import { ctaLinks } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 /** Shows how the module connects to the school-wide QRION dashboard. */
@@ -110,12 +108,6 @@ export function ProductPage({ product }: { product: Product }) {
       <ProductRoles product={product} />
       <ProductIntegration product={product} />
       <FAQSection items={product.faq} />
-      <CTASection
-        title={product.cta.title}
-        description={product.cta.description}
-        primaryCta={{ label: product.cta.primaryLabel, href: `/demo?produk=${product.slug}` }}
-        secondaryCta={{ label: product.cta.secondaryLabel, href: ctaLinks.contact }}
-      />
     </div>
   );
 }

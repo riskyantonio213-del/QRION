@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { OntimeSidebar, type OntimeTab } from "./sidebar";
+import {
+  OntimeSidebar,
+  ontimeMobileNavItems,
+  type OntimeTab,
+} from "./sidebar";
 import { OntimeNavbar } from "./navbar";
+import { MobileTabBar } from "@/components/live-preview/mobile-tab-bar";
 import { OntimeDashboard } from "./dashboard";
 import {
   SiswaView,
@@ -30,6 +35,11 @@ export function OntimeApp() {
 
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         <OntimeNavbar />
+        <MobileTabBar
+          items={ontimeMobileNavItems}
+          active={active}
+          onSelect={setActive}
+        />
 
         <main key={active} className="flex-1 overflow-y-auto p-6">
           {active === "dashboard" && <OntimeDashboard />}

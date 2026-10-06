@@ -156,16 +156,16 @@ export function EcosystemDiagram() {
 
             {/* Teks & icon di-overlay di atas gambar */}
             <div className="relative flex h-full min-h-[300px] flex-col justify-start p-6 md:min-h-[340px] md:p-8">
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3 md:items-center">
                 <div
                   className={cn(
                     "flex size-10 shrink-0 items-center justify-center  text-xl  ",
                     card.iconClassName,
                   )}
                 >
-                  <card.icon aria-hidden="true" className="size-8 -mt-10" />
+                  <card.icon aria-hidden="true" className="size-8 md:-mt-10" />
                 </div>
-                <div className="flex flex-col gap-0 -mt-9 -px-13 ">
+                <div className="flex flex-col gap-0 md:-mt-9 md:-px-13 ">
                   <h3
                     className={cn(
                       "text-2xl font-bold",

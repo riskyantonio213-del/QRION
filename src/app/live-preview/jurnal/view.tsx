@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { JurnalSidebar, type JurnalTab } from "./sidebar";
+import { JurnalSidebar, navItems as jurnalNavItems, type JurnalTab } from "./sidebar";
 import { JurnalNavbar } from "./navbar";
+import { MobileTabBar } from "@/components/live-preview/mobile-tab-bar";
 import { JurnalDashboard } from "./dashboard";
 import {
   ManajemenKas,
@@ -31,6 +32,11 @@ export function JurnalApp() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         <JurnalNavbar />
+        <MobileTabBar
+          items={jurnalNavItems}
+          active={active}
+          onSelect={setActive}
+        />
         <main className="flex-1 overflow-y-auto p-6">
           {active === "dashboard" && <JurnalDashboard />}
           {active === "manajemen-kas" && <ManajemenKas />}

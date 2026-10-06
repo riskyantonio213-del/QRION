@@ -44,6 +44,25 @@ interface OntimeSidebarProps {
   onSelect?: (tab: OntimeTab) => void;
 }
 
+/** Daftar tab datar untuk tab bar seluler (sidebar hanya tampil di lg ke atas). */
+export const ontimeMobileNavItems: { id: OntimeTab; label: string }[] = [
+  { id: "dashboard", label: "Dashboard" },
+  { id: "siswa", label: "Siswa" },
+  { id: "guru", label: "Guru" },
+  { id: "mata-pelajaran", label: "Mapel" },
+  { id: "kelas", label: "Kelas" },
+  { id: "ruangan", label: "Ruangan" },
+  { id: "pengajar", label: "Pengajar" },
+  { id: "laporan-masuk-pulang", label: "Masuk/Pulang" },
+  { id: "laporan-mapel", label: "Lap. Mapel" },
+  { id: "laporan-mengajar", label: "Lap. Mengajar" },
+  { id: "laporan-custom", label: "Lap. Custom" },
+  { id: "jadwal", label: "Jadwal" },
+  { id: "koreksi-absen", label: "Koreksi Absen" },
+  { id: "pengaturan", label: "Pengaturan" },
+  { id: "ganti-password", label: "Ganti Password" },
+];
+
 export function OntimeSidebar({
   active = "dashboard",
   onSelect,

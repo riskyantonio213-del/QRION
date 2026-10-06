@@ -2,9 +2,7 @@ import { Info } from "lucide-react";
 
 import { PageHero } from "@/components/sections/page-hero";
 import { Section } from "@/components/layout/section";
-import { CTASection } from "@/components/sections/cta-section";
 import { Reveal } from "@/components/motion/reveal";
-import { ctaLinks } from "@/config/site";
 
 export type ContentBlock = {
   title: string;
@@ -20,7 +18,6 @@ type ContentPageProps = {
   blocks?: ContentBlock[];
   /** Honest status note shown when a page is not final yet. */
   note?: string;
-  showCta?: boolean;
   children?: React.ReactNode;
 };
 
@@ -36,7 +33,6 @@ export function ContentPage({
   breadcrumb,
   blocks = [],
   note,
-  showCta = true,
   children,
 }: ContentPageProps) {
   return (
@@ -99,15 +95,6 @@ export function ContentPage({
 
         {children}
       </Section>
-
-      {showCta ? (
-        <CTASection
-          title="Butuh informasi lebih lanjut?"
-          description="Tim QRION siap membantu menjawab pertanyaan sekolah, madrasah, maupun pesantren mengenai ekosistem QRION."
-          primaryCta={{ label: "Jadwalkan Demo", href: ctaLinks.demo }}
-          secondaryCta={{ label: "Hubungi Tim QRION", href: ctaLinks.contact }}
-        />
-      ) : null}
     </>
   );
 }

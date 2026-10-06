@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
 import { Hero } from "@/components/sections/hero";
+import { ComparisonSection } from "@/components/sections/comparison-section";
+import { OnboardSection } from "@/components/sections/onboard-section";
 import { TrustSection } from "@/components/sections/trust-section";
 import { ProblemSection } from "@/components/sections/problem-section";
 import { EcosystemSection } from "@/components/sections/ecosystem-section";
@@ -13,9 +15,6 @@ import { PricingSection } from "@/components/sections/pricing-section";
 import { InsightSection } from "@/components/sections/insight-section";
 import { RolesSection } from "@/components/sections/roles-section";
 import { FAQSection } from "@/components/sections/faq-section";
-import { CTASection } from "@/components/sections/cta-section";
-import { finalCta } from "@/data/home";
-import { ctaLinks } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "QRION",
@@ -28,27 +27,19 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <TrustSection />
-      <ProblemSection />
+      <ComparisonSection />
+      <OnboardSection />
       <EcosystemSection />
       <ProductsSection />
+      {/* <ProblemSection /> */}
       {/* <HowItWorks /> */}
       {/* <BenefitsSection /> */}
       <RolesSection />
       <TestimonialSection />
       <PricingSection />
       <InsightSection />
+      <TrustSection />
       <FAQSection />
-
-      <CTASection
-        title={finalCta.title}
-        description={finalCta.description}
-        primaryCta={finalCta.primaryCta}
-        secondaryCta={{
-          label: finalCta.secondaryCta.label,
-          href: ctaLinks.contact,
-        }}
-      />
     </>
   );
 }

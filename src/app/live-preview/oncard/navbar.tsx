@@ -35,17 +35,17 @@ export function OncardNavbar({
   const displayTitle = title || tabTitleMap[activeTab] || "Dashboard";
 
   return (
-    <header className="h-20 bg-white border-b border-slate-100 px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header className="h-20 bg-white border-b border-slate-100 px-3 sm:px-6 flex items-center justify-between gap-3 sticky top-0 z-30 shrink-0">
       {/* Sisi Kiri: Judul Halaman & Tanggal */}
-      <div className="flex flex-col justify-center">
-        <h1 className="font-bold text-slate-900 text-lg tracking-tight leading-snug">
+      <div className="flex flex-col justify-center min-w-0">
+        <h1 className="font-bold text-slate-900 text-base sm:text-lg tracking-tight leading-snug truncate">
           {displayTitle}
         </h1>
-        <p className="text-xs text-slate-400 font-medium">{date}</p>
+        <p className="hidden sm:block text-xs text-slate-400 font-medium">{date}</p>
       </div>
 
       {/* Sisi Kanan: Action Buttons & Profil User */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
         {/* Tombol Theme / Dark Mode */}
         <button
           type="button"
@@ -60,7 +60,7 @@ export function OncardNavbar({
           <div className="w-9 h-9 rounded-xl bg-[#0F5A31] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
             AD
           </div>
-          <div className="flex flex-col text-left leading-tight">
+          <div className="hidden sm:flex flex-col text-left leading-tight">
             <span className="font-bold text-xs text-slate-800">Admin Demo</span>
             <span className="text-[10px] text-slate-400 font-medium">
               Super Admin
