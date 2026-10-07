@@ -24,10 +24,16 @@ const nextConfig: NextConfig = {
     // Gambar panel admin diunggah ke Supabase Storage (bucket publik
     // admin-uploads) dan dirender homepage lewat next/image.
     remotePatterns: [
+      // Unggahan panel admin (Supabase Storage, bucket publik admin-uploads)
+      // dan mirror-nya — hostname wildcard satu subdomain.
       {
         protocol: "https",
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ygydgyerzutlnvpxhvko.supabase.co",
       },
       {
         protocol: "https",
@@ -39,6 +45,12 @@ const nextConfig: NextConfig = {
     // illustration) as local SVG files that are rendered through `next/image`.
     // Remote SVG sources are still blocked; only same-origin files are served.
     dangerouslyAllowSVG: true,
+    // DNS64 di jaringan (NAT64, RFC6052 `64:ff9b::/96`) membuat lookup
+    // hostname Supabase berakhir sebagai alamat yang dianggap "private" oleh
+    // cek SSRF Next — padahal IP aslinya publik (Cloudflare) sehingga gambar
+    // unggahan admin diblokir (400). URL gambar hanya berasal dari panel
+    // admin yang terautentikasi, jadi cek ini dilewati.
+    dangerouslyAllowLocalIP: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     // 76: cache-bust for the home bento artwork — the dev optimizer keeps a

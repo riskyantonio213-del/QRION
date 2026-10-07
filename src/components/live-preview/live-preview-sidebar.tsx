@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { products } from "@/data/products";
+import { livePreviewProducts } from "@/data/live-preview";
 import { Smartphone } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ export function LivePreviewSidebar() {
 
         <nav aria-label="Layanan QRION" className="flex-1 overflow-y-auto px-2 pb-4">
           <ul>
-            {products.map((product) => {
+            {livePreviewProducts.map((product) => {
               const href = `/live-preview/${product.slug}`;
               const isActive = pathname === href;
               const Icon = product.icon;

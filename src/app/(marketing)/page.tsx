@@ -36,9 +36,9 @@ export default function HomePage() {
       {/* <BenefitsSection /> */}
       <RolesSection />
       <TestimonialSection />
+      <TrustSection />
       <PricingSection />
       <InsightSection />
-      <TrustSection />
       <FAQSection />
     </>
   );

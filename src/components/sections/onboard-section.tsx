@@ -29,11 +29,11 @@ export function OnboardSection() {
           alt=""
           width={1920}
           height={1080}
-          className="h-full w-full object-cover object-bottom"
+          className="h-full w-full object-fit object-bottom"
         />
         {/* Overlay keterbacaan — pekat di mobile, gradasi tipis di desktop */}
         <div className="absolute inset-0 bg-background/75 lg:hidden" />
-        <div className="absolute inset-0 hidden bg-gradient-to-r from-background/95 via-background/55 to-transparent lg:block" />
+        {/* <div className="absolute inset-0 hidden bg-gradient-to-r from-background/95 via-background/55 to-transparent lg:block" /> */}
       </div>
 
       {/* Teks + CTA (kiri) */}

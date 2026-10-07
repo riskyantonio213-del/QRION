@@ -159,7 +159,7 @@ function WidgetCard({
   return (
     <div
       className={cn(
-        "rounded-2xl bg-white p-4 shadow-[0_18px_44px_-14px_rgba(48,46,89,0.25)] ring-1 ring-slate-900/[0.04]",
+        "rounded-2xl bg-white animate-[qrion-float_7s_ease-in-out_infinite] p-4 shadow-[0_18px_44px_-14px_rgba(48,46,89,0.25)] ring-1 ring-slate-900/[0.04]",
         className,
       )}
     >
@@ -175,7 +175,7 @@ function PaidWidget({ className }: { className?: string }) {
 
   return (
     <WidgetCard title={paid.title} className={className}>
-      <div className="mt-3 flex items-start gap-4">
+      <div className="mt-3 flex items-start gap-4 ">
         <div className="flex shrink-0 flex-col items-center gap-1">
           <span className="relative flex size-16 items-center justify-center">
             <svg
@@ -212,7 +212,7 @@ function PaidWidget({ className }: { className?: string }) {
           </span>
         </div>
 
-        <ul className="grid flex-1 gap-1.5 pt-1.5">
+        <ul className="grid flex-1 gap-1.5 pt-1.5 ">
           {paid.legend.map((row) => (
             <li
               key={row.label}

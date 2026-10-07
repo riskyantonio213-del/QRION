@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { deepMerge, getPath, setPath, type PlainObject } from "@/lib/admin/merge";
+import { deepMerge, getPath, isPlainObject, setPath, type PlainObject } from "@/lib/admin/merge";
 
 /* ---------------------------------------------------------------
  * Tipe field editor
@@ -43,6 +43,8 @@ export type AdminField =
       itemLabel: (item: Record<string, unknown>, index: number) => string;
       itemKind?: "text";
       itemFields?: AdminField[];
+      /** Tampilan kartu (thumbnail + klik untuk edit lewat popup). */
+      cardMode?: boolean;
     };
 
 export type AdminSection = {
@@ -454,7 +456,7 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     path: "showcase",
     title: "Produk",
     description:
-      "Header section Produk + 7 slide showcase (judul, gambar, logo, tautan).",
+      "Header section Produk + slide showcase: tambah, hapus, urutkan, dan edit judul, gambar, tautan, intro, serta fitur tiap produk.",
     icon: Package,
     accent: "bg-rose-100 text-rose-600",
     fields: [
@@ -476,7 +478,9 @@ export const ADMIN_SECTIONS: AdminSection[] = [
         type: "list",
         key: "slides",
         label: "Slide produk",
-        addable: false,
+        addable: true,
+        addLabel: "Tambah slide",
+        cardMode: true,
         itemLabel: (item, index) => String(item.label ?? `Slide ${index + 1}`),
         itemFields: [
           { type: "text", key: "label", label: "Nama tab (label)" },
@@ -499,6 +503,33 @@ export const ADMIN_SECTIONS: AdminSection[] = [
           { type: "number", key: "iconHeight", label: "Tinggi logo (px)" },
           { type: "text", key: "href", label: "Tautan detail" },
           { type: "text", key: "linkLabel", label: "Label tombol" },
+          {
+            type: "list",
+            key: "floats",
+            label: "Intro & daftar fitur (kartu mengambang)",
+            addable: true,
+            addLabel: "Tambah poin",
+            itemLabel: (item, index) =>
+              index === 0
+                ? "Intro (paragraf kiri)"
+                : `Fitur ${index}${item.check ? " ✓" : ""}`,
+            itemFields: [
+              {
+                type: "text",
+                key: "chip",
+                label: "Chip (teks kecil, opsional)",
+                hint: "Kategori yang tampil di kartu kanan, mis. \"Digital School Payment\".",
+              },
+              { type: "text", key: "title", label: "Judul" },
+              {
+                type: "textarea",
+                key: "text",
+                label: "Teks",
+                rows: 3,
+                hint: "Intro = paragraf kiri. Fitur = baris checklist di kartu kanan.",
+              },
+            ],
+          },
         ],
       },
     ],
@@ -907,6 +938,21 @@ export function countFields(fields: AdminField[]): number {
  * Ambil nilai form dari konten ter-merge
  * ------------------------------------------------------------- */
 
+/** Aman dikirim sebagai props Server → Client Component: primitif dan
+ *  objek/array plain saja (React component, forwardRef, element tidak). */
+function isPlainValue(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  const type = typeof value;
+  if (type === "string" || type === "number" || type === "boolean") return true;
+  if (Array.isArray(value)) return value.every(isPlainValue);
+  if (type === "object") {
+    const obj = value as Record<string, unknown>;
+    if ("$$typeof" in obj) return false;
+    return Object.values(obj).every(isPlainValue);
+  }
+  return false;
+}
+
 function pickOne(
   root: unknown,
   field: AdminField,
@@ -918,7 +964,19 @@ function pickOne(
       if (field.itemKind === "text") {
         return list.map((item) => String(item ?? ""));
       }
-      return list.map((item) => pickValues(item, field.itemFields ?? []));
+      // Item objek: field form menimpa, key di luar form (mis. phone, check)
+      // ikut terbawa — kalau tidak, data ekstra hilang dari payload simpan dan
+      // merge per-index merusaknya saat urutan berubah. Hanya nilai plain yang
+      // boleh ikut: React component (Icon) tidak bisa dikirim ke Client
+      // Component dan membuat halaman panel error 500.
+      return list.map((item) => {
+        if (!isPlainObject(item)) return pickValues(item, field.itemFields ?? []);
+        const extra: PlainObject = {};
+        for (const [key, value] of Object.entries(item)) {
+          if (isPlainValue(value)) extra[key] = value;
+        }
+        return { ...extra, ...pickValues(item, field.itemFields ?? []) };
+      });
     }
     case "group":
       // group bersifat UI-only; nilai diambil per field anak

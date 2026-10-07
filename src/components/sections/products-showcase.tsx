@@ -66,27 +66,39 @@ function TiltStage({
           current.phone ? "max-w-[280px] lg:shrink-0" : "max-w-[920px]",
         )}
       >
-        <Image
-          src={current.image}
-          alt={`Tampilan ${current.label} — QRION`}
-          width={current.width}
-          height={current.height}
-          priority
-          style={
-            tilt
-              ? {
-                  transform: `perspective(1500px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
-                }
-              : undefined
-          }
-          className={cn(
-            "h-auto w-full transition-transform duration-500 ease-out",
-            REST_TILT_CLASS,
-            current.phone
-              ? "rounded-[2.5rem] shadow-[0_24px_60px_rgba(48,46,89,0.22)]"
-              : "rounded-2xl border border-slate-100 shadow-[0_24px_60px_rgba(48,46,89,0.12)]",
-          )}
-        />
+        {current.image && current.width > 0 && current.height > 0 ? (
+          <Image
+            src={current.image}
+            alt={`Tampilan ${current.label} — QRION`}
+            width={current.width}
+            height={current.height}
+            priority
+            style={
+              tilt
+                ? {
+                    transform: `perspective(1500px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+                  }
+                : undefined
+            }
+            className={cn(
+              "h-auto w-full transition-transform duration-500 ease-out",
+              REST_TILT_CLASS,
+              current.phone
+                ? "rounded-[2.5rem] shadow-[0_24px_60px_rgba(48,46,89,0.22)]"
+                : "rounded-2xl border border-slate-100 shadow-[0_24px_60px_rgba(48,46,89,0.12)]",
+            )}
+          />
+        ) : (
+          <div
+            className={cn(
+              "flex h-56 w-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 text-center text-xs text-slate-400",
+              REST_TILT_CLASS,
+              current.phone && "max-w-[280px] rounded-[2.5rem]",
+            )}
+          >
+            Gambar belum dipilih — unggah melalui panel admin.
+          </div>
+        )}
       </div>
       {children}
     </div>
@@ -102,8 +114,8 @@ export function ProductsShowcase() {
   const [btnOffset, setBtnOffset] = useState({ x: 0, y: 0 });
   
   // Memisahkan data float intro (untuk deskripsi kiri) dan sisanya (untuk fitur kanan)
-  const introFloat = current.floats[0];
-  const featureFloats = current.floats.slice(1, 5); // Menampilkan maksimal 4 fitur di kanan
+  const introFloat = current?.floats?.[0] ?? { text: "" };
+  const featureFloats = current?.floats?.slice(1, 5) ?? []; // Menampilkan maksimal 4 fitur di kanan
 
   // Preload semua gambar slide supaya transisi tidak kedip
   useEffect(() => {
@@ -112,6 +124,9 @@ export function ProductsShowcase() {
       img.src = slide.image;
     });
   }, []);
+
+  // Slide bisa kosong/hilang (mis. semua dihapus dari admin) — jangan render area utama.
+  if (!current) return null;
 
   return (
     <div className="mt-12">
@@ -143,14 +158,20 @@ export function ProductsShowcase() {
           
           {/* Badge Label */}
               
-            <Image
-              src={current.icon}
-              alt={current.label}
-              width={current.iconWidth}
-              height={current.iconHeight}
-              sizes="140px"
-              className="h-10 mb-5 gap-10 w-auto"
-            />
+            {current.icon && current.iconWidth > 0 && current.iconHeight > 0 ? (
+              <Image
+                src={current.icon}
+                alt={current.label}
+                width={current.iconWidth}
+                height={current.iconHeight}
+                sizes="140px"
+                className="h-10 mb-5 gap-10 w-auto"
+              />
+            ) : (
+              <span className="mb-5 text-sm font-semibold text-slate-400">
+                {current.label}
+              </span>
+            )}
 
           {/* Heading - Dirancang menyamai gaya referensi "Terhubung, Tanpa Batas" */}
           <h2 className="mb-6 font-display text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 md:text-5xl lg:text-[42px] xl:text-5xl">
@@ -193,7 +214,7 @@ export function ProductsShowcase() {
           <div
             className={cn(
               "relative z-20 w-full max-w-[340px] animate-[qrion-emerge_0.65s_cubic-bezier(0.22,1,0.36,1)_both] lg:w-[280px] lg:max-w-none lg:shrink-0",
-              !current.phone && "lg:absolute lg:-top-20 lg:-right-45",
+              !current.phone && "lg:absolute lg:-bottom-20 lg:-left-20",
             )}
           >
             {/* Wrapper animasi floating berkelanjutan */}

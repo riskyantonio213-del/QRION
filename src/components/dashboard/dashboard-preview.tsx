@@ -24,10 +24,13 @@ import {
 
 import { LivePreviewShell } from "@/components/live-preview/live-preview-shell";
 
-export function DashboardPreview() {
+/**
+ * Body dashboard ONBOARD tanpa bingkai shell — dipakai halaman
+ * /live-preview/onboard dan preview integrasi di halaman produk.
+ */
+export function OnboardApp() {
   return (
-    <LivePreviewShell slug="onboard" compact size="lg">
-      <div className="flex h-full w-full min-w-0 overflow-hidden bg-[#F8FAFC] font-sans text-slate-800">
+    <div className="flex h-full w-full min-w-0 overflow-hidden bg-[#F8FAFC] font-sans text-slate-800">
         {/* ================= SIDEBAR ================= */}
         <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white p-4 lg:flex justify-between">
           <div>
@@ -237,7 +240,7 @@ export function DashboardPreview() {
             <div className="rounded-3xl bg-gradient-to-r from-[#00A896] via-[#10B981] to-[#00A896] p-6 text-white shadow-md">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-white/20">
                 <div>
-                  <h2 className="text-lg font-bold">Kinerja Sekolah</h2>
+                  <h2 className="text-lg font-bold text-white">Kinerja Sekolah</h2>
                   <p className="text-xs text-white/80 mt-0.5">
                     Kondisi operasional sekolah bulan ini.
                   </p>
@@ -756,7 +759,14 @@ export function DashboardPreview() {
             </div>
           </main>
         </div>
-      </div>
+    </div>
+  );
+}
+
+export function DashboardPreview() {
+  return (
+    <LivePreviewShell slug="onboard" compact size="lg">
+      <OnboardApp />
     </LivePreviewShell>
   );
 }

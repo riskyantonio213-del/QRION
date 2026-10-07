@@ -76,6 +76,9 @@ function TbBtn(props: {
   label: string;
   active?: boolean;
   disabled?: boolean;
+  /** Lebar ikuti konten (untuk tombol berlabel teks, cegah overflow menimpa
+   *  tombol sebelahnya — kotak size-8 tetap memaksa teks meluber). */
+  autoWidth?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -89,7 +92,8 @@ function TbBtn(props: {
       onMouseDown={(event) => event.preventDefault()}
       onClick={props.onClick}
       className={cn(
-        "grid size-8 place-items-center rounded-md text-slate-600 transition-colors",
+        "grid h-8 shrink-0 place-items-center rounded-md text-slate-600 transition-colors",
+        props.autoWidth ? "w-auto gap-1 px-2" : "w-8",
         "hover:bg-slate-100 hover:text-slate-900 disabled:opacity-35",
         props.active && "bg-brand/15 text-brand hover:bg-brand/20",
       )}
@@ -134,7 +138,6 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [slash, setSlashUI] = useState<SlashState | null>(null);
-  const [float, setFloat] = useState<{ x: number; y: number } | null>(null);
   const [rail, setRail] = useState<{ x: number; y: number } | null>(null);
   const [inserter, setInserter] = useState(false);
   const [insQuery, setInsQuery] = useState("");
@@ -144,6 +147,10 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
   const [showInspector, setShowInspector] = useState(false);
   const [device, setDevice] = useState<Device>("full");
   const [, setTick] = useState(0);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const topBarRef = useRef<HTMLDivElement | null>(null);
+  /** Tinggi bilah atas (px) — dipakai offset sticky panel & clamp rail blok. */
+  const topBarHRef = useRef(46);
 
   const setSlash = useCallback((value: SlashState | null) => {
     slashRef.current = value;
@@ -239,36 +246,22 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
 
     const updateOverlays = () => {
       if (!editor.isFocused) {
-        setFloat(null);
         setRail(null);
         return;
       }
       try {
         const { state, view } = editor;
-        const { from, to } = state.selection;
-        const start = view.coordsAtPos(from);
-        const end = view.coordsAtPos(to);
-        const rect = view.dom.getBoundingClientRect();
-        const top = Math.min(start.top, end.top);
-        const above = top - 46;
-        const y =
-          above < rect.top + 2
-            ? Math.max(start.bottom, end.bottom) + 8
-            : above;
-        const centerX =
-          (Math.min(start.left, end.left) + Math.max(start.right, end.right)) /
-          2;
-        setFloat({
-          x: Math.min(Math.max(centerX, rect.left + 48), rect.right - 48),
-          y: Math.max(y, 6),
-        });
         const $from = state.selection.$from;
         const blockFrom =
           $from.depth === 0 ? state.selection.from : $from.before(1);
         const blockCoords = view.coordsAtPos(blockFrom);
-        setRail({ x: blockCoords.left, y: blockCoords.top });
+        // Jangan tumpuk di bawah bilah atas yang sticky (88px header + bilah).
+        const minRailY = 88 + topBarHRef.current + 6;
+        setRail({
+          x: blockCoords.left,
+          y: Math.max(blockCoords.top, minRailY),
+        });
       } catch {
-        setFloat(null);
         setRail(null);
       }
     };
@@ -347,7 +340,6 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
     const handleBlur = () => {
       setFocusedUI(false);
       setSlash(null);
-      setFloat(null);
       setRail(null);
       setTypeMenu(false);
     };
@@ -371,6 +363,22 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, [editor, setSlash]);
+
+  // Tinggi bilah atas -> var CSS di root (offset sticky panel kiri/kanan)
+  // dan angka clamp rail blok, agar ikut berubah saat bilah wrap di layar sempit.
+  useEffect(() => {
+    const bar = topBarRef.current;
+    const root = rootRef.current;
+    if (!bar || !root) return;
+    const apply = () => {
+      topBarHRef.current = bar.offsetHeight;
+      root.style.setProperty("--tb-h", `${bar.offsetHeight}px`);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(bar);
+    return () => observer.disconnect();
+  }, [editor]);
 
   const state = editor
     ? {
@@ -503,13 +511,19 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
 
   return (
     <div
+      ref={rootRef}
       className={cn(
-        "relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm",
+        // overflow-clip (bukan overflow-hidden): memotong sudut membulat
+        // tanpa membuat scroll container — position:sticky panel tetap jalan.
+        "relative flex flex-col overflow-clip rounded-2xl border border-slate-200 bg-white shadow-sm",
         focusedUI && "gutenberg-focus",
       )}
     >
-      {/* Bilah atas tipis gaya Gutenberg */}
-      <div className="relative z-20 flex items-center gap-1 border-b border-slate-200 bg-white/95 px-2 py-1.5 backdrop-blur">
+      {/* Bilah atas tipis gaya Gutenberg — menempel di bawah header admin */}
+      <div
+        ref={topBarRef}
+        className="sticky top-15 z-30 flex flex-wrap items-center gap-1 border-b border-slate-200 bg-white/95 px-2 py-1.5 backdrop-blur"
+      >
         <TbBtn
           label="Tambah blok"
           active={inserter}
@@ -530,6 +544,282 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
           <span className="font-medium text-slate-500">{breadcrumbLabel}</span>
         </span>
         <span className="flex-1" />
+
+        {/* Alat format blok — menetap di bilah atas, tak lagi mengambang */}
+        <div
+          role="toolbar"
+          aria-label="Alat format"
+          className="flex flex-wrap items-center gap-0.5"
+        >
+          {!state.isImage && !state.table ? (
+            <>
+              <div className="relative">
+                <TbBtn
+                  label="Jenis blok"
+                  autoWidth
+                  active={typeMenu}
+                  onClick={() => setTypeMenu((open) => !open)}
+                >
+                  <span className="flex items-center gap-0.5 text-[12px] font-medium">
+                    {blockTypeLabel}
+                    <ChevronDown className="size-3" />
+                  </span>
+                </TbBtn>
+                {typeMenu ? (
+                  <div
+                    role="menu"
+                    aria-label="Jenis blok"
+                    className="absolute right-0 top-full z-40 mt-1 w-36 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+                  >
+                    {typeOptions.map((option) => (
+                      <button
+                        key={option.label}
+                        type="button"
+                        role="menuitem"
+                        aria-pressed={option.active}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          setTypeMenu(false);
+                          option.run();
+                        }}
+                        className={cn(
+                          "block w-full rounded-md px-2.5 py-1.5 text-left text-sm hover:bg-slate-100",
+                          option.active &&
+                            "bg-brand/10 font-semibold text-brand",
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              <Divider />
+              <TbBtn
+                label="Tebal"
+                active={state.bold}
+                onClick={() => editor.chain().focus().toggleBold().run()}
+              >
+                <Bold className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Miring"
+                active={state.italic}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+              >
+                <Italic className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Garis bawah"
+                active={state.underline}
+                onClick={() =>
+                  editor.chain().focus().toggleUnderline().run()
+                }
+              >
+                <Underline className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Coret"
+                active={state.strike}
+                onClick={() => editor.chain().focus().toggleStrike().run()}
+              >
+                <Strikethrough className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Kode inline"
+                active={state.code}
+                onClick={() => editor.chain().focus().toggleCode().run()}
+              >
+                <Code className={iconCls} />
+              </TbBtn>
+              <Divider />
+              <TbBtn
+                label={state.link ? "Ubah tautan" : "Sisipkan tautan"}
+                active={state.link}
+                onClick={() => setLinkPrompt(editor)}
+              >
+                <Link2 className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Lepas tautan"
+                disabled={!state.link}
+                onClick={() => editor.chain().focus().unsetLink().run()}
+              >
+                <Unlink className={iconCls} />
+              </TbBtn>
+              <Divider />
+            </>
+          ) : null}
+
+          <TbBtn
+            label="Rata kiri"
+            active={state.alignLeft}
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          >
+            <AlignLeft className={iconCls} />
+          </TbBtn>
+          <TbBtn
+            label="Rata tengah"
+            active={state.alignCenter}
+            onClick={() =>
+              editor.chain().focus().setTextAlign("center").run()
+            }
+          >
+            <AlignCenter className={iconCls} />
+          </TbBtn>
+          <TbBtn
+            label="Rata kanan"
+            active={state.alignRight}
+            onClick={() =>
+              editor.chain().focus().setTextAlign("right").run()
+            }
+          >
+            <AlignRight className={iconCls} />
+          </TbBtn>
+
+          {!state.isImage && !state.table ? (
+            <>
+              <Divider />
+              <TbBtn
+                label="Daftar butir"
+                active={state.bulletList}
+                onClick={() =>
+                  editor.chain().focus().toggleBulletList().run()
+                }
+              >
+                <List className={iconCls} />
+              </TbBtn>
+              <TbBtn
+                label="Daftar bernomor"
+                active={state.orderedList}
+                onClick={() =>
+                  editor.chain().focus().toggleOrderedList().run()
+                }
+              >
+                <ListOrdered className={iconCls} />
+              </TbBtn>
+            </>
+          ) : null}
+
+          {state.isImage ? (
+            <>
+              <Divider />
+              <TbBtn
+                label="Lebar kecil (240px)"
+                active={state.imageWidth === 240}
+                onClick={() =>
+                  setImageWidth(
+                    editor,
+                    state.imageWidth === 240 ? null : 240,
+                  )
+                }
+              >
+                <span className="text-[11px] font-semibold leading-none">
+                  S
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Lebar sedang (400px)"
+                active={state.imageWidth === 400}
+                onClick={() =>
+                  setImageWidth(
+                    editor,
+                    state.imageWidth === 400 ? null : 400,
+                  )
+                }
+              >
+                <span className="text-[11px] font-semibold leading-none">
+                  M
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Lebar besar (640px)"
+                active={state.imageWidth === 640}
+                onClick={() =>
+                  setImageWidth(
+                    editor,
+                    state.imageWidth === 640 ? null : 640,
+                  )
+                }
+              >
+                <span className="text-[11px] font-semibold leading-none">
+                  L
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Lebar alami (100%)"
+                active={state.imageWidth === null}
+                onClick={() => setImageWidth(editor, null)}
+              >
+                <span className="text-[10px] font-semibold leading-none">
+                  100%
+                </span>
+              </TbBtn>
+              <Divider />
+              <TbBtn
+                label="Ganti URL gambar"
+                onClick={() => replaceImageSrc(editor)}
+              >
+                <span className="text-[11px] font-semibold leading-none">
+                  URL
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Unggah gambar"
+                disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload
+                  className={cn(
+                    iconCls,
+                    uploading && "animate-pulse",
+                  )}
+                />
+              </TbBtn>
+              <TbBtn
+                label="Teks alternatif"
+                onClick={() => promptImageAlt(editor)}
+              >
+                <span className="text-[10px] font-semibold leading-none">
+                  ALT
+                </span>
+              </TbBtn>
+            </>
+          ) : null}
+
+          {state.table ? (
+            <>
+              <Divider />
+              <TbBtn
+                label="Tambah baris"
+                onClick={() => editor.chain().focus().addRowAfter().run()}
+              >
+                <span className="text-[13px] font-semibold leading-none">
+                  R+
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Tambah kolom"
+                onClick={() =>
+                  editor.chain().focus().addColumnAfter().run()
+                }
+              >
+                <span className="text-[13px] font-semibold leading-none">
+                  C+
+                </span>
+              </TbBtn>
+              <TbBtn
+                label="Hapus tabel"
+                onClick={() => editor.chain().focus().deleteTable().run()}
+              >
+                <span className="text-[13px] font-semibold leading-none">
+                  T−
+                </span>
+              </TbBtn>
+            </>
+          ) : null}
+        </div>
+        <Divider />
 
         {/* Pratinjau lebar kanvas */}
         <TbBtn
@@ -642,7 +932,7 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
       <div className="flex min-h-0 flex-1 items-stretch">
         {/* Rail kiri: toggle List View (minimize jadi icon) */}
         <div className="hidden shrink-0 border-r border-slate-200 bg-white md:flex">
-          <div className="flex w-11 shrink-0 flex-col items-center gap-1 py-2">
+          <div className="sticky top-[calc(5.5rem_+_var(--tb-h,46px))] flex w-11 shrink-0 flex-col items-center gap-1 self-start py-2">
             <TbBtn
               label="Daftar blok"
               active={showList}
@@ -658,7 +948,7 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
           {showList ? (
             <aside
               aria-label="Daftar blok"
-              className="w-56 shrink-0 overflow-hidden border-l border-slate-100"
+              className="sticky top-[calc(5.5rem_+_var(--tb-h,46px))] max-h-[calc(100dvh_-_7rem)] w-56 shrink-0 self-start overflow-y-auto border-l border-slate-100"
             >
               <ListView editor={editor} />
             </aside>
@@ -683,12 +973,12 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
           {showInspector ? (
             <aside
               aria-label="Pengaturan blok"
-              className="w-64 shrink-0 overflow-hidden border-r border-slate-100"
+              className="sticky top-[calc(5.5rem_+_var(--tb-h,46px))] max-h-[calc(100dvh_-_7rem)] w-64 shrink-0 self-start overflow-y-auto border-r border-slate-100"
             >
               <BlockInspector editor={editor} />
             </aside>
           ) : null}
-          <div className="flex w-11 shrink-0 flex-col items-center gap-1 py-2">
+          <div className="sticky top-[calc(5.5rem_+_var(--tb-h,46px))] flex w-11 shrink-0 flex-col items-center gap-1 self-start py-2">
             <TbBtn
               label="Pengaturan blok"
               active={showInspector}
@@ -722,285 +1012,6 @@ export function TiptapEditor({ initialHTML, onChange }: TiptapEditorProps) {
           <span>{state.chars.toLocaleString("id-ID")} karakter</span>
         </span>
       </div>
-
-      {/* Toolbar mengambang di atas pilihan */}
-      {float && focusedUI ? (
-        <div
-          role="toolbar"
-          aria-label="Alat blok"
-          style={{ left: float.x, top: float.y }}
-          className="fixed z-40 -translate-x-1/2"
-        >
-          <div className="flex max-w-[min(92vw,44rem)] flex-wrap items-center gap-0.5 rounded-xl border border-slate-200 bg-white/95 px-1.5 py-1 shadow-lg backdrop-blur">
-            {!state.isImage && !state.table ? (
-              <>
-                <div className="relative">
-                  <TbBtn
-                    label="Jenis blok"
-                    active={typeMenu}
-                    onClick={() => setTypeMenu((open) => !open)}
-                  >
-                    <span className="flex items-center gap-0.5 text-[12px] font-medium">
-                      {blockTypeLabel}
-                      <ChevronDown className="size-3" />
-                    </span>
-                  </TbBtn>
-                  {typeMenu ? (
-                    <div
-                      role="menu"
-                      aria-label="Jenis blok"
-                      className="absolute left-0 top-full z-40 mt-1 w-36 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
-                    >
-                      {typeOptions.map((option) => (
-                        <button
-                          key={option.label}
-                          type="button"
-                          role="menuitem"
-                          aria-pressed={option.active}
-                          onMouseDown={(event) => event.preventDefault()}
-                          onClick={() => {
-                            setTypeMenu(false);
-                            option.run();
-                          }}
-                          className={cn(
-                            "block w-full rounded-md px-2.5 py-1.5 text-left text-sm hover:bg-slate-100",
-                            option.active &&
-                              "bg-brand/10 font-semibold text-brand",
-                          )}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-                <Divider />
-                <TbBtn
-                  label="Tebal"
-                  active={state.bold}
-                  onClick={() => editor.chain().focus().toggleBold().run()}
-                >
-                  <Bold className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Miring"
-                  active={state.italic}
-                  onClick={() => editor.chain().focus().toggleItalic().run()}
-                >
-                  <Italic className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Garis bawah"
-                  active={state.underline}
-                  onClick={() =>
-                    editor.chain().focus().toggleUnderline().run()
-                  }
-                >
-                  <Underline className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Coret"
-                  active={state.strike}
-                  onClick={() => editor.chain().focus().toggleStrike().run()}
-                >
-                  <Strikethrough className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Kode inline"
-                  active={state.code}
-                  onClick={() => editor.chain().focus().toggleCode().run()}
-                >
-                  <Code className={iconCls} />
-                </TbBtn>
-                <Divider />
-                <TbBtn
-                  label={state.link ? "Ubah tautan" : "Sisipkan tautan"}
-                  active={state.link}
-                  onClick={() => setLinkPrompt(editor)}
-                >
-                  <Link2 className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Lepas tautan"
-                  disabled={!state.link}
-                  onClick={() => editor.chain().focus().unsetLink().run()}
-                >
-                  <Unlink className={iconCls} />
-                </TbBtn>
-                <Divider />
-              </>
-            ) : null}
-
-            <TbBtn
-              label="Rata kiri"
-              active={state.alignLeft}
-              onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            >
-              <AlignLeft className={iconCls} />
-            </TbBtn>
-            <TbBtn
-              label="Rata tengah"
-              active={state.alignCenter}
-              onClick={() =>
-                editor.chain().focus().setTextAlign("center").run()
-              }
-            >
-              <AlignCenter className={iconCls} />
-            </TbBtn>
-            <TbBtn
-              label="Rata kanan"
-              active={state.alignRight}
-              onClick={() =>
-                editor.chain().focus().setTextAlign("right").run()
-              }
-            >
-              <AlignRight className={iconCls} />
-            </TbBtn>
-
-            {!state.isImage && !state.table ? (
-              <>
-                <Divider />
-                <TbBtn
-                  label="Daftar butir"
-                  active={state.bulletList}
-                  onClick={() =>
-                    editor.chain().focus().toggleBulletList().run()
-                  }
-                >
-                  <List className={iconCls} />
-                </TbBtn>
-                <TbBtn
-                  label="Daftar bernomor"
-                  active={state.orderedList}
-                  onClick={() =>
-                    editor.chain().focus().toggleOrderedList().run()
-                  }
-                >
-                  <ListOrdered className={iconCls} />
-                </TbBtn>
-              </>
-            ) : null}
-
-            {state.isImage ? (
-              <>
-                <Divider />
-                <TbBtn
-                  label="Lebar kecil (240px)"
-                  active={state.imageWidth === 240}
-                  onClick={() =>
-                    setImageWidth(
-                      editor,
-                      state.imageWidth === 240 ? null : 240,
-                    )
-                  }
-                >
-                  <span className="text-[11px] font-semibold leading-none">
-                    S
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Lebar sedang (400px)"
-                  active={state.imageWidth === 400}
-                  onClick={() =>
-                    setImageWidth(
-                      editor,
-                      state.imageWidth === 400 ? null : 400,
-                    )
-                  }
-                >
-                  <span className="text-[11px] font-semibold leading-none">
-                    M
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Lebar besar (640px)"
-                  active={state.imageWidth === 640}
-                  onClick={() =>
-                    setImageWidth(
-                      editor,
-                      state.imageWidth === 640 ? null : 640,
-                    )
-                  }
-                >
-                  <span className="text-[11px] font-semibold leading-none">
-                    L
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Lebar alami (100%)"
-                  active={state.imageWidth === null}
-                  onClick={() => setImageWidth(editor, null)}
-                >
-                  <span className="text-[10px] font-semibold leading-none">
-                    100%
-                  </span>
-                </TbBtn>
-                <Divider />
-                <TbBtn
-                  label="Ganti URL gambar"
-                  onClick={() => replaceImageSrc(editor)}
-                >
-                  <span className="text-[11px] font-semibold leading-none">
-                    URL
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Unggah gambar"
-                  disabled={uploading}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <Upload
-                    className={cn(
-                      iconCls,
-                      uploading && "animate-pulse",
-                    )}
-                  />
-                </TbBtn>
-                <TbBtn
-                  label="Teks alternatif"
-                  onClick={() => promptImageAlt(editor)}
-                >
-                  <span className="text-[10px] font-semibold leading-none">
-                    ALT
-                  </span>
-                </TbBtn>
-              </>
-            ) : null}
-
-            {state.table ? (
-              <>
-                <Divider />
-                <TbBtn
-                  label="Tambah baris"
-                  onClick={() => editor.chain().focus().addRowAfter().run()}
-                >
-                  <span className="text-[13px] font-semibold leading-none">
-                    R+
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Tambah kolom"
-                  onClick={() =>
-                    editor.chain().focus().addColumnAfter().run()
-                  }
-                >
-                  <span className="text-[13px] font-semibold leading-none">
-                    C+
-                  </span>
-                </TbBtn>
-                <TbBtn
-                  label="Hapus tabel"
-                  onClick={() => editor.chain().focus().deleteTable().run()}
-                >
-                  <span className="text-[13px] font-semibold leading-none">
-                    T−
-                  </span>
-                </TbBtn>
-              </>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
 
       {/* Menu slash command */}
       {slash && slashItems.length > 0 ? (

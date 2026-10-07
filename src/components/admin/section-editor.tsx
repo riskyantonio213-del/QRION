@@ -16,6 +16,7 @@ import {
   Trash2,
   Type,
   Upload,
+  X,
 } from "lucide-react";
 
 import { saveSectionAction } from "@/actions/admin-actions";
@@ -603,6 +604,288 @@ function ListEditor({
 }
 
 /* ---------------------------------------------------------------
+ * Field: daftar mode kartu (thumbnail + klik untuk edit via popup)
+ * ------------------------------------------------------------- */
+
+function CardListEditor({
+  field,
+  values,
+  defaults,
+  onChange,
+}: {
+  field: Extract<AdminField, { type: "list" }>;
+  values: PlainObject;
+  defaults: PlainObject;
+  onChange: (path: string, value: unknown) => void;
+}) {
+  const raw = getPath(values, field.key);
+  const list = Array.isArray(raw) ? raw : [];
+  const defaultsRaw = getPath(defaults, field.key);
+  const defaultsList = Array.isArray(defaultsRaw) ? defaultsRaw : [];
+
+  const itemFields = field.itemFields ?? [];
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [snapshot, setSnapshot] = useState<unknown[] | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const setList = (next: unknown[]) => onChange(field.key, next);
+
+  const openEdit = (index: number) => {
+    setSnapshot(structuredClone(list));
+    setOpenIndex(index);
+  };
+
+  const addCard = () => {
+    setSnapshot(structuredClone(list)); // sebelum append: batal = kartu hilang
+    const next = [...list, emptyItem(itemFields)];
+    setList(next);
+    setOpenIndex(next.length - 1);
+  };
+
+  const closeEdit = (revert: boolean) => {
+    if (revert && snapshot && JSON.stringify(snapshot) !== JSON.stringify(list)) {
+      setList(snapshot);
+    }
+    setOpenIndex(null);
+    setSnapshot(null);
+  };
+
+  useEffect(() => {
+    if (openIndex === null) return;
+    panelRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeEdit(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- closeEdit stabil via openIndex
+  }, [openIndex, snapshot]);
+
+  const editing =
+    openIndex !== null && openIndex >= 0 && openIndex < list.length
+      ? openIndex
+      : null;
+  const editItem =
+    editing !== null && isPlainObject(list[editing])
+      ? (list[editing] as PlainObject)
+      : {};
+  const editDefaults =
+    editing !== null &&
+    editing < defaultsList.length &&
+    isPlainObject(defaultsList[editing])
+      ? (defaultsList[editing] as PlainObject)
+      : {};
+  const handleEditChange = (path: string, value: unknown) => {
+    if (editing === null) return;
+    setList(
+      list.map((existing, i) =>
+        i === editing && isPlainObject(existing)
+          ? setPath(existing, path, value)
+          : existing,
+      ),
+    );
+  };
+
+  const move = (index: number, delta: number) => {
+    const target = index + delta;
+    if (target < 0 || target >= list.length) return;
+    const next = list.slice();
+    const [moved] = next.splice(index, 1);
+    next.splice(target, 0, moved);
+    setList(next);
+  };
+
+  const header = (
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <span className="text-sm font-semibold">{field.label}</span>
+      <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500">
+        {list.length} item
+      </span>
+    </div>
+  );
+
+  return (
+    <div className="grid gap-4 rounded-3xl border border-slate-200/80 bg-white/85 p-4 sm:col-span-2 sm:p-5">
+      {header}
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {list.map((item, index) => {
+          const itemObject = isPlainObject(item) ? item : {};
+          const image = typeof itemObject.image === "string" ? itemObject.image : "";
+          const href = typeof itemObject.href === "string" ? itemObject.href : "";
+          return (
+            <li
+              key={index}
+              className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-sm transition hover:border-qrion-indigo/40 hover:shadow-md"
+            >
+              <button
+                type="button"
+                onClick={() => openEdit(index)}
+                className="block w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-qrion-indigo/40"
+              >
+                <div className="relative h-32 overflow-hidden bg-slate-50">
+                  <div className="absolute inset-0 grid place-items-center text-xs text-slate-400">
+                    Tanpa gambar
+                  </div>
+                  {image ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- URL bisa domain eksternal
+                    <img
+                      src={image}
+                      alt=""
+                      className="relative h-full w-full object-cover"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
+                    />
+                  ) : null}
+                </div>
+                <div className="grid gap-1 p-4">
+                  <span
+                    data-card-label
+                    className="truncate text-sm font-semibold text-slate-800"
+                  >
+                    {field.itemLabel(itemObject, index)}
+                  </span>
+                  <span className="truncate text-xs text-slate-400">
+                    {href || "Tanpa tautan"}
+                  </span>
+                  <span className="text-[11px] font-semibold text-qrion-indigo">
+                    Klik untuk edit →
+                  </span>
+                </div>
+              </button>
+              <div className="flex items-center justify-end gap-1 border-t border-slate-100 px-3 py-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Naikkan urutan"
+                  disabled={index === 0}
+                  onClick={() => move(index, -1)}
+                >
+                  <ArrowUp aria-hidden="true" className="size-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Turunkan urutan"
+                  disabled={index === list.length - 1}
+                  onClick={() => move(index, 1)}
+                >
+                  <ArrowDown aria-hidden="true" className="size-4" />
+                </Button>
+                {field.addable ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Hapus item"
+                    className="text-rose-500 hover:text-rose-600"
+                    onClick={() =>
+                      setList(list.filter((_value, i) => i !== index))
+                    }
+                  >
+                    <Trash2 aria-hidden="true" className="size-4" />
+                  </Button>
+                ) : null}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      {field.addable ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="justify-self-start"
+          onClick={addCard}
+        >
+          <Plus aria-hidden="true" className="size-4" />
+          {field.addLabel ?? "Tambah item"}
+        </Button>
+      ) : null}
+
+      {editing !== null ? (
+        <div className="fixed inset-0 z-50 grid place-items-center p-4">
+          <div
+            className="absolute inset-0 bg-slate-900/45 backdrop-blur-sm"
+            onClick={() => closeEdit(true)}
+            aria-hidden="true"
+          />
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="card-editor-title"
+            tabIndex={-1}
+            className="relative flex max-h-[85vh] w-full max-w-3xl flex-col rounded-3xl bg-white shadow-2xl focus:outline-none"
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 sm:px-6">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                  {field.label}
+                </p>
+                <h3
+                  id="card-editor-title"
+                  className="truncate font-display text-lg font-bold text-qrion-indigo"
+                >
+                  {field.itemLabel(editItem, editing)}
+                </h3>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Tutup"
+                onClick={() => closeEdit(true)}
+              >
+                <X aria-hidden="true" className="size-4" />
+              </Button>
+            </div>
+            <div className="grid gap-4 overflow-y-auto p-5 sm:grid-cols-2 sm:p-6">
+              {itemFields.map((itemField) => (
+                <FieldControl
+                  key={fieldKey(itemField)}
+                  field={itemField}
+                  values={editItem}
+                  defaults={editDefaults}
+                  onChange={handleEditChange}
+                />
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-5 py-4 sm:px-6">
+              <p className="text-xs leading-relaxed text-slate-400">
+                Perubahan baru tersimpan ke situs setelah menekan “Simpan
+                perubahan” di bawah halaman.
+              </p>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => closeEdit(true)}
+                >
+                  Batalkan
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => closeEdit(false)}
+                >
+                  Selesai
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------
  * Kontrol field rekursif
  * ------------------------------------------------------------- */
 
@@ -661,6 +944,16 @@ function FieldControl({
   }
 
   if (field.type === "list") {
+    if (field.cardMode && field.itemFields && field.itemKind !== "text") {
+      return (
+        <CardListEditor
+          field={field}
+          values={values}
+          defaults={defaults}
+          onChange={onChange}
+        />
+      );
+    }
     return (
       <ListEditor
         field={field}

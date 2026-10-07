@@ -1,4 +1,8 @@
+import type { LucideIcon } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
+
 import { products, type Product, type ProductSlug, type StatusTone } from "@/data/products";
+import { onboard } from "@/data/onboard";
 
 /**
  * Content for the QRION Live Experience (/live-preview).
@@ -13,6 +17,38 @@ import { products, type Product, type ProductSlug, type StatusTone } from "@/dat
 
 /** Chart slot in the shared QRION data-visualisation palette. */
 export type ChartSlot = "chart-1" | "chart-2" | "chart-3" | "chart-4" | "chart-5";
+
+/** Kartu dashboard di sidebar, overview, dan menu seluler Live Preview. */
+export type LivePreviewProduct = {
+  slug: string;
+  name: string;
+  category: string;
+  summary: string;
+  icon: LucideIcon;
+};
+
+/**
+ * Daftar lengkap dashboard di ekosistem Live Preview: ONBOARD (dashboard
+ * induk sekolah) diikuti seluruh modul produk. Dipakai sidebar, overview,
+ * menu seluler, dan shell — ONBOARD tampil di live-preview saja dan sengaja
+ * tidak ikut katalog publik /produk.
+ */
+export const livePreviewProducts: LivePreviewProduct[] = [
+  {
+    slug: "onboard",
+    name: "ONBOARD",
+    category: "Dashboard Sekolah",
+    summary: onboard.description,
+    icon: LayoutDashboard,
+  },
+  ...products.map((product) => ({
+    slug: product.slug,
+    name: product.name,
+    category: product.category,
+    summary: product.summary,
+    icon: product.icon,
+  })),
+];
 
 export const chartPalette: Record<ChartSlot, string> = {
   "chart-1": "var(--qrion-chart-1)",

@@ -8,7 +8,7 @@ import { ArrowLeft, ChevronDown, Smartphone } from "lucide-react";
 import { SheetClose } from "@/components/ui/sheet";
 import { MobileNavItem, isActivePath } from "@/components/layout/mobile-nav-item";
 import { mainNav } from "@/config/site";
-import { products } from "@/data/products";
+import { livePreviewProducts } from "@/data/live-preview";
 import { cn } from "@/lib/utils";
 
 /**
@@ -24,7 +24,7 @@ export function LivePreviewMenuPanel() {
   const mobileHref = "/live-preview/qrion-mobile";
 
   const items = [
-    ...products.map((product) => ({
+    ...livePreviewProducts.map((product) => ({
       href: `/live-preview/${product.slug}`,
       name: product.name,
       Icon: product.icon,

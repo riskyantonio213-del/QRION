@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Sparkles } from "lucide-react";
 
-import { products } from "@/data/products";
+import { livePreviewProducts } from "@/data/live-preview";
 import { DesktopHint } from "@/components/live-preview/desktop-hint";
 
 interface LivePreviewShellProps {
@@ -25,7 +25,7 @@ export function LivePreviewShell({
   compact = false,
   size = "default",
 }: LivePreviewShellProps) {
-  const product = products.find((p) => p.slug === slug);
+  const product = livePreviewProducts.find((p) => p.slug === slug);
   const ProductIcon = product?.icon ?? Sparkles;
 
   // Mockup QRION Mobile dipertahankan dengan tampilan klasiknya (padding & tinggi asli).

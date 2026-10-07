@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { products } from "@/data/products";
+import { livePreviewProducts } from "@/data/live-preview";
 import { ArrowRight, Smartphone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export function LivePreviewOverview() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => {
+          {livePreviewProducts.map((product) => {
             const Icon = product.icon;
             return (
               <Link
