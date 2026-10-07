@@ -3,16 +3,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CalendarDays, User } from "lucide-react";
 
+import { ArticleBody } from "@/components/marketing/article-body";
 import { Section } from "@/components/layout/section";
 import { ExternalImage } from "@/components/ui/external-image";
+import { articleCategoryList, articles, categorySlug } from "@/data/articles";
 import {
-  articleCategoryList,
-  articles,
-  categorySlug,
-  getArticleMeta,
-  latestArticles,
-} from "@/data/articles";
-import { articlesContent } from "@/data/articles-content";
+  buildCategoryList,
+  getPublishedArticle,
+  getPublishedArticleMeta,
+  getPublishedArticles,
+  latest as pickLatest,
+} from "@/lib/articles-data";
 import { neutralizeArticleLinks } from "@/lib/sanitize-article";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -30,7 +31,7 @@ export async function generateMetadata({
   params,
 }: ArticleRouteProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleMeta(slug);
+  const article = await getPublishedArticleMeta(slug);
 
   if (!article) {
     return { title: "Artikel tidak ditemukan" };
@@ -61,16 +62,18 @@ export async function generateMetadata({
 
 export default async function ArticleDetailPage({ params }: ArticleRouteProps) {
   const { slug } = await params;
-  const article = getArticleMeta(slug);
-  const contentHtml = articlesContent[slug];
+  const result = await getPublishedArticle(slug);
 
-  if (!article || !contentHtml) {
+  if (!result) {
     notFound();
   }
+  const { meta: article, contentHtml } = result;
 
-  const latest = latestArticles(10)
+  const published = await getPublishedArticles();
+  const latest = pickLatest(published, 10)
     .filter((item) => item.slug !== slug)
     .slice(0, 3);
+  const categories = buildCategoryList(published);
 
   return (
     <>
@@ -139,7 +142,7 @@ export default async function ArticleDetailPage({ params }: ArticleRouteProps) {
               Kategori Lainnya
             </h2>
             <ul className="mt-4 space-y-3">
-              {articleCategoryList.map((item) => (
+              {categories.map((item) => (
                 <li key={item.slug}>
                   <Link
                     href={`/insight/${item.slug}`}
@@ -206,11 +209,9 @@ export default async function ArticleDetailPage({ params }: ArticleRouteProps) {
 
           {/* Konten utama */}
           <div className="order-1 min-w-0 max-w-3xl lg:order-2">
-            <div
+            <ArticleBody
+              html={neutralizeArticleLinks(contentHtml)}
               className="article-content"
-              dangerouslySetInnerHTML={{
-                __html: neutralizeArticleLinks(contentHtml),
-              }}
             />
 
             {/* Meta bawah — tanggal, penulis, sumber, label kategori (ala PCR) */}

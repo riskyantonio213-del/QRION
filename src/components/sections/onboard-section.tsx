@@ -1,49 +1,11 @@
-import {
-  AlertCircle,
-  ArrowRight,
-  BarChart3,
-  Eye,
-  Zap,
-  type LucideIcon,
-} from "lucide-react";
+"use client";
 
+import { ArrowRight, BarChart3 } from "lucide-react";
+
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
-
-/* =========================================================
- * DATA
- * ======================================================= */
-
-type OnboardCard = {
-  Icon: LucideIcon;
-  tone: string;
-  title: string;
-  description: string;
-};
-
-const onboardCards: OnboardCard[] = [
-  {
-    Icon: Eye,
-    tone: "bg-brand-mint text-brand",
-    title: "Semua lebih terlihat",
-    description: "Pantau indikator penting sekolah dalam satu pandangan.",
-  },
-  {
-    Icon: AlertCircle,
-    tone: "bg-amber-100 text-amber-600",
-    title: "Tahu apa yang perlu perhatian",
-    description:
-      "Masalah terlihat lebih awal sebelum mengganggu operasional.",
-  },
-  {
-    Icon: Zap,
-    tone: "bg-brand-mint text-brand",
-    title: "Keputusan lebih cepat",
-    description:
-      "Data yang jelas membantu pimpinan menentukan langkah berikutnya.",
-  },
-];
 
 /* =========================================================
  * SECTION — foto dashboard sebagai latar bleed penuh,
@@ -51,6 +13,8 @@ const onboardCards: OnboardCard[] = [
  * ======================================================= */
 
 export function OnboardSection() {
+  const { onboard, onboardCards } = useContent().onboard;
+
   return (
     <Section
       id="onboard"
@@ -61,7 +25,7 @@ export function OnboardSection() {
       {/* Latar foto laptop — bleed penuh */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <img
-          src="/images/bg-onboard.png"
+          src={onboard.image}
           alt=""
           width={1920}
           height={1080}
@@ -80,23 +44,21 @@ export function OnboardSection() {
               aria-hidden="true"
               className="size-2 rounded-full bg-brand shadow-[0_0_0_4px_rgba(53,187,130,0.20)]"
             />
-            QRION ONBOARD
+            {onboard.eyebrow}
           </span>
 
           <h2
             id="onboard-heading"
             className="mt-5 text-[32px] font-bold leading-[1.08] tracking-tight text-foreground sm:text-[42px] lg:text-[50px]"
           >
-            Lihat seluruh kondisi sekolah{" "}
+            {onboard.titleBefore}{" "}
             <span className="bg-gradient-to-r from-brand to-emerald-700 bg-clip-text text-transparent">
-              dari satu dashboard.
+              {onboard.titleHighlight}
             </span>
           </h2>
 
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground sm:text-[16px]">
-            Onboard dirancang khusus untuk pimpinan sekolah agar pembayaran,
-            keuangan, kehadiran, penerimaan siswa, dan aktivitas penting
-            sekolah dapat dipantau dalam satu pandangan.
+            {onboard.description}
           </p>
 
           {/* Callout pill */}
@@ -106,17 +68,17 @@ export function OnboardSection() {
               className="size-5 shrink-0 text-brand"
             />
             <p className="text-[14px] font-medium leading-snug text-foreground">
-              Tidak perlu menunggu laporan untuk tahu kondisi sekolah.
+              {onboard.callout}
             </p>
           </div>
 
           {/* CTA */}
           <div className="mt-7">
             <a
-              href="/live-preview"
+              href={onboard.cta.href}
               className="group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-6 pr-2 text-sm font-bold text-white shadow-[0_14px_32px_rgba(53,187,130,0.35)] transition-colors duration-300 hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
             >
-              Lihat Cara Kerjanya
+              {onboard.cta.label}
               <span
                 aria-hidden="true"
                 className="flex size-9 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:translate-x-0.5"

@@ -3,94 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  BookOpen,
-  ClipboardList,
-  Clock,
-  CreditCard,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-type BentoCard = {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  image: string;
-  alt: string;
-  /** Ubah warna judul kartu di sini (class Tailwind). */
-  titleClassName?: string;
-  /** Ubah warna deskripsi kartu di sini (class Tailwind). */
-  descriptionClassName?: string;
-  /** Ubah warna icon kartu di sini (class Tailwind). */
-  iconClassName?: string;
-  /** object-position tambahan (mis. object-top) */
-  position?: string;
-  /** tampil selebar 2 kolom */
-  wide?: boolean;
-  sizes: string;
-};
-
-const bentoCards: BentoCard[] = [
-  {
-    title: "Oncard",
-    description: "Pembayaran sekolah lebih mudah dan aman.",
-    icon: CreditCard,
-    titleClassName: "text-black",
-    descriptionClassName: "text-black/65",
-    image: "/bento/1.png",
-    alt: "Kartu QRION di-tap ke mesin pembayaran",
-    sizes: "(max-width: 768px) 100vw, 33vw",
-  },
-  {
-    title: "Ontime",
-    description: "Absensi siswa dalam satu platform.",
-    icon: Clock,
-    titleClassName: "text-black",
-    descriptionClassName: "text-black/65",
-    image: "/bento/2.png",
-    alt: "Dashboard kehadiran harian siswa QRION",
-    sizes: "(max-width: 768px) 100vw, 33vw",
-  },
-  {
-    title: "Ekosistem terintegrasi",
-    description: "Seluruh kebutuhan sekolah berjalan selaras.",
-    icon: Sparkles,
-    titleClassName: "text-white",
-    descriptionClassName: "text-white/75",
-    iconClassName: "text-white",
-    image: "/bento/3.png",
-    alt: "Ilustrasi seluruh aplikasi QRION yang saling terhubung",
-    sizes: "(max-width: 768px) 100vw, 33vw",
-  },
-  {
-    title: "Ontuition & QRION Jurnal",
-    description:
-      "Pembelajaran dan administrasi keuangan dalam satu alur yang terintegrasi.",
-    icon: BookOpen,
-    titleClassName: "text-black",
-    descriptionClassName: "text-black/65",
-    image: "/bento/4.png",
-    alt: "Kelas online dan dashboard keuangan sekolah",
-    wide: true,
-    sizes: "(max-width: 768px) 100vw, 66vw",
-  },
-  {
-    title: "SPMB & POS",
-    description:  
-      "Kelola penerimaan siswa baru dan operasional kantin dalam satu sistem.",
-    icon: ClipboardList,
-    titleClassName: "text-black",
-    descriptionClassName: "text-black/65",
-    image: "/bento/5.png",
-    alt: "Kartu pendaftaran siswa baru dan transaksi kantin",
-    sizes: "(max-width: 768px) 100vw, 33vw",
-  },
-];
+import { useContent } from "@/components/admin/content-provider";
 
 export function EcosystemDiagram() {
+  const { bentoCards, ecosystemHeader } = useContent().ecosystem;
+
   return (
     <div className="mt-14 w-full max-w-7xl mx-auto px-4">
       {/* Header Section */}
@@ -98,24 +17,22 @@ export function EcosystemDiagram() {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-mint-medium/10 text-brand mb-4 text-xs font-semibold uppercase tracking-wider">
             <span className="size-2 rounded-full bg-brand" />
-            Ekosistem QRION
+            {ecosystemHeader.eyebrow}
           </div>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground max-w-2xl">
-            Semua yang sekolah butuhkan dalam{" "}
-            <span className="text-brand">satu ekosistem</span>
+            {ecosystemHeader.titleBefore}{" "}
+            <span className="text-brand">{ecosystemHeader.titleHighlight}</span>
           </h2>
         </div>
         <div>
           <p className="text-muted-foreground max-w-md text-sm md:text-base mb-4">
-            Platform terintegrasi untuk membantu sekolah mengelola operasional,
-            pembelajaran, keuangan, absensi, dan layanan orang tua dengan lebih
-            efisien.
+            {ecosystemHeader.description}
           </p>
           <Link
-            href="/produk"
+            href={ecosystemHeader.cta.href}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background font-medium text-sm hover:opacity-90 transition-opacity"
           >
-            Lihat semua fitur
+            {ecosystemHeader.cta.label}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>

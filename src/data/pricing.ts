@@ -24,6 +24,15 @@ export type PricingPlan = {
   cta: { label: string; href: string };
 };
 
+/** Header section Paket (TitleDashes tetap di komponen). */
+export const pricingHeader = {
+  eyebrow: "Paket Langganan",
+  titleBefore: "Pilih Paket Sesuai",
+  titleAfter: "Kebutuhan Sekolah",
+  description:
+    "Solusi praktis untuk mendukung operasional, pembelajaran, absensi, dan keuangan sekolah dalam satu ekosistem QRION.",
+};
+
 export const pricingPlans: PricingPlan[] = [
   {
     id: "basic",
@@ -103,4 +112,6 @@ export const pricingCallout = {
   description:
     "Tim QRION siap membantu menyesuaikan solusi sesuai kebutuhan sekolah Anda.",
   cta: { label: "Hubungi Tim Kami", href: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
+  /** Latar gedung di balik kartu callout. */
+  image: "/images/bg.png",
 };

@@ -21,6 +21,20 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // Gambar panel admin diunggah ke Supabase Storage (bucket publik
+    // admin-uploads) dan dirender homepage lewat next/image.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.in",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
     // QRION ships its placeholder brand artwork (logo cloud marks, about-us
     // illustration) as local SVG files that are rendered through `next/image`.
     // Remote SVG sources are still blocked; only same-origin files are served.

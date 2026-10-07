@@ -1,110 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import type { ReactNode } from "react";
-import {
-  ArrowRight,
-  BarChart3,
-  CalendarCheck,
-  CreditCard,
-  Eye,
-  FileSpreadsheet,
-  FileText,
-  GraduationCap,
-  Share2,
-  TrendingUp,
-  User,
-  UserPlus,
-  UtensilsCrossed,
-  Wallet,
-  X,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, TrendingUp, User, X } from "lucide-react";
 
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
-
-/* =========================================================
- * DATA
- * ======================================================= */
-
-const painPoints = [
-  "Data dari berbagai file dan laporan",
-  "Rekap manual yang memakan waktu",
-  "Sulit melihat kondisi secara keseluruhan",
-  "Risiko kesalahan dan keterlambatan informasi",
-] as const;
-
-/**
- * Posisi relatif terhadap area foto (kartu "Sebelum").
- * Disesuaikan persis menyerupai gambar referensi, di mana badge
- * Rekap Pembayaran SPP offside ke kiri atas.
- */
-const fileBadges = [
-  {
-    label: "Rekap Pembayaran SPP.xlsx",
-    Icon: FileSpreadsheet,
-    tone: "bg-emerald-500",
-    position: "-right-[14%] top-[10%] -rotate-6 lg:right-[15%] lg:top-[12%]", // Offside ke kiri
-    delay: "[animation-delay:0s]",
-  },
-  {
-    label: "Laporan Kehadiran.pdf",
-    Icon: FileText,
-    tone: "bg-rose-500",
-    position: "right-[8%] top-[22%] rotate-[6deg] lg:right-[1%] lg:top-[25%]",
-    delay: "[animation-delay:1s]",
-  },
-  {
-    label: "Data Siswa Baru",
-    Icon: FileText,
-    tone: "bg-blue-500",
-    position: "right-[16%] top-[44%] rotate-[2deg] lg:right-[2%] lg:top-[42%]",
-    delay: "[animation-delay:0.5s]",
-  },
-  {
-    label: "Laporan Keuangan.xlsx",
-    Icon: FileSpreadsheet,
-    tone: "bg-emerald-500",
-    position: "bottom-[12%] right-[6%] rotate-[6deg] lg:bottom-[15%] lg:right-[1%]",
-    delay: "[animation-delay:1.6s]",
-  },
-] as const;
-
-const modules = [
-  { label: "Pembayaran", Icon: CreditCard },
-  { label: "Akademik", Icon: GraduationCap },
-  { label: "Kehadiran", Icon: CalendarCheck },
-  { label: "Keuangan", Icon: Wallet },
-  { label: "Penerimaan Siswa", Icon: UserPlus },
-  { label: "Kantin", Icon: UtensilsCrossed },
-] as const;
-
-const features = [
-  {
-    Icon: Eye,
-    title: "Semua lebih terlihat",
-    description:
-      "Informasi penting sekolah tersaji dalam satu tempat, tanpa perlu mencari dari banyak bagian.",
-  },
-  {
-    Icon: Share2,
-    title: "Semua lebih terhubung",
-    description:
-      "Akademik, pembayaran, keuangan, absensi, penerimaan siswa, dan kantin berjalan dalam satu ekosistem.",
-  },
-  {
-    Icon: Zap,
-    title: "Keputusan lebih cepat",
-    description:
-      "Data yang jelas membantu pimpinan sekolah menentukan prioritas dan tindak lanjut dengan lebih cepat.",
-  },
-  {
-    Icon: BarChart3,
-    title: "Sekolah lebih siap berkembang",
-    description:
-      "Tim bekerja lebih efisien, layanan lebih modern, dan sekolah memiliki fondasi yang lebih kuat untuk masa depan.",
-  },
-] as const;
 
 /* =========================================================
  * MASK FOTO — foto "larut" ke warna kartu.
@@ -129,6 +32,9 @@ const MASK_AFTER = [
  * ======================================================= */
 
 function ComparisonHeading() {
+  const { comparison } = useContent();
+  const { comparisonHeading } = comparison;
+
   return (
     <Reveal className="mx-auto max-w-4xl text-center">
       <span className="inline-flex items-center gap-2 rounded-full bg-brand-mint px-4 py-1.5 text-[13px] font-semibold tracking-wide text-brand-dark">
@@ -136,25 +42,23 @@ function ComparisonHeading() {
           aria-hidden="true"
           className="size-2 rounded-full bg-brand shadow-[0_0_0_4px_rgba(53,187,130,0.20)]"
         />
-        SEKOLAH ANDA DENGAN QRION
+        {comparisonHeading.eyebrow}
       </span>
 
       <h2
         id="perbandingan-heading"
         className="mt-5 text-[30px] font-bold leading-[1.1] tracking-tight text-foreground sm:text-[42px] lg:text-[54px]"
       >
-        Bayangkan sekolah yang bekerja{" "}
+        {comparisonHeading.titleBefore}{" "}
         <br className="hidden sm:block" />
         <span className="bg-gradient-to-r from-brand to-teal-500 bg-clip-text text-transparent">
-          lebih baik
+          {comparisonHeading.titleHighlight}
         </span>{" "}
-        setiap harinya.
+        {comparisonHeading.titleAfter}
       </h2>
 
       <p className="mx-auto mt-5 max-w-[44rem] text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
-        Bukan sekadar mendigitalisasi pekerjaan yang sudah ada. QRION membantu
-        sekolah menjadi lebih tertata, terhubung, dan mudah dikendalikan—dari
-        ruang pimpinan hingga aktivitas siswa.
+        {comparisonHeading.description}
       </p>
     </Reveal>
   );
@@ -165,21 +69,23 @@ function ComparisonHeading() {
  * ======================================================= */
 
 function BeforeCard() {
+  const { comparison } = useContent();
+  const { beforeCard, fileBadges, images, painPoints } = comparison;
+
   return (
     <article className="relative flex h-full flex-col overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-100 via-slate-100 to-slate-200 lg:min-h-[470px] lg:rounded-[40px]">
       <div className="relative z-10 p-6 sm:p-8 lg:w-[60%] lg:pb-10">
         <span className="inline-flex w-fit items-center rounded-full bg-slate-300/60 px-4 py-1.5 text-[13px] font-semibold text-slate-600">
-          Sebelum QRION
+          {beforeCard.badge}
         </span>
 
         <h3 className="mt-4 font-display text-[22px] font-bold leading-snug text-foreground sm:text-[26px]">
-          Data tersebar,
-          <br className="hidden sm:block" /> keputusan jadi lebih lambat.
+          {beforeCard.titleBefore}
+          <br className="hidden sm:block" /> {beforeCard.titleAfter}
         </h3>
 
         <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-slate-500 lg:max-w-[19rem]">
-          Informasi dari berbagai bagian masih terpisah, rekap manual memakan
-          waktu, dan sulit mendapatkan gambaran utuh tentang kondisi sekolah.
+          {beforeCard.description}
         </p>
 
         <ul className="mt-5 grid gap-3">
@@ -203,7 +109,7 @@ function BeforeCard() {
       {/* Foto latar dengan badge melayang (overflow-visible agar badge di kiri tidak terpotong) */}
       <div className="relative h-[300px] overflow-visible sm:h-[340px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[170%]">
         <Image
-          src="/images/comparison1.png"
+          src={images.before}
           alt="bg"
           fill
           sizes="(min-width:1280px) 30vw, (min-width:1024px) 60vw, 100vw"
@@ -264,14 +170,11 @@ function WidgetCard({
 }
 
 function PaidWidget({ className }: { className?: string }) {
-  const legend = [
-    { label: "Sudah bayar", value: "342", color: "bg-brand" },
-    { label: "Belum lunas", value: "24", color: "bg-amber-400" },
-    { label: "Tunggakan", value: "10", color: "bg-rose-500" },
-  ] as const;
+  const { comparison } = useContent();
+  const { paid } = comparison.comparisonWidgets;
 
   return (
-    <WidgetCard title="Pembayaran SPP" className={className}>
+    <WidgetCard title={paid.title} className={className}>
       <div className="mt-3 flex items-start gap-4">
         <div className="flex shrink-0 flex-col items-center gap-1">
           <span className="relative flex size-16 items-center justify-center">
@@ -301,16 +204,16 @@ function PaidWidget({ className }: { className?: string }) {
               />
             </svg>
             <span className="absolute text-[13px] font-extrabold text-foreground">
-              92%
+              {paid.percent}
             </span>
           </span>
           <span className="whitespace-nowrap text-[10px] text-muted-foreground">
-            Sudah dibayar
+            {paid.caption}
           </span>
         </div>
 
         <ul className="grid flex-1 gap-1.5 pt-1.5">
-          {legend.map((row) => (
+          {paid.legend.map((row) => (
             <li
               key={row.label}
               className="flex items-center justify-between gap-2 text-[11px] text-slate-500"
@@ -339,8 +242,11 @@ const avatarTones = [
 ] as const;
 
 function AttendanceWidget({ className }: { className?: string }) {
+  const { comparison } = useContent();
+  const { attendance } = comparison.comparisonWidgets;
+
   return (
-    <WidgetCard title="Kehadiran Hari Ini" className={className}>
+    <WidgetCard title={attendance.title} className={className}>
       <div className="mt-3 flex items-center justify-between gap-3">
         <span className="flex -space-x-2" aria-hidden="true">
           {avatarTones.map((tone) => (
@@ -361,11 +267,11 @@ function AttendanceWidget({ className }: { className?: string }) {
         </span>
         <span className="grid gap-1 text-right">
           <span className="whitespace-nowrap text-[15px] font-extrabold leading-none text-foreground">
-            96% hadir
+            {attendance.present}
           </span>
           <span className="flex items-center justify-end gap-0.5 whitespace-nowrap text-[10.5px] font-semibold text-brand">
             <TrendingUp aria-hidden="true" className="size-3" />
-            +2% hadir
+            {attendance.delta}
           </span>
         </span>
       </div>
@@ -373,14 +279,15 @@ function AttendanceWidget({ className }: { className?: string }) {
   );
 }
 
-const admissionBars = [34, 48, 40, 66, 100, 58] as const;
-
 function AdmissionWidget({ className }: { className?: string }) {
+  const { comparison } = useContent();
+  const { admission } = comparison.comparisonWidgets;
+
   return (
-    <WidgetCard title="Penerimaan Siswa Baru" className={className}>
+    <WidgetCard title={admission.title} className={className}>
       <div className="mt-3 flex items-end justify-between gap-3">
         <span className="flex h-10 items-end gap-1" aria-hidden="true">
-          {admissionBars.map((height, index) => (
+          {admission.bars.map((height, index) => (
             <span
               key={index}
               className={cn(
@@ -393,12 +300,12 @@ function AdmissionWidget({ className }: { className?: string }) {
         </span>
         <span className="grid gap-1 text-right">
           <span className="whitespace-nowrap text-[16px] font-extrabold leading-none text-foreground">
-            <span className="text-brand">+</span> 84
+            <span className="text-brand">+</span> {admission.count}
           </span>
           <span className="text-[10px] leading-tight text-muted-foreground">
-            Pendaftar baru
+            {admission.captionA}
             <br />
-            minggu ini
+            {admission.captionB}
           </span>
         </span>
       </div>
@@ -406,20 +313,15 @@ function AdmissionWidget({ className }: { className?: string }) {
   );
 }
 
-const financeBars = [
-  { height: 38, tone: "bg-brand/25" },
-  { height: 52, tone: "bg-brand/35" },
-  { height: 46, tone: "bg-brand/50" },
-  { height: 74, tone: "bg-brand/70" },
-  { height: 100, tone: "bg-brand" },
-] as const;
-
 function FinanceWidget({ className }: { className?: string }) {
+  const { comparison } = useContent();
+  const { finance } = comparison.comparisonWidgets;
+
   return (
-    <WidgetCard title="Keuangan Sekolah" className={className}>
+    <WidgetCard title={finance.title} className={className}>
       <div className="mt-3 flex items-end justify-between gap-3">
         <span className="flex h-10 items-end gap-1" aria-hidden="true">
-          {financeBars.map(({ height, tone }, index) => (
+          {finance.bars.map(({ height, tone }, index) => (
             <span
               key={index}
               className={cn("w-2.5 rounded-[3px]", tone)}
@@ -429,11 +331,11 @@ function FinanceWidget({ className }: { className?: string }) {
         </span>
         <span className="grid gap-1 text-right">
           <span className="whitespace-nowrap text-[13px] font-extrabold leading-tight text-foreground">
-            Rp 124.500.000
+            {finance.amount}
           </span>
           <span className="flex items-center justify-end gap-0.5 whitespace-nowrap text-[10px] font-semibold text-brand">
             <TrendingUp aria-hidden="true" className="size-3" />
-            +12% dari bulan lalu
+            {finance.delta}
           </span>
         </span>
       </div>
@@ -446,22 +348,23 @@ function FinanceWidget({ className }: { className?: string }) {
  * ======================================================= */
 
 function AfterCard() {
+  const { comparison } = useContent();
+  const { afterCard, images, modules } = comparison;
+
   return (
     <article className="relative flex h-full flex-col rounded-[32px] border border-brand-mint-medium/60 bg-gradient-to-br from-emerald-50 via-white to-brand-mint-light lg:min-h-[470px] lg:rounded-[40px]">
       <div className="relative z-10 flex flex-1 flex-col px-6 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-8 lg:w-[56%] lg:pb-0 lg:pr-0">
         <span className="inline-flex w-fit items-center rounded-full bg-brand-mint px-4 py-1.5 text-[13px] font-semibold text-brand-dark">
-          Dengan QRION
+          {afterCard.badge}
         </span>
 
         <h3 className="mt-4 font-display text-[22px] font-bold leading-snug text-foreground sm:text-[26px]">
-          Semua terhubung,
-          <br className="hidden sm:block" /> keputusan lebih cepat.
+          {afterCard.titleBefore}
+          <br className="hidden sm:block" /> {afterCard.titleAfter}
         </h3>
 
         <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-slate-500 lg:max-w-[19rem]">
-          Seluruh aktivitas sekolah tersaji dalam satu ekosistem, sehingga Anda
-          dapat melihat kondisi sekolah secara utuh dan mengambil keputusan
-          dengan lebih percaya diri.
+          {afterCard.description}
         </p>
 
         {/* Box menu modul — di desktop menempel ke dasar kartu */}
@@ -486,7 +389,7 @@ function AfterCard() {
       {/* Foto latar */}
       <div className="relative h-[300px] sm:h-[340px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[80%] lg:overflow-hidden lg:rounded-r-[40px]">
         <Image
-          src="/images/comparison2.png"
+          src={images.after}
           alt="bg"
           fill
           sizes="(min-width:1280px) 30vw, (min-width:1024px) 60vw, 100vw"
@@ -510,6 +413,9 @@ function AfterCard() {
  * ======================================================= */
 
 function FeatureGrid() {
+  const { comparison } = useContent();
+  const { features } = comparison;
+
   return (
     <div className="mt-14 grid gap-10 sm:grid-cols-2 sm:gap-y-12 lg:mt-20 lg:grid-cols-4 lg:gap-0">
       {features.map(({ Icon, title, description }, index) => (

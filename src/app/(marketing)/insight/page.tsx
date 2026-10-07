@@ -7,10 +7,11 @@ import { PageHero } from "@/components/sections/page-hero";
 import { ArticleCard } from "@/components/sections/article-card";
 import { OncardRipple } from "@/components/product/designs/interactive/oncard-ripple";
 import {
-  articleCategoryList,
-  articlesByCategory,
-  latestArticles,
-} from "@/data/articles";
+  articlesInCategory,
+  buildCategoryList,
+  getPublishedArticles,
+  latest,
+} from "@/lib/articles-data";
 
 export const metadata: Metadata = {
   title: "Artikel",
@@ -19,8 +20,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/insight" },
 };
 
-export default function InsightPage() {
-  const featured = latestArticles(3);
+export default async function InsightPage() {
+  const articles = await getPublishedArticles();
+  const featured = latest(articles, 3);
+  const categories = buildCategoryList(articles);
 
   return (
     <>
@@ -46,8 +49,8 @@ export default function InsightPage() {
       </Section>
 
       {/* Section per kategori + "Lihat Selengkapnya" */}
-      {articleCategoryList.map((category, index) => {
-        const categoryArticles = articlesByCategory(category.slug).slice(0, 6);
+      {categories.map((category, index) => {
+        const categoryArticles = articlesInCategory(articles, category.slug).slice(0, 6);
         return (
           <Section
             key={category.slug}

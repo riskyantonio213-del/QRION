@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { ArticleCard } from "@/components/sections/article-card";
@@ -9,14 +12,15 @@ import { OncardRipple } from "@/components/product/designs/interactive/oncard-ri
 import { latestArticles } from "@/data/articles";
 
 export function InsightSection() {
+  const { insightHeader } = useContent().home;
   const latest = latestArticles(3);
 
   return (
     <Section id="wawasan" aria-labelledby="wawasan-heading">
       <SectionHeader
-        eyebrow="Wawasan"
-        title={<span id="wawasan-heading">Wawasan &amp; Artikel Terbaru</span>}
-        description="Berbagai artikel pilihan yang membahas teknologi, manajemen, dan inovasi di lingkungan sekolah."
+        eyebrow={insightHeader.eyebrow}
+        title={<span id="wawasan-heading">{insightHeader.title}</span>}
+        description={insightHeader.description}
       />
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

@@ -5,6 +5,14 @@ export type Testimonial = {
   photo: string;
 };
 
+/** Header section Testimoni (pindah dari data/home.ts). */
+export const testimonialHeader = {
+  eyebrow: "Testimoni",
+  title: "Apa Kata Mitra Kami",
+  description:
+    "Pengalaman langsung dari sekolah dan pengguna yang telah merasakan manfaat ekosistem digital kami.",
+};
+
 /** Testimoni mitra — diambil dari https://qrion.id/ ("Apa Kata Mitra Kami"). */
 export const testimonials: Testimonial[] = [
   {

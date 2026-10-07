@@ -1,9 +1,13 @@
+"use client";
+
+import { useContent } from "@/components/admin/content-provider";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { MitraScroll } from "@/components/sections/mitra-scroll";
-import { trust } from "@/data/home";
 
 export function TrustSection() {
+  const { trust } = useContent().home;
+
   return (
     <section
       id="kepercayaan"
@@ -11,7 +15,7 @@ export function TrustSection() {
     >
       <Container>
         <SectionHeader
-          eyebrow="Kepercayaan"
+          eyebrow={trust.eyebrow}
           title={trust.title}
           description={trust.description}
           titleClassName="text-[22px] sm:text-[26px] lg:text-[28px]"

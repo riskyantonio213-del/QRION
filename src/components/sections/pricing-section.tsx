@@ -1,12 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Fragment } from "react";
 import { ArrowRight, Check } from "lucide-react";
 
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import CountUp from "@/components/motion/count-up";
 import { Reveal } from "@/components/motion/reveal";
-import { pricingCallout, pricingPlans, pricingTrust, type PricingPlan } from "@/data/pricing";
+import type { PricingPlan } from "@/data/pricing";
 import { externalLinkProps } from "@/lib/utils";
 
 function TitleDashes() {
@@ -125,6 +128,9 @@ function PlanCard({ plan, index }: { plan: PricingPlan; index: number }) {
 }
 
 export function PricingSection() {
+  const { pricingCallout, pricingHeader, pricingPlans, pricingTrust } =
+    useContent().pricing;
+
   return (
     <Section
       id="paket"
@@ -135,21 +141,20 @@ export function PricingSection() {
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-mint px-4 py-2 text-[13px] font-semibold text-brand-dark">
             <span aria-hidden="true" className="size-2 rounded-full bg-brand" />
-            Paket Langganan
+            {pricingHeader.eyebrow}
           </span>
 
           <h2
             id="paket-heading"
             className="mt-6 text-balance text-[28px] font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:text-4xl lg:text-[44px]"
           >
-            Pilih Paket Sesuai
+            {pricingHeader.titleBefore}
             <TitleDashes />
-            Kebutuhan Sekolah
+            {pricingHeader.titleAfter}
           </h2>
 
           <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-slate-500 sm:text-base">
-            Solusi praktis untuk mendukung operasional, pembelajaran, absensi, dan
-            keuangan sekolah dalam satu ekosistem QRION.
+            {pricingHeader.description}
           </p>
         </div>
       </Reveal>
@@ -181,7 +186,7 @@ export function PricingSection() {
       <Reveal delay={0.15}>
         <div className="relative mt-14 overflow-hidden rounded-[28px] bg-gradient-to-br from-[#eafaf3] via-white to-[#dcf4ea] ring-1 ring-brand-mint">
           <Image
-            src="/images/bg.png"
+            src={pricingCallout.image}
             alt=""
             aria-hidden="true"
             width={1920}

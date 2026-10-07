@@ -15,7 +15,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { mainNav, externalLinks, ctaLinks } from "@/config/site";
+import { mainNav, ctaLinks } from "@/config/site";
 import { MobileNavItem, isActivePath } from "@/components/layout/mobile-nav-item";
 import { LivePreviewMenuPanel } from "@/components/live-preview/live-preview-menu-panel";
 import { products } from "@/data/products";
@@ -46,9 +46,8 @@ function navLinkClasses({
 }
 
 /**
- * `Masuk` points at the customer portal. The URL is not configured yet, so the
- * control renders as a disabled button instead of a dead link. Set
- * NEXT_PUBLIC_LOGIN_URL (see src/config/site.ts) to enable it.
+ * `Masuk` membuka panel admin (/masuk). Halaman login menampilkan navbar &
+ * footer situs sehingga tautan ini tetap berada dalam route group (marketing).
  */
 function LoginButton({
   className,
@@ -57,25 +56,9 @@ function LoginButton({
   className?: string;
   variant?: "secondary" | "inverted-outline";
 }) {
-  if (!externalLinks.login) {
-    return (
-      <Button
-        variant={variant}
-        size="sm"
-        disabled
-        title="Portal masuk akan tersedia setelah URL diatur"
-        className={className}
-      >
-        Masuk
-      </Button>
-    );
-  }
-
   return (
     <Button variant={variant} size="sm" asChild className={className}>
-      <a href={externalLinks.login} rel="noopener noreferrer">
-        Masuk
-      </a>
+      <Link href="/masuk">Masuk</Link>
     </Button>
   );
 }

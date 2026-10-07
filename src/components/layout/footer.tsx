@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
+import { useContent } from "@/components/admin/content-provider";
 import { Container } from "@/components/layout/container";
 import { Logo, LogoMark } from "@/components/layout/logo";
 import {
@@ -10,7 +13,6 @@ import {
   siteConfig,
   socialLinks,
 } from "@/config/site";
-import { finalCta } from "@/data/home";
 import { externalLinkProps } from "@/lib/utils";
 
 function SocialButton({
@@ -50,6 +52,7 @@ function SocialButton({
 }
 
 export function Footer() {
+  const { finalCta } = useContent().home;
   const year = new Date().getFullYear();
 
   return (

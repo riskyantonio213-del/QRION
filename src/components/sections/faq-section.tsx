@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -23,24 +23,20 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
+import { useContent } from "@/components/admin/content-provider";
 import { ctaLinks } from "@/config/site";
+import {
+  type FaqItem,
+  type FaqTone,
+} from "@/data/home-faq";
 import { cn, externalLinkProps } from "@/lib/utils";
 
 /* =========================================================
- * FAQ CONTENT
- *
- * Hanya dipakai oleh section ini; data FAQ existing di
- * src/data/faq.ts tidak disentuh.
+ * FAQ CONTENT — pindah ke src/data/home-faq.tsx.
+ * Data FAQ existing di src/data/faq.ts tidak disentuh.
  * ======================================================= */
 
-type Tone = "emerald" | "blue" | "violet" | "rose" | "orange";
-
-type FaqItem = {
-  question: string;
-  answer: ReactNode;
-  icon?: LucideIcon;
-  tone?: Tone;
-};
+type Tone = FaqTone;
 
 type ResolvedFaqItem = FaqItem & { icon: LucideIcon; tone: Tone };
 
@@ -67,94 +63,6 @@ const toneClasses: Record<Tone, string> = {
   orange: "bg-orange-50 text-orange-500",
 };
 
-const FAQS: FaqItem[] = [
-  {
-    question: "Apa itu QRION?",
-    icon: Package,
-    tone: "emerald",
-    answer:
-      "QRION adalah ekosistem digital sekolah yang mengintegrasikan seluruh operasional sekolah dalam satu platform, mulai dari pembayaran, absensi, pembelajaran, manajemen keuangan, penerimaan siswa, hingga sistem kasir kantin.",
-  },
-  {
-    question: "Berapa harga paket QRION?",
-    icon: CreditCard,
-    tone: "blue",
-    answer: (
-      <div className="space-y-3">
-        <p>
-          QRION tersedia dalam beberapa pilihan paket yang dapat disesuaikan
-          dengan kebutuhan sekolah. Untuk informasi harga terbaru dan kebutuhan
-          implementasi, silakan hubungi tim QRION.
-        </p>
-        <ul className="space-y-1.5">
-          {[
-            "Paket Ontuition + QRION Jurnal",
-            "Paket Oncard + Ontime",
-            "Paket Komplit (semua ekosistem)",
-          ].map((packageName) => (
-            <li key={packageName} className="flex items-start gap-2.5">
-              <span
-                aria-hidden="true"
-                className="mt-[7px] size-1.5 shrink-0 rounded-full bg-blue-500"
-              />
-              <span>{packageName}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ),
-  },
-  {
-    question: "Apa saja yang termasuk dalam Paket Komplit?",
-    icon: Layers,
-    tone: "violet",
-    answer:
-      "Paket Komplit menggabungkan layanan utama QRION dalam satu ekosistem terintegrasi untuk operasional, akademik, pembayaran, komunikasi, dan kebutuhan administrasi sekolah.",
-  },
-  {
-    question: "Apakah QRION SPMB benar-benar gratis?",
-    icon: Gift,
-    tone: "rose",
-    answer:
-      "QRION menyediakan solusi SPMB yang dapat digunakan sekolah untuk membantu proses penerimaan siswa baru. Detail program dan ketentuannya dapat dikonfirmasi kepada tim QRION.",
-  },
-  {
-    question: "Berapa lama proses implementasi QRION?",
-    icon: Settings,
-    tone: "orange",
-    answer:
-      "Waktu implementasi menyesuaikan ukuran sekolah, kebutuhan modul, proses migrasi data, serta pelatihan tim sekolah.",
-  },
-  {
-    question: "Apakah tersedia pelatihan untuk sekolah?",
-    icon: BookOpen,
-    tone: "emerald",
-    answer:
-      "Ya. Tim QRION dapat membantu proses onboarding dan pelatihan agar admin, guru, dan pihak sekolah dapat menggunakan sistem dengan nyaman.",
-  },
-  {
-    question: "Apakah data sekolah aman di QRION?",
-    icon: ShieldCheck,
-    tone: "blue",
-    answer:
-      "QRION dirancang dengan perhatian terhadap keamanan dan pengelolaan data agar informasi sekolah dapat dikelola secara terstruktur dan terlindungi.",
-  },
-  {
-    question: "Apakah bisa mencoba sistem terlebih dahulu?",
-    icon: PlayCircle,
-    tone: "rose",
-    answer:
-      "Ya. Sekolah dapat mencoba pengalaman QRION melalui demo atau live preview sebelum menentukan implementasi.",
-  },
-  {
-    question: "Siapa saja yang bisa menggunakan QRION?",
-    icon: Users,
-    tone: "violet",
-    answer:
-      "QRION dirancang untuk kepala sekolah, admin, guru, orang tua, siswa, serta pihak lain yang terlibat dalam ekosistem operasional sekolah.",
-  },
-];
-
 /* =========================================================
  * CONTACT CARD
  * ======================================================= */
@@ -166,6 +74,8 @@ const AVATARS = [
 ] as const;
 
 function ContactCard() {
+  const { faqContact } = useContent().faq;
+
   return (
     <div className="mt-8 w-full max-w-md rounded-[26px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_18px_50px_rgba(48,46,89,0.08)] backdrop-blur-sm sm:p-7">
       <div className="flex items-center" aria-hidden="true">
@@ -187,10 +97,10 @@ function ContactCard() {
       </div>
 
       <h3 className="mt-5 text-lg font-bold text-slate-900">
-        Masih ada pertanyaan?
+        {faqContact.title}
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Tim kami siap membantu Anda menemukan solusi terbaik untuk sekolah Anda.
+        {faqContact.description}
       </p>
 
       <Link
@@ -199,7 +109,7 @@ function ContactCard() {
         className="mt-5 inline-flex items-center gap-3 rounded-full bg-slate-950 py-3 pl-5 pr-4 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
       >
         <MessageCircle aria-hidden="true" className="size-4" />
-        Hubungi tim kami
+        {faqContact.ctaLabel}
         <ArrowRight aria-hidden="true" className="ml-2 size-4" />
       </Link>
     </div>
@@ -279,7 +189,27 @@ function FaqAccordionItem({
           >
             <div className="px-5 pb-5 pt-1 sm:px-6">
               <div className="max-w-[58ch] pl-14 pr-2 text-[14.5px] leading-relaxed text-muted-foreground sm:pr-6">
-                {item.answer}
+                {typeof item.answer === "string" ? (
+                  item.answer
+                ) : (
+                  <div className="space-y-3">
+                    <p>{item.answer.intro}</p>
+                    <ul className="space-y-1.5">
+                      {item.answer.bullets.map((packageName) => (
+                        <li
+                          key={packageName}
+                          className="flex items-start gap-2.5"
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="mt-[7px] size-1.5 shrink-0 rounded-full bg-blue-500"
+                          />
+                          <span>{packageName}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -303,10 +233,11 @@ export function FAQSection({
   items,
   background = "default",
 }: FAQSectionProps) {
+  const { faqHeader, faqImage, homeFaq } = useContent().faq;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [imageFailed, setImageFailed] = useState(false);
 
-  const list: ResolvedFaqItem[] = (items ?? FAQS).map((item, index) => ({
+  const list: ResolvedFaqItem[] = (items ?? homeFaq).map((item, index) => ({
     ...item,
     icon: item.icon ?? ICON_POOL[index % ICON_POOL.length],
     tone: item.tone ?? TONE_POOL[index % TONE_POOL.length],
@@ -337,7 +268,7 @@ export function FAQSection({
           <div className="absolute inset-0 bg-gradient-to-tr from-brand-soft via-brand-mint to-transparent" />
         ) : (
           <Image
-            src="/images/faq-school.jpg"
+            src={faqImage}
             alt=""
             fill
             sizes="46vw"
@@ -354,23 +285,23 @@ export function FAQSection({
         <div>
           <Reveal>
             <span className="inline-flex items-center rounded-full bg-brand-mint px-4 py-1.5 text-[13px] font-semibold text-brand-dark">
-              FAQ
+              {faqHeader.pill}
             </span>
 
             <h2
               id="faq-heading"
               className="mt-5 text-[38px] font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-[46px] lg:text-[54px] xl:text-[60px]"
             >
-              Pertanyaan
+              {faqHeader.line1}
               <br />
-              yang <span className="text-brand">Sering</span>
+              {faqHeader.line2Before}{" "}
+              <span className="text-brand">{faqHeader.line2Highlight}</span>
               <br />
-              <span className="text-brand-green">Ditanyakan</span>
+              <span className="text-brand-green">{faqHeader.line3}</span>
             </h2>
 
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
-              Temukan jawaban cepat untuk pertanyaan umum seputar produk, harga,
-              implementasi, dan penggunaan QRION.
+              {faqHeader.description}
             </p>
           </Reveal>
 

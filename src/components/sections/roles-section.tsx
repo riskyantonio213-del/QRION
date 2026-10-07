@@ -5,57 +5,17 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
-import { roles } from "@/data/home";
+import { useContent } from "@/components/admin/content-provider";
+import type { IconCard, RoleVisual } from "@/data/home";
 
-/* =========================================================
- * VISUAL CONFIG
- *
- * Ganti path image sesuai file yang kamu punya di /public.
- * ======================================================= */
+type Role = IconCard & { visual: RoleVisual };
 
-const ROLE_VISUALS: Record<
-  string,
-  {
-    image: string;
-    highlight: string;
-    subHighlight: string;
-    theme: "green" | "blue";
-  }
-> = {
-  "Manajemen Sekolah": {
-    image: "/UseCase/kepsek.png",
-    highlight: "Data Real-time",
-    subHighlight: "Kontrol sekolah di satu layar",
-    theme: "green",
-  },
-
-  Administrator: {
-    image: "/UseCase/admin.png",
-    highlight: "Tertata",
-    subHighlight: "Administrasi lebih terstruktur",
-    theme: "green",
-  },
-
-  Guru: {
-    image: "/UseCase/guru.png",
-    highlight: "+Efisien",
-    subHighlight: "Lebih banyak waktu untuk mengajar",
-    theme: "blue",
-  },
-
-  "Orang Tua": {
-    image: "/UseCase/ortu.png",
-    highlight: "Semua Terhubung",
-    subHighlight: "Lebih dekat dengan sekolah",
-    theme: "green",
-  },
-
-  Siswa: {
-    image: "/UseCase/murid.png",
-    highlight: "Lebih Mandiri",
-    subHighlight: "Semangat belajar setiap hari",
-    theme: "blue",
-  },
+/** Fallback visual kartu foto — nilai identik dengan role "Guru". */
+const GURU_VISUAL_FALLBACK: RoleVisual = {
+  image: "/UseCase/guru.png",
+  highlight: "+Efisien",
+  subHighlight: "Lebih banyak waktu untuk mengajar",
+  theme: "blue",
 };
 
 /* =========================================================
@@ -65,12 +25,12 @@ const ROLE_VISUALS: Record<
 function RoleInfoCard({
   role,
 }: {
-  role: (typeof roles)[number];
+  role: Role;
 }) {
   const Icon = role.icon;
 
   const visual =
-    ROLE_VISUALS[role.title] ??
+    role.visual ??
     ({
       image: "/images/roles/default.jpg",
       highlight: "Terintegrasi",
@@ -288,11 +248,9 @@ function RoleInfoCard({
 function RoleImageCard({
   role,
 }: {
-  role: (typeof roles)[number];
+  role: Role;
 }) {
-  const visual =
-    ROLE_VISUALS[role.title] ??
-    ROLE_VISUALS.Guru;
+  const visual = role.visual ?? GURU_VISUAL_FALLBACK;
 
   return (
     <article
@@ -360,6 +318,8 @@ function RolesLoopGroup({
 }: {
   groupIndex: number;
 }) {
+  const { roles } = useContent().home;
+
   return (
     <div
       className="
@@ -387,6 +347,7 @@ function RolesLoopGroup({
  * ======================================================= */
 
 export function RolesSection() {
+  const { rolesHeader } = useContent().home;
   const prefersReducedMotion =
     useReducedMotion() ?? false;
 
@@ -464,25 +425,25 @@ export function RolesSection() {
               font-semibold
               text-emerald-800
             "
-          >
-            Use case
-          </div>
+            >
+              {rolesHeader.eyebrow}
+            </div>
 
-          {/* TITLE */}
-          <h2
-            id="peran-heading"
-            className="
-              mt-6
-              text-4xl
-              font-extrabold
-              tracking-[-0.04em]
-              text-slate-950
-              sm:text-5xl
-              lg:text-[56px]
-            "
-          >
-            Untuk siapa QRION dirancang
-          </h2>
+            {/* TITLE */}
+            <h2
+              id="peran-heading"
+              className="
+                mt-6
+                text-4xl
+                font-extrabold
+                tracking-[-0.04em]
+                text-slate-950
+                sm:text-5xl
+                lg:text-[56px]
+              "
+            >
+              {rolesHeader.title}
+            </h2>
         </div>
       </Reveal>
 

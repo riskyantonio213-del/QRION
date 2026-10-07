@@ -15,19 +15,12 @@ import {
   useSyncExternalStore,
   type CSSProperties,
 } from "react";
-import {
-  Check,
-  CreditCard,
-  GraduationCap,
-  MessagesSquare,
-  ScanFace,
-  type LucideIcon,
-} from "lucide-react";
+import { Check, type LucideIcon } from "lucide-react";
 
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import TechText from "@/components/tech-text";
-import { dashboardSection, hero } from "@/data/home";
+import { useContent } from "@/components/admin/content-provider";
 
 /**
  * Hero stage berlapis (konsep parallax ala FintechX Framer template):
@@ -303,6 +296,7 @@ function DashboardFeatureCard({
  * ======================================================= */
 
 export function Hero() {
+  const { hero, heroFloatingCards } = useContent().home;
   const stageRef = useRef<HTMLDivElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
   const dashImgRef = useRef<HTMLImageElement>(null);
@@ -878,11 +872,11 @@ export function Hero() {
         >
           <div className="rotate-[5deg]">
             <DashboardFeatureCard
-              icon={ScanFace}
-              title="Absensi"
-              description="Lebih mudah dengan wajah"
-              iconBoxClassName="bg-blue-50"
-              iconClassName="text-blue-500"
+              icon={heroFloatingCards.absensi.icon}
+              title={heroFloatingCards.absensi.title}
+              description={heroFloatingCards.absensi.description}
+              iconBoxClassName={heroFloatingCards.absensi.iconBoxClassName}
+              iconClassName={heroFloatingCards.absensi.iconClassName}
             />
           </div>
         </motion.div>
@@ -932,11 +926,11 @@ export function Hero() {
         >
           <div className="rotate-[3deg]">
             <DashboardFeatureCard
-              icon={CreditCard}
-              title="Pembayaran"
-              description="Non-tunai di kantin sekolah"
-              iconBoxClassName="bg-emerald-50"
-              iconClassName="text-emerald-500"
+              icon={heroFloatingCards.pembayaran.icon}
+              title={heroFloatingCards.pembayaran.title}
+              description={heroFloatingCards.pembayaran.description}
+              iconBoxClassName={heroFloatingCards.pembayaran.iconBoxClassName}
+              iconClassName={heroFloatingCards.pembayaran.iconClassName}
             />
           </div>
         </motion.div>
@@ -986,11 +980,11 @@ export function Hero() {
         >
           <div className="-rotate-[5deg]">
             <DashboardFeatureCard
-              icon={GraduationCap}
-              title="Akademik"
-              description="Nilai & rapor dalam satu sistem"
-              iconBoxClassName="bg-blue-50"
-              iconClassName="text-blue-600"
+              icon={heroFloatingCards.akademik.icon}
+              title={heroFloatingCards.akademik.title}
+              description={heroFloatingCards.akademik.description}
+              iconBoxClassName={heroFloatingCards.akademik.iconBoxClassName}
+              iconClassName={heroFloatingCards.akademik.iconClassName}
             />
           </div>
         </motion.div>
@@ -1040,11 +1034,11 @@ export function Hero() {
         >
           <div className="-rotate-[3deg]">
             <DashboardFeatureCard
-              icon={MessagesSquare}
-              title="Komunikasi"
-              description="Sekolah, orang tua dan siswa terhubung"
-              iconBoxClassName="bg-sky-50"
-              iconClassName="text-sky-500"
+              icon={heroFloatingCards.komunikasi.icon}
+              title={heroFloatingCards.komunikasi.title}
+              description={heroFloatingCards.komunikasi.description}
+              iconBoxClassName={heroFloatingCards.komunikasi.iconBoxClassName}
+              iconClassName={heroFloatingCards.komunikasi.iconClassName}
             />
           </div>
         </motion.div>
@@ -1067,7 +1061,7 @@ export function Hero() {
             <Reveal className="mt-0">
               <Image
                 ref={dashImgRef}
-                src="/images/onboard.png"
+                src={hero.dashboardImage}
                 alt="Dashboard ONBOARD QRION"
                 width={1280}
                 height={703}

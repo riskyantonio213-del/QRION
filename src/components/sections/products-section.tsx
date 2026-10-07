@@ -1,8 +1,13 @@
+"use client";
+
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { ProductsShowcase } from "@/components/sections/products-showcase";
 
 export function ProductsSection() {
+  const { productsHeader } = useContent().showcase;
+
   return (
     <Section
       id="produk"
@@ -12,13 +17,11 @@ export function ProductsSection() {
       containerClassName="max-w-[1400px]"
     >
       <SectionHeader
-        eyebrow="Produk"
+        eyebrow={productsHeader.eyebrow}
         title={
-          <span id="produk-heading">
-            Modul yang Dapat Digunakan Sesuai Kebutuhan
-          </span>
+          <span id="produk-heading">{productsHeader.title}</span>
         }
-        description="Setiap modul QRION dapat digunakan secara mandiri, dan bekerja paling optimal ketika dihubungkan dalam satu ekosistem."
+        description={productsHeader.description}
       />
 
       <ProductsShowcase />

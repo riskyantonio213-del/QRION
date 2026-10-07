@@ -6,13 +6,16 @@ import {
   ClipboardCheck,
   ClipboardList,
   Clock,
+  CreditCard,
   Database,
   Eye,
   Gauge,
   GraduationCap,
   Layers,
+  MessagesSquare,
   NotebookPen,
   Rocket,
+  ScanFace,
   Search,
   Table2,
   UserCheck,
@@ -47,9 +50,44 @@ export const hero = {
   secondaryCta: { label: "Jadwalkan Demo", href: "https://api.whatsapp.com/send/?phone=628216195202&text=Halo+Qrion%2C+Saya+mau+konsultasi+gratis&type=phone_number&app_absent=0" },
   trustNote:
     "Teknologi yang dirancang untuk membuat operasional sekolah lebih sederhana, transparan, dan terintegrasi.",
+  /** Gambar dashboard hero — satu-satunya gambar yang bisa dikustom di hero. */
+  dashboardImage: "/images/onboard.png",
+};
+
+/** 4 kartu fitur melayang di sekitar dashboard hero. */
+export const heroFloatingCards = {
+  absensi: {
+    icon: ScanFace,
+    title: "Absensi",
+    description: "Lebih mudah dengan wajah",
+    iconBoxClassName: "bg-blue-50",
+    iconClassName: "text-blue-500",
+  },
+  pembayaran: {
+    icon: CreditCard,
+    title: "Pembayaran",
+    description: "Non-tunai di kantin sekolah",
+    iconBoxClassName: "bg-emerald-50",
+    iconClassName: "text-emerald-500",
+  },
+  akademik: {
+    icon: GraduationCap,
+    title: "Akademik",
+    description: "Nilai & rapor dalam satu sistem",
+    iconBoxClassName: "bg-blue-50",
+    iconClassName: "text-blue-600",
+  },
+  komunikasi: {
+    icon: MessagesSquare,
+    title: "Komunikasi",
+    description: "Sekolah, orang tua dan siswa terhubung",
+    iconBoxClassName: "bg-sky-50",
+    iconClassName: "text-sky-500",
+  },
 };
 
 export const trust = {
+  eyebrow: "Kepercayaan",
   title: "Dipercaya untuk Mendukung Transformasi Digital Pendidikan",
   description:
     "QRION dikembangkan bersama kebutuhan institusi pendidikan — mulai dari sekolah, madrasah, hingga pesantren.",
@@ -163,35 +201,73 @@ export const benefits: IconCard[] = [
 
 /**
  * Section 9 — User roles.
+ * `visual` dipindahkan utuh dari ROLE_VISUALS di roles-section.tsx.
  */
-export const roles: IconCard[] = [
+export type RoleVisual = {
+  image: string;
+  highlight: string;
+  subHighlight: string;
+  theme: "green" | "blue";
+};
+
+export const roles: (IconCard & { visual: RoleVisual })[] = [
   {
     title: "Manajemen Sekolah",
     description:
       "Mendapatkan visibilitas terhadap aktivitas dan operasional sekolah.",
     icon: Building2,
+    visual: {
+      image: "/UseCase/kepsek.png",
+      highlight: "Data Real-time",
+      subHighlight: "Kontrol sekolah di satu layar",
+      theme: "green",
+    },
   },
   {
     title: "Administrator",
     description:
       "Mengelola data serta aktivitas administratif dengan lebih terstruktur.",
     icon: ClipboardCheck,
+    visual: {
+      image: "/UseCase/admin.png",
+      highlight: "Tertata",
+      subHighlight: "Administrasi lebih terstruktur",
+      theme: "green",
+    },
   },
   {
     title: "Guru",
     description: "Mendukung aktivitas pembelajaran dan pencatatan jurnal.",
     icon: NotebookPen,
+    visual: {
+      image: "/UseCase/guru.png",
+      highlight: "+Efisien",
+      subHighlight: "Lebih banyak waktu untuk mengajar",
+      theme: "blue",
+    },
   },
   {
     title: "Orang Tua",
     description: "Mendapatkan informasi penting terkait aktivitas siswa.",
     icon: Users2,
+    visual: {
+      image: "/UseCase/ortu.png",
+      highlight: "Semua Terhubung",
+      subHighlight: "Lebih dekat dengan sekolah",
+      theme: "green",
+    },
   },
   {
     title: "Siswa",
     description:
       "Mendapat pengalaman layanan sekolah yang lebih terintegrasi.",
     icon: GraduationCap,
+    visual: {
+      image: "/UseCase/murid.png",
+      highlight: "Lebih Mandiri",
+      subHighlight: "Semangat belajar setiap hari",
+      theme: "blue",
+    },
   },
 ];
 
@@ -213,4 +289,20 @@ export const dashboardSection = {
     "Data dikelompokkan per modul agar mudah ditelusuri",
     "Dapat disesuaikan dengan kebutuhan pelaporan sekolah",
   ],
+};
+
+/**
+ * Header SectionHeader tiap section homepage.
+ * (id `*-heading` tetap di komponen agar ARIA tidak berubah.)
+ */
+export const insightHeader = {
+  eyebrow: "Wawasan",
+  title: "Wawasan & Artikel Terbaru",
+  description:
+    "Berbagai artikel pilihan yang membahas teknologi, manajemen, dan inovasi di lingkungan sekolah.",
+};
+
+export const rolesHeader = {
+  eyebrow: "Use case",
+  title: "Untuk siapa QRION dirancang",
 };

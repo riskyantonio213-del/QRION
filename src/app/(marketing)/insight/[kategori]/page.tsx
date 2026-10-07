@@ -5,11 +5,12 @@ import { notFound } from "next/navigation";
 import { Section } from "@/components/layout/section";
 import { PageHero } from "@/components/sections/page-hero";
 import { ArticleCard } from "@/components/sections/article-card";
+import { articleCategoryList, getCategoryBySlug } from "@/data/articles";
 import {
-  articleCategoryList,
-  articlesByCategory,
-  getCategoryBySlug,
-} from "@/data/articles";
+  articlesInCategory,
+  buildCategoryList,
+  getPublishedArticles,
+} from "@/lib/articles-data";
 import { cn } from "@/lib/utils";
 
 type KategoriRouteProps = {
@@ -42,13 +43,17 @@ export default async function KategoriArtikelPage({
   params,
 }: KategoriRouteProps) {
   const { kategori } = await params;
-  const category = getCategoryBySlug(kategori);
+  const published = await getPublishedArticles();
+  const allCategories = buildCategoryList(published);
+  const category =
+    allCategories.find((item) => item.slug === kategori) ??
+    getCategoryBySlug(kategori);
 
   if (!category) {
     notFound();
   }
 
-  const categoryArticles = articlesByCategory(category.slug);
+  const categoryArticles = articlesInCategory(published, category.slug);
 
   return (
     <>
@@ -69,7 +74,7 @@ export default async function KategoriArtikelPage({
           <span className="mr-1 text-[13px] font-semibold text-muted-foreground">
             Kategori Lainnya
           </span>
-          {articleCategoryList.map((item) =>
+          {allCategories.map((item) =>
             item.slug === category.slug ? (
               <span
                 key={item.slug}

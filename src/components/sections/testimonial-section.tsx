@@ -1,10 +1,13 @@
+"use client";
+
 import { Quote } from "lucide-react";
 
+import { useContent } from "@/components/admin/content-provider";
 import { Section } from "@/components/layout/section";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
 import { ExternalImage } from "@/components/ui/external-image";
-import { testimonials } from "@/data/testimonials";
+import type { Testimonial } from "@/data/testimonials";
 
 /**
  * Marquee testimoni — looping mulus tanpa jeda.
@@ -19,7 +22,7 @@ import { testimonials } from "@/data/testimonials";
 function TestimonialCard({
   testimonial,
 }: {
-  testimonial: (typeof testimonials)[number];
+  testimonial: Testimonial;
 }) {
   return (
     <figure className="flex h-full flex-col gap-4 rounded-2xl border border-border bg-background p-6 shadow-[0_8px_30px_rgba(48,46,89,0.05)] transition duration-300 hover:-translate-y-1.5 hover:border-brand-mint-medium hover:shadow-[0_20px_46px_rgba(48,46,89,0.10)]">
@@ -53,6 +56,7 @@ function TestimonialCard({
 }
 
 export function TestimonialSection() {
+  const { testimonials, testimonialHeader } = useContent().testimonials;
   const count = testimonials.length;
   const loop = [...testimonials, ...testimonials];
 
@@ -63,9 +67,9 @@ export function TestimonialSection() {
       aria-labelledby="testimoni-heading"
     >
       <SectionHeader
-        eyebrow="Testimoni"
-        title={<span id="testimoni-heading">Apa Kata Mitra Kami</span>}
-        description="Pengalaman langsung dari sekolah dan pengguna yang telah merasakan manfaat ekosistem digital kami."
+        eyebrow={testimonialHeader.eyebrow}
+        title={<span id="testimoni-heading">{testimonialHeader.title}</span>}
+        description={testimonialHeader.description}
       />
 
       <Reveal delay={0.1}>

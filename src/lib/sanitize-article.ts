@@ -13,7 +13,12 @@ export function neutralizeArticleLinks(html: string): string {
       const href = hrefMatch?.[1].trim() ?? "";
 
       if (href.startsWith("#")) {
-        return `<a${attrs}>${inner}</a>`;
+        // Anchor internal: buang target/rel agar klik men-scroll di tab yang
+        // sama (target="_blank" akan membuka tab baru, scroll jadi tak terasa).
+        const cleaned = attrs
+          .replace(/\s+target="[^"]*"/gi, "")
+          .replace(/\s+rel="[^"]*"/gi, "");
+        return `<a${cleaned}>${inner}</a>`;
       }
 
       const hashAt = href.indexOf("#");

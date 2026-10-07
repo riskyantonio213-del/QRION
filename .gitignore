@@ -31,3 +31,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# admin panel (override konten, akun, sesi)
+.qrion-admin/
