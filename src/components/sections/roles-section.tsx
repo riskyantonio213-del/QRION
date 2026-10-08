@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
+import { useDragMarquee } from "@/components/motion/use-drag-marquee";
 import { useContent } from "@/components/admin/content-provider";
 import type { IconCard, RoleVisual } from "@/data/home";
 
@@ -348,8 +349,9 @@ function RolesLoopGroup({
 
 export function RolesSection() {
   const { rolesHeader } = useContent().home;
-  const prefersReducedMotion =
-    useReducedMotion() ?? false;
+  const { containerRef, trackRef, x, dragging, handlers } = useDragMarquee({
+    duration: 38,
+  });
 
   return (
     <Section
@@ -465,43 +467,32 @@ export function RolesSection() {
        * ================================================= */}
 
       <div
-        className="
+        ref={containerRef}
+        className={`
           relative
           left-1/2
           mt-14
           w-screen
           -translate-x-1/2
           overflow-hidden
-        "
+          cursor-grab
+          active:cursor-grabbing
+          ${dragging ? "select-none" : ""}
+        `}
+        style={{ touchAction: "pan-y" }}
+        {...handlers}
       >
         <motion.div
+          ref={trackRef}
           className="
             flex
             w-max
             items-stretch
           "
           style={{
+            x,
             willChange: "transform",
           }}
-          animate={
-            prefersReducedMotion
-              ? undefined
-              : {
-                x: ["0%", "-50%"],
-              }
-          }
-          transition={
-            prefersReducedMotion
-              ? undefined
-              : {
-                x: {
-                  duration: 38,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  ease: "linear",
-                },
-              }
-          }
         >
           {/* LOOP 1 */}
           <RolesLoopGroup groupIndex={0} />

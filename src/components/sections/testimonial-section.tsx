@@ -1,22 +1,24 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 
 import { useContent } from "@/components/admin/content-provider";
-import { Section } from "@/components/layout/section";
+import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
+import { useDragMarquee } from "@/components/motion/use-drag-marquee";
 import { ExternalImage } from "@/components/ui/external-image";
 import type { Testimonial } from "@/data/testimonials";
 
 /**
- * Marquee testimoni — looping mulus tanpa jeda.
+ * Marquee testimoni — loop mulus tanpa jeda, bisa di-drag.
  *
- * Track berisi dua salinan identik testimoni; `oc-marquee-left` bergerak
- * 0 → -50% sehingga tepat satu set penuh berganti dengan set berikutnya
- * tanpa lompatan. Lebar slide tetap (termasuk padding kanan sebagai gutter)
- * agar -50% presisi. Hover menjeda animasi; prefers-reduced-motion
- * menonaktifkan animasi dan mengubah container jadi scrollable.
+ * Track berisi dua salinan identik testimoni; posisi digerakkan oleh
+ * useDragMarquee (rAF, 0 → -50% per putaran) sehingga bisa dijeda lalu
+ * digeser dengan pointer/layar sentuh — arah drag menentukan arah
+ * auto-scroll setelah dilepas. Hover menjeda; prefers-reduced-motion
+ * menonaktifkan auto-scroll (drag tetap bisa).
  */
 
 function TestimonialCard({
@@ -59,27 +61,40 @@ export function TestimonialSection() {
   const { testimonials, testimonialHeader } = useContent().testimonials;
   const count = testimonials.length;
   const loop = [...testimonials, ...testimonials];
+  const { containerRef, trackRef, x, dragging, handlers } = useDragMarquee({
+    duration: 55,
+    pauseOnHover: true,
+  });
 
   return (
-    <Section
+    <section
       id="testimoni"
-      background="soft"
+      className="bg-soft py-16 sm:py-20 lg:py-28"
       aria-labelledby="testimoni-heading"
     >
-      <SectionHeader
-        eyebrow={testimonialHeader.eyebrow}
-        title={<span id="testimoni-heading">{testimonialHeader.title}</span>}
-        description={testimonialHeader.description}
-      />
+      <Container>
+        <SectionHeader
+          eyebrow={testimonialHeader.eyebrow}
+          title={<span id="testimoni-heading">{testimonialHeader.title}</span>}
+          description={testimonialHeader.description}
+        />
+      </Container>
 
       <Reveal delay={0.1}>
         <div
-          className="group relative mt-12 overflow-hidden py-2 motion-reduce:overflow-x-auto [-webkit-mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
+          ref={containerRef}
+          className={`relative mt-12 overflow-hidden py-2 cursor-grab active:cursor-grabbing motion-reduce:overflow-x-auto [-webkit-mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]${dragging ? " select-none" : ""}`}
+          style={{ touchAction: "pan-y" }}
           role="region"
           aria-roledescription="carousel"
           aria-label="Testimoni mitra QRION"
+          {...handlers}
         >
-          <div className="flex w-max animate-[oc-marquee-left_55s_linear_infinite] group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+          <motion.div
+            ref={trackRef}
+            className="flex w-max"
+            style={{ x, willChange: "transform" }}
+          >
             {loop.map((testimonial, i) => {
               const isClone = i >= count;
               return (
@@ -99,9 +114,9 @@ export function TestimonialSection() {
                 </div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </Reveal>
-    </Section>
+    </section>
   );
 }

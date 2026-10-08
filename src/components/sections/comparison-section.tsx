@@ -10,19 +10,19 @@ import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
 /* =========================================================
- * MASK FOTO — foto "larut" ke warna kartu.
+ * MASK FOTO
  * ======================================================= */
 
 const MASK_BEFORE = [
-  "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_30%)]",
-  "[mask-image:linear-gradient(to_bottom,transparent,#000_30%)]",
+  "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_15%)]",
+  "[mask-image:linear-gradient(to_bottom,transparent,#000_15%)]",
   "lg:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_38%)]",
   "lg:[mask-image:linear-gradient(to_right,transparent,#000_38%)]",
 ].join(" ");
 
 const MASK_AFTER = [
-  "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_25%,#000_80%,transparent)]",
-  "[mask-image:linear-gradient(to_bottom,transparent,#000_25%,#000_80%,transparent)]",
+  "[-webkit-mask-image:linear-gradient(to_bottom,transparent,#000_15%,#000_85%,transparent)]",
+  "[mask-image:linear-gradient(to_bottom,transparent,#000_15%,#000_85%,transparent)]",
   "lg:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_34%)]",
   "lg:[mask-image:linear-gradient(to_right,transparent,#000_34%)]",
 ].join(" ");
@@ -106,15 +106,15 @@ function BeforeCard() {
         </ul>
       </div>
 
-      {/* Foto latar dengan badge melayang (overflow-visible agar badge di kiri tidak terpotong) */}
-      <div className="relative h-[300px] overflow-visible sm:h-[340px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[170%]">
-        <Image
-          src={images.before}
-          alt="bg"
-          fill
-          sizes="(min-width:1280px) 30vw, (min-width:1024px) 60vw, 100vw"
-          className={cn("object-cover object-bottom", MASK_BEFORE)}
-        />
+      {/* Foto latar dengan tinggi fleksibel di mobile */}
+      <div className="relative -mt-8 h-[420px] overflow-visible lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-auto lg:w-[170px]">
+  <Image
+    src={images.before}
+    alt="bg"
+    fill
+    sizes="(min-width:1280px) 30vw, (min-width:1024px) 60vw, 100vw"
+    className={cn("object-cover object-[100%_bottom]", MASK_BEFORE)}
+  />
 
         {/* Label file miring melayang di atas foto */}
         {fileBadges.map(({ label, Icon, tone, position, delay }) => (
@@ -344,7 +344,7 @@ function FinanceWidget({ className }: { className?: string }) {
 }
 
 /* =========================================================
- * KARTU KANAN — "Dengan QRION" (Tombol text di bawah component dibuang)
+ * KARTU KANAN — "Dengan QRION"
  * ======================================================= */
 
 function AfterCard() {
@@ -386,14 +386,14 @@ function AfterCard() {
         </div>
       </div>
 
-      {/* Foto latar */}
-      <div className="relative h-[300px] sm:h-[340px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[80%] lg:overflow-hidden lg:rounded-r-[40px]">
+      {/* Foto latar dengan tinggi fleksibel di mobile */}
+      <div className="relative -mt-32 min-h-[360px] flex-1 lg:absolute lg:inset-y-0 lg:right-0 lg:mt-0 lg:h-auto lg:w-[80%] lg:overflow-hidden lg:rounded-r-[40px]">
         <Image
           src={images.after}
           alt="bg"
           fill
           sizes="(min-width:1280px) 30vw, (min-width:1024px) 60vw, 100vw"
-          className={cn("object-cover object-[80%_bottom]", MASK_AFTER)}
+          className={cn("object-cover object-[70%_bottom]", MASK_AFTER)}
         />
       </div>
 
